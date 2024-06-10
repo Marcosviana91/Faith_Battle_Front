@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "Faith_Batlle",
+    "slug": "faith-battle",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/Faith_Batlle.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#040611"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.marcosvianadev.faithbattle"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f96c6919-e312-47d9-9e14-7a23e7ae858e"
+      }
+    },
+    "owner": "marcosvianadev"
+  }
+}
