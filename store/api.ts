@@ -1,7 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-
-const URI = 'http://192.168.1.32:8000'
+// WWW
+const URI = 'http://marcosvianadev2.ddns.net:3188'
+// Local Network
+// const URI = 'http://192.168.1.32:8000'
+// Docker
+// const URI = 'http://192.168.1.32:3188'
+// Local Machine
 // const URI = 'http://127.0.0.1:8000'
 
 const api = createApi({
