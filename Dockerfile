@@ -10,7 +10,6 @@ RUN npm install
 RUN npm install -g eas-cli
 
 RUN apt-get update && apt-get install -y git
-RUN eas login
 
 CMD [ "npm", "start" ]
 
