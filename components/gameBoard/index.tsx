@@ -2,7 +2,7 @@ import { View, ScrollView, Text, Image, StyleSheet } from "react-native";
 import Card from "@/components/cards";
 import CardsContainer from "./cardsContainer";
 
-export default function GameBoard(props: PlayersInMatchApiPRops) {
+export default function GameBoard(props: PlayersInMatchApiProps) {
     return (
         <>
             <Image

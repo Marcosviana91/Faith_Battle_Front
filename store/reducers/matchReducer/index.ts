@@ -15,35 +15,65 @@ const ainitialState: MatchApiProps = {
             {
                 id: 1,
                 wisdom: 3,
-                deck: [1, 2, 3, 4, 6, 7, 10, 11, 12, 13, 15, 16, 17, 21, 22, 23, 25, 26, 27, 28, 29, 31, 32, 34, 35, 36, 37, 39, 41, 42, 43],
-                cards_in_hand: [5, 18, 33, 38, 40],
-                cards_in_prepare_zone: [8, 14],
-                cards_in_battle_zone: [9, 19],
-                cards_in_forgotten_sea: [20, 24, 30],
+                deck: ['abraao', 'adao', 'daniel',
+                    'davi', 'elias', 'ester',
+                    'eva', 'jaco', "jose-do-egito",
+                    "josue", "maria", "moises",
+                    "noe", "salomao", "sansao",
+                    'abraao', "moises", "sansao",],
+                cards_in_hand: ['abraao', 'adao', 'daniel',
+                    'davi', 'elias',],
+                cards_in_prepare_zone: ['eva', 'jaco'],
+                cards_in_battle_zone: ["jose-do-egito",
+                    "josue"],
+                cards_in_forgotten_sea: ["maria", "moises",],
             },
             {
-                id: 32,
+                id: 2,
                 wisdom: 3,
-                cards_in_prepare_zone: [2, 6, 18],
-                cards_in_battle_zone: [3, 4, 15],
-                cards_in_forgotten_sea: [1, 20],
+                deck: ['abraao', 'adao', 'daniel',
+                    'davi', 'elias', 'ester',
+                    'eva', 'jaco', "jose-do-egito",
+                    "josue", "maria", "moises",
+                    "noe", "salomao", "sansao",
+                    'abraao', "moises", "sansao",],
+                cards_in_hand: ['abraao', 'adao', 'daniel',
+                    'davi', 'elias',],
+                cards_in_prepare_zone: ['eva', 'jaco'],
+                cards_in_battle_zone: ["jose-do-egito",
+                    "josue"],
+                cards_in_forgotten_sea: ["maria", "moises",],
             },
             {
-                id: 5,
+                id: 3,
                 wisdom: 3,
-                cards_in_prepare_zone: [7, 9, 10],
-                cards_in_battle_zone: [8, 13, 16],
-                cards_in_forgotten_sea: [],
+                deck: ['abraao', 'adao', 'daniel',
+                    'davi', 'elias', 'ester',
+                    'eva', 'jaco', "jose-do-egito",
+                    "josue", "maria", "moises",
+                    "noe", "salomao", "sansao",
+                    'abraao', "moises", "sansao",],
+                cards_in_hand: ['abraao', 'adao', 'daniel',
+                    'davi', 'elias',],
+                cards_in_prepare_zone: ['eva', 'jaco'],
+                cards_in_battle_zone: ["jose-do-egito",
+                    "josue"],
+                cards_in_forgotten_sea: ["maria", "moises",],
             },
-
         ],
     }
 }
 
 const matchSlice = createSlice({
-    name: "userAuthData",
+    name: "matchData",
     initialState,
     reducers: {
+        enter: (state, action: PayloadAction<MatchApiProps>) => {
+            state.data = action.payload.data
+            console.log('Enter Match reducer...')
+            console.log(state)
+            console.log(action.payload)
+        },
         start: (state, action: PayloadAction<MatchApiProps>) => {
             state.data = action.payload.data
             console.log('Start Match reducer...')

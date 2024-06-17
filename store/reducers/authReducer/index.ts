@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-const ainitialState: UserStoreProps = {
+const initialState: UserStoreProps = {
     data: undefined
 }
 
-const initialState: UserStoreProps = {
+const ainitialState: UserStoreProps = {
     data: {
         id: 1,
         username: "Marcox00",
@@ -18,10 +18,12 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action: PayloadAction<UserProps>) => {
-            state.data = action.payload
             console.log('Login reducer...')
-            console.log(state)
-            console.log(action.payload)
+            if (action.payload.id) {
+                state.data = action.payload
+            }
+            console.log(state.data)
+            console.log(action.payload.id)
         },
         logout: (state) => {
             state.data = undefined
@@ -29,5 +31,5 @@ const authSlice = createSlice({
         }
     }
 })
-export const { login } = authSlice.actions
+export const { login, logout } = authSlice.actions
 export default authSlice.reducer

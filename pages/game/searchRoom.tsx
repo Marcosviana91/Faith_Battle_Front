@@ -1,75 +1,21 @@
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, ToastAndroid, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
 
-import SearchRoomRow from '@/components/searchRoomRow';
+import { useApiMutation, useMatchHandleMutation } from '@/store/api';
+
+import SearchRoomList from '@/pages/game/searchRoomList'
 import ToggleButton from '@/components/button/toggle';
 import BasicButton from '@/components/button/basic';
 
 import { globalStyles } from '@/constants/Styles';
 
-const roomList: RoomApiProps[] = [
-    {
-        room_id: 1,
-        room_name: "Sala 01",
-        room_game_style: "coop",
-        room_current_players: 1,
-        room_max_players: 8,
-    },
-    {
-        room_id: 2,
-        room_name: "Sala 02",
-        room_game_style: "survival",
-        room_current_players: 3,
-        room_max_players: 4,
-    },
-    {
-        room_id: 123457,
-        room_name: "ABCDEFGHIJKLMNOPQRSTU",
-        room_game_style: "survival",
-        room_current_players: 3,
-        room_max_players: 4,
-    },
-    {
-        room_id: 123458,
-        room_name: "ABCDEFGHIJKLMNOPQRSTU",
-        room_game_style: "survival",
-        room_current_players: 3,
-        room_max_players: 4,
-    },
-    {
-        room_id: 123459,
-        room_name: "ABCDEFGHIJKLMNOPQRSTU",
-        room_game_style: "survival",
-        room_current_players: 3,
-        room_max_players: 4,
-    },
-    {
-        room_id: 123450,
-        room_name: "ABCDEFGHIJKLMNOPQRSTU",
-        room_game_style: "survival",
-        room_current_players: 3,
-        room_max_players: 4,
-    },
-    {
-        room_id: 123451,
-        room_name: "ABCDEFGHIJKLMNOPQRSTU",
-        room_game_style: "survival",
-        room_current_players: 3,
-        room_max_players: 4,
-    },
-    {
-        room_id: 123452,
-        room_name: "ABCDEFGHIJKLMNOPQRSTU",
-        room_game_style: "survival",
-        room_current_players: 3,
-        room_max_players: 4,
-    },
-]
 
 export default function SearchRoom() {
+    const [fetchApi, { data: apiResponse }] = useApiMutation();
+    const [fetchMatch, { data: matchResponse }] = useMatchHandleMutation();
     const playerData = useSelector((state: RootReducer) => state.authReducer.data)
 
     const gameTypesList = ['cooperativo', 'sobrevivência']
@@ -82,6 +28,16 @@ export default function SearchRoom() {
     const buttons = ['Entrar', 'Criar']
     const [table, setTable] = useState(0)
 
+    useEffect(() => {
+        if (apiResponse) {
+            console.log(apiResponse)
+            fetchMatch({
+                data_type:"connect",
+                room_id: apiResponse
+            })
+        }
+    }, [apiResponse])
+
     return (
         <View style={[styles.container, { backgroundColor: "#000000b3" }]}>
             <View style={styles.searchRoomContainer} >
@@ -91,22 +47,7 @@ export default function SearchRoom() {
                     </View>
                 </View>
                 {table === 0 && (
-                    <View style={{ width: '100%' }}>
-                        <View style={{flexDirection:'row', gap:10}}>
-                            <Text>Filtro:</Text>
-                            <TextInput style={[globalStyles.textInput, {flex:1}]}/>
-                        </View>
-                        <SearchRoomRow room_id={0} />
-                        <ScrollView style={{ height: 270 }}>
-
-                            <View style={styles.roomListContainer} >
-                                {roomList.map((room) => {
-                                    return <SearchRoomRow key={room.room_id} {...room} />
-                                })}
-                            </View>
-                        </ScrollView>
-
-                    </View>
+                    <SearchRoomList />
                 )}
                 {table === 1 && (
                     <View style={styles.roomListContainer} >
@@ -144,7 +85,16 @@ export default function SearchRoom() {
                             />
                         </View>
                         <BasicButton onPress={() => {
-                            ToastAndroid.showWithGravity(`Criando sala...\n\nNome: ${newRoomName}\nEstilo: ${gameTypesList[newRoomGameType]}\nQuantidade: ${newRoomPlayerQtd}\nSenha: ${newRoomPassword === '' ? '[sala aberta]' : newRoomPassword}\n`, ToastAndroid.LONG, ToastAndroid.CENTER)
+                            // ToastAndroid.show(`Criando sala...\n\nNome: ${newRoomName}\nEstilo: ${gameTypesList[newRoomGameType]}\nQuantidade: ${newRoomPlayerQtd}\nSenha: ${newRoomPassword === '' ? '[sala aberta]' : newRoomPassword}\n`, ToastAndroid.LONG)
+                            fetchApi({
+                                data: {
+                                    created_by: playerData?.id,
+                                    room_name: newRoomName,
+                                    max_players: Number(newRoomPlayerQtd),
+                                    match_type: newRoomGameType,
+                                    password: newRoomPassword
+                                }
+                            })
                         }}>
                             Criar
                         </BasicButton>

@@ -19,6 +19,7 @@ export default function LoginScreen() {
     const dispatch = useDispatch();
 
     const [doLogin, { data: userAuthData }] = useLoginMutation();
+    const [createUser, { data: newUserData }] = useNewUserMutation();
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [hidePassword, setHidePassword] = useState(true)
@@ -67,12 +68,13 @@ export default function LoginScreen() {
                     {isCreating ? (
                         <>
                             <Button color={'green'} title='Salvar' onPress={() => {
-                                // CreateNewUser({
-                                //     email: email,
-                                //     real_name: realName,
-                                //     password: password,
-                                //     username: userName,
-                                // })
+                                console.log("Criando...");
+                                createUser({
+                                    email: email,
+                                    real_name: realName,
+                                    password: password,
+                                    username: userName,
+                                })
 
                                 setRealName('')
                                 setEmail('')
