@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
+import useWebSocket from 'react-use-websocket';
+import { URI } from "@/store/server_urls";
 
-import { useApiMutation, useMatchHandleMutation } from '@/store/api';
+import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
 
 import SearchRoomList from '@/pages/game/searchRoomList'
 import ToggleButton from '@/components/button/toggle';
@@ -14,29 +15,20 @@ import { globalStyles } from '@/constants/Styles';
 
 
 export default function SearchRoom() {
-    const [fetchApi, { data: apiResponse }] = useApiMutation();
-    const [fetchMatch, { data: matchResponse }] = useMatchHandleMutation();
-    const playerData = useSelector((state: RootReducer) => state.authReducer.data)
+    const userData = useSelector((state: RootReducer) => state.authReducer.data)
+
+    const WS = useWebSocket(`ws://${URI}/websocket_conn`, { share: true });
 
     const gameTypesList = ['cooperativo', 'sobrevivência']
     // Create new room 'form' values
-    const [newRoomName, setNewRoomName] = useState(`Sala de ${playerData!.username}`)
-    const [newRoomGameType, setNewRoomGameType] = useState(0)
+    const [newRoomName, setNewRoomName] = useState(`Sala de ${userData!.username}`)
+    const [newRoomGameType, setNewRoomGameType] = useState('survival')
     const [newRoomPlayerQtd, setNewRoomPlayerQtd] = useState('2')
     const [newRoomPassword, setNewRoomPassword] = useState('')
 
     const buttons = ['Entrar', 'Criar']
     const [table, setTable] = useState(0)
 
-    useEffect(() => {
-        if (apiResponse) {
-            console.log(apiResponse)
-            fetchMatch({
-                data_type:"connect",
-                room_id: apiResponse
-            })
-        }
-    }, [apiResponse])
 
     return (
         <View style={[styles.container, { backgroundColor: "#000000b3" }]}>
@@ -86,12 +78,14 @@ export default function SearchRoom() {
                         </View>
                         <BasicButton onPress={() => {
                             // ToastAndroid.show(`Criando sala...\n\nNome: ${newRoomName}\nEstilo: ${gameTypesList[newRoomGameType]}\nQuantidade: ${newRoomPlayerQtd}\nSenha: ${newRoomPassword === '' ? '[sala aberta]' : newRoomPassword}\n`, ToastAndroid.LONG)
-                            fetchApi({
-                                data: {
-                                    created_by: playerData?.id,
+
+                            WS.sendJsonMessage({
+                                data_type: "create",
+                                room_data: {
+                                    created_by: userData?.id,
                                     room_name: newRoomName,
-                                    max_players: Number(newRoomPlayerQtd),
-                                    match_type: newRoomGameType,
+                                    room_max_players: Number(newRoomPlayerQtd),
+                                    room_game_type: newRoomGameType,
                                     password: newRoomPassword
                                 }
                             })

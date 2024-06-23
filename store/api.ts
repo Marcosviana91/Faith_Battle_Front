@@ -1,17 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-// WWW
-const URI = 'http://marcosvianadev2.ddns.net:3110'
-// Local Network
-// const URI = 'http://192.168.1.32:8000'
-// Docker
-// const URI = 'http://192.168.1.32:3110'
-// Local Machine
-// const URI = 'http://127.0.0.1:8000'
+import {URI} from "@/store/server_urls";
 
 const api = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: URI
+        baseUrl: `http://${URI}`
     }),
     endpoints: (builder) => ({
         login: builder.mutation<APIResponseProps, AuthProps>({// tipa o response, tipa o request
@@ -28,25 +21,11 @@ const api = createApi({
                 body: newUserData
             })
         }),
-        api: builder.mutation<any, any>({
-            query: apiData => ({
-                url: "/match",
-                method: 'POST',
-                body: apiData
-            })
-        }),
-        getRooms: builder.query<RoomApiProps[], void>({
+        getRooms: builder.query<APIResponseProps, void>({
             query: () => ({
                 url: "/match",
             })
         }),
-        matchHandle: builder.mutation<any, APIGameDataProps>({
-            query: data_type => ({
-                url: `/match/handle/${data_type.room_id}`,
-                method: 'POST',
-                body: data_type
-            })
-        })
     })
 })
 
@@ -54,8 +33,6 @@ const api = createApi({
 export const {
     useLoginMutation,
     useNewUserMutation,
-    useApiMutation,
-    useMatchHandleMutation,
     useGetRoomsQuery
 } = api
 export default api

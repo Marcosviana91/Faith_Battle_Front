@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import BasicButton from "./button/basic";
 
-export default function FooterBar({ navigation, route }:RouterScreenProps) {
+export default function FooterBar() {
+    const navigation = useNavigation()
     return (
         <View style={styles.container}>
             <BasicButton onPress={() =>

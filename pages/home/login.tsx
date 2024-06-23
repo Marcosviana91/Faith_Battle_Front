@@ -30,8 +30,16 @@ export default function LoginScreen() {
 
     useEffect(() => {
         if (userAuthData) {
-            console.log(userAuthData!.message)
-            dispatch(login(userAuthData!.data as UserProps))
+            if (userAuthData.data_type == 'error') {
+                // FALTA: Gerar aviso de não logado
+                console.log('FALTA: Gerar aviso de não logado')
+                console.log(userAuthData.message)
+            }
+            else {
+                console.log(userAuthData.message)
+                dispatch(login(userAuthData.user_data!))
+            }
+
         }
     }, [userAuthData])
 
@@ -96,7 +104,6 @@ export default function LoginScreen() {
                                     window.alert('Digite uma senha')
                                 }
                                 else {
-                                    console.log("Tentando logar")
                                     doLogin({ username: userName, password: password })
                                 }
                             }} />

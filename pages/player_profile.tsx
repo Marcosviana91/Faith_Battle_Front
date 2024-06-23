@@ -1,7 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigation } from '@react-navigation/native';
 
 import { RootReducer } from '@/store';
 import { logout } from "@/store/reducers/authReducer";
+import { leaveMatch } from "@/store/reducers/matchReducer";
 
 import { Text, View, TouchableOpacity, Pressable } from 'react-native';
 
@@ -11,6 +13,7 @@ import { globalStyles } from '@/constants/Styles';
 
 export default function ProfileScreen() {
     const dispatch = useDispatch();
+    const navigation = useNavigation()
     
     const playerData = useSelector((state: RootReducer) => state.authReducer.data)
 
@@ -25,6 +28,8 @@ export default function ProfileScreen() {
                     <TouchableOpacity
                         onPress={() => {
                             dispatch(logout())
+                            dispatch(leaveMatch())
+                            navigation.navigate('Home' as never)
                             // Navegar para Tela de login
                         }}
                         style={{backgroundColor: "red", width: 200, height:30}}

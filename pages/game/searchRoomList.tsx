@@ -15,7 +15,9 @@ export default function SearchRoomList() {
 
     useEffect(() => {
         dataRoomList.refetch()
-        setRoomList(dataRoomList.data!)
+        if (dataRoomList.data?.room_list) {
+            setRoomList(dataRoomList.data.room_list)
+        }
     }, [])
 
 

@@ -19,7 +19,7 @@ export default function App() {
     return (
         <NavigationContainer independent>
             <StatusBar backgroundColor='#000' barStyle='light-content' />
-            <Stack.Navigator >
+            <Stack.Navigator>
                 <Stack.Screen
                     name="Home"
                     component={HomeScreen}

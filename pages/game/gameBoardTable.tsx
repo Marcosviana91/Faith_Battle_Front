@@ -7,16 +7,19 @@ import { globalStyles } from "@/constants/Styles";
 import GameBoard from "@/components/gameBoard";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
 
+
 import CardsContainer from "@/components/gameBoard/cardsContainer";
 
 
-export default function GameBoardTable(props: MatchApiProps) {
+export default function GameBoardTable() {
     // console.log("Dados da Partida: ", props);
-    const playerData = useSelector((state: RootReducer) => state.authReducer.data)
-    const player_focus = props.data?.player_focus
 
-    function getPlayerFocusData() {
-        const _data = props.data!.players_in_match.filter((player) => player.id===player_focus)
+    const room = useSelector((state: RootReducer) => state.matchReducer.room_data)
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const player_focus = room?.player_focus
+
+    function getPlayerData(player_id: number) {
+        const _data = room!.players_in_match!.filter((player) => player.id === player_id)
         return _data[0]
     }
 
@@ -24,7 +27,7 @@ export default function GameBoardTable(props: MatchApiProps) {
         <View style={globalStyles.container}>
             {/* Icones dos jogadores */}
             <View style={[styles.gameBoardHeader,]}>
-                {props.data?.players_in_match.map((player) => (
+                {room?.players_in_match?.map((player) => (
                     <PlayerIcon key={player.id} id={player.id} />
                 ))}
             </View>
@@ -32,17 +35,17 @@ export default function GameBoardTable(props: MatchApiProps) {
             <View style={[globalStyles.contentContainer, styles.container]}>
                 {player_focus && <View style={[styles.enemyBoard]}>
                     {/* Verificar ID do jogador focado, não usar mais indice da lista */}
-                    <GameBoard {...getPlayerFocusData()} />
+                    <GameBoard {...getPlayerData(player_focus)} />
                 </View>}
                 <View>
                     {/* Verificar ID do jogador logado */}
-                    <GameBoard {...props.data!.players_in_match[0]} />
+                    <GameBoard {...getPlayerData(player?.id!)} />
                 </View>
             </View>
             {/* Mão do jogador */}
             <View style={[styles.playerFooter,]}>
                 <ScrollView horizontal>
-                    <CardsContainer size="normal" cards={props.data?.players_in_match[0].cards_in_hand}/>
+                    <CardsContainer size="normal" cards={player!.cards_in_hand} />
                 </ScrollView>
             </View>
         </View>

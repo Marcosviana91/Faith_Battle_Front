@@ -1,4 +1,10 @@
-import { StyleSheet, View, Text, TouchableHighlight, Pressable, Modal, TextInput } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux'
+import { RootReducer } from '@/store';
+
+import useWebSocket from 'react-use-websocket';
+import { URI } from "@/store/server_urls";
+
+import { StyleSheet, View, Text, TouchableHighlight, Modal, TextInput } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -7,7 +13,8 @@ type ModalProps = {
 }
 
 export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
-
+    const userData = useSelector((state: RootReducer) => state.authReducer.data)
+    const WS = useWebSocket(`ws://${URI}/websocket_conn`, { share: true });
 
     return (
         <Modal presentationStyle='overFullScreen' transparent>
@@ -21,6 +28,7 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
                             <Ionicons name="close-circle-outline" size={48} color="black" />
                         </TouchableHighlight>
                     </View>
+
                     {/* Content */}
                     <View style={{ flex: 1, padding: 8 }}>
                         <Text >{props.room_name}</Text>
@@ -29,15 +37,24 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
                         {props.has_password && (
                             <View>
                                 <Text>Digite a senha</Text>
-                                <TextInput style={{backgroundColor:'#009'}} />
+                                <TextInput style={{ backgroundColor: '#009' }} />
                             </View>
                         )}
-
                     </View>
+
                     {/* Footer */}
                     <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 8 }}>
                         <TouchableHighlight onPress={() => {
-                            console.log("Conectar")
+                            console.log("Conectando")
+                            WS.sendJsonMessage({
+                                data_type: 'connect',
+                                room_data: {
+                                    id: props.id
+                                },
+                                user_data: {
+                                    id: userData?.id
+                                }
+                            })
                             props.onClose()
                         }} style={{ backgroundColor: '#090', borderRadius: 8 }}>
                             <Ionicons name="enter-outline" size={48} color="black" />

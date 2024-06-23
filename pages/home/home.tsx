@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText'
@@ -12,7 +11,7 @@ import FooterBar from "@/components/FooterBar";
 import { globalStyles } from '@/constants/Styles';
 
 
-export default function HomeScreen(props: UserProps & RouterScreenProps) {
+export default function HomeScreen() {
 
     return (
 
@@ -23,11 +22,11 @@ export default function HomeScreen(props: UserProps & RouterScreenProps) {
                 <View></View>
                 <View style={globalStyles.contentContainer} >
                     <HelloWave />
-                    <ThemedText >Bem-Vindo! {props.username}</ThemedText>
+                    <ThemedText >Bem-Vindo!</ThemedText>
                     <ThemedText >Novo jogo</ThemedText>
                 </View>
                 <View style={[globalStyles.footerContainer, { flexBasis: 100 }]}>
-                    <FooterBar {...props} />
+                    <FooterBar />
                 </View>
             </ThemedView>
     );
