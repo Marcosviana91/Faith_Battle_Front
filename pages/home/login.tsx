@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TextInput, Button, Text, View, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TextInput, Button, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 
@@ -32,7 +32,9 @@ export default function LoginScreen() {
         if (userAuthData) {
             if (userAuthData.data_type == 'error') {
                 // FALTA: Gerar aviso de não logado
-                console.log('FALTA: Gerar aviso de não logado')
+                Alert.alert('Não logou', 'Usuário ou senha inválidos.', [
+                    { text: 'OK' },
+                ])
                 console.log(userAuthData.message)
             }
             else {

@@ -20,7 +20,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.marcosvianadev.faithbattle"
+      "package": "com.marcosvianadev.faithbattle",
+      "permissions": ["android.permission.INTERNET"]
     },
     "web": {
       "bundler": "metro",

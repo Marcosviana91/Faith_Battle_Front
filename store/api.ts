@@ -4,7 +4,7 @@ import {URI} from "@/store/server_urls";
 
 const api = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: `http://${URI}`
+        baseUrl: `https://${URI}`
     }),
     endpoints: (builder) => ({
         login: builder.mutation<APIResponseProps, AuthProps>({// tipa o response, tipa o request
