@@ -4,7 +4,7 @@
     "slug": "faith-battle",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/Faith_Batlle.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/Faith_Batlle.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.marcosvianadev.faithbattle",
@@ -26,7 +26,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/Faith_Batlle.png"
     },
     "plugins": [
       "expo-router"

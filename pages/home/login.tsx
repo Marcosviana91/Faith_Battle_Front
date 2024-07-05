@@ -15,10 +15,20 @@ import { useLoginMutation, useNewUserMutation } from '@/store/api'
 import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
 
+function parseJwt (token: string): TokenProps {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
 export default function LoginScreen() {
     const dispatch = useDispatch();
 
-    const [doLogin, { data: userAuthData }] = useLoginMutation();
+    const [doLogin, { data: tokenAuthData, error : authError }] = useLoginMutation();
     const [createUser, { data: newUserData }] = useNewUserMutation();
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
@@ -29,21 +39,26 @@ export default function LoginScreen() {
     const [email, setEmail] = useState('')
 
     useEffect(() => {
-        if (userAuthData) {
-            if (userAuthData.data_type == 'error') {
-                // FALTA: Gerar aviso de não logado
-                Alert.alert('Não logou', 'Usuário ou senha inválidos.', [
-                    { text: 'OK' },
-                ])
-                console.log(userAuthData.message)
-            }
-            else {
-                console.log(userAuthData.message)
-                dispatch(login(userAuthData.user_data!))
+        if (authError) {
+            // console.log(authError.data.detail)
+            Alert.alert('Não logou', 'Usuário ou senha inválidos.', [
+                { text: 'OK' },
+            ])
+            window.alert('Usuário ou senha inválidos.')
+        }
+        if (tokenAuthData) {
+            if (tokenAuthData.token_type === "Bearer") {
+                const token = tokenAuthData.access_token
+                // console.log(token)
+                const userData = parseJwt(tokenAuthData.access_token).inf
+                userData.token = token
+                // console.log(userData)
+                dispatch(login(userData))
+                
             }
 
         }
-    }, [userAuthData])
+    }, [authError, tokenAuthData])
 
     return (
         <ThemedView style={globalStyles.container}>

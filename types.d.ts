@@ -6,11 +6,23 @@ declare type UserProps = {
     last_login?: string,
     real_name?: string,
     email?: string,
+    token?: string,
 }
 
 declare type AuthProps = {
     username: string,
     password: string,
+}
+
+declare type TokenAuthProps = {
+    access_token: string,
+    token_type: string,
+}
+
+declare type TokenProps = {
+    exp: string,
+    sub: string,
+    inf: UserProps,
 }
 
 declare type UserStoreProps = {
