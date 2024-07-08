@@ -1,48 +1,19 @@
-declare type UserProps = {
-    id?: number,
-    username?: string,
-    password?: string,
-    created_at?: string,
-    last_login?: string,
-    real_name?: string,
-    email?: string,
-    token?: string,
-}
-
-declare type AuthProps = {
-    username: string,
-    password: string,
-}
-
-declare type TokenAuthProps = {
-    access_token: string,
-    token_type: string,
-}
-
-declare type TokenProps = {
-    exp: string,
-    sub: string,
-    inf: UserProps,
-}
-
-declare type UserStoreProps = {
-    data?: UserProps
+declare type MatchApiProps = {
+    id?: string;
+    start_match?: string;
+    match_type?: string;
+    players_in_match?: PlayersInMatchApiProps[];
+    round_match?: number;
+    max_players?: number;
+    player_turn?: number;
+    player_focus_id?: number;
+    can_others_move?: boolean;
+    end_match?: string;
 }
 
 declare type CardProps = {
     slug: string,
-    path: ImageSourcePropType ,
-}
-
-declare type APIResponseProps = {
-    data_type: string,
-    message?: string,
-    user_data?: UserProps,
-    room_data?: RoomApiProps
-    player_data?: PlayersInMatchApiProps
-    room_list?: RoomApiProps[]
-    // player_in_match_data?: any,
-    // card_data?: any,
+    path: ImageSourcePropType,
 }
 
 
@@ -56,42 +27,9 @@ declare type APIMoveProps = {
     card_target?: string
 }
 
-declare type RoomApiProps = {
-    id?: number;
-    created_by?: number;
-    // Stage 0: players has connecteds, check decks
-    // Stage 1: Sort cards to all players, retry sort
-    // Stage 2: The game is in curse
-    stage?: number;
-
-    room_name?: string;
-    room_current_players?: number;
-    room_game_type?: string;
-    room_max_players?: number;
-    password?: string;
-    has_password?: boolean;
-
-    start_match?: string;
-    end_match?: string;
-    player_focus?: number;
-
-    players_in_match?: PlayersInMatchApiProps[];
-}
-
-declare type PlayersInMatchApiProps = {
-    id: number;
-    ready?: boolean;
-    deck?: string[]
-    wisdom?: number
-    faith?: number,
-    cards_in_hand?: string[]
-    cards_in_battle_zone?: string[]
-    cards_in_prepare_zone?: string[]
-    cards_in_forgotten_sea?: string[]
-}
-
 declare type MatchReducerProps = {
     room_data?: RoomApiProps,
+    match_data?: MatchApiProps,
     player_data?: PlayersInMatchApiProps;
 }
 

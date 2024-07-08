@@ -23,7 +23,7 @@ export default function ProfileScreen() {
     const [sendUserData, { data: newUserData }] = useEditUserMutation();
     const [isEditting, setEditting] = useState(false);
 
-    const playerData = useSelector((state: RootReducer) => state.authReducer.data)
+    const playerData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const [realName, setRealName] = useState(playerData?.real_name);
     const [email, setEmail] = useState(playerData?.email);
     const [email2, setEmail2] = useState(playerData?.email);

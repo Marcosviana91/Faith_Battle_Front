@@ -18,7 +18,7 @@ export default function GameRoom() {
     
     const room = useSelector((state: RootReducer) => state.matchReducer.room_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const userData = useSelector((state: RootReducer) => state.authReducer.data)
+    const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
 
     const WS = useWebSocket(`ws://${URI}/websocket_conn`, {share:true});
 
@@ -28,18 +28,18 @@ export default function GameRoom() {
     }
 
     const open_player_slot = []
-    for (let index = 0; index < room.room_max_players! - room.room_current_players!; index++) {
+    for (let index = 0; index < room.max_players! - room.connected_players!.length; index++) {
         open_player_slot.push(<PlayerRoomMini key={index} id={0} />)
     }
 
     return (
         <View style={{ flex: 1, margin: 8 }}>
-            {room.stage === 0 && (
+            {room.room_stage === 0 && (
                 <View style={{ backgroundColor: 'green', height: 120, padding: 8 }}>
                     <Text>ID: {room.id}</Text>
-                    <Text>Nome: {room.room_name}</Text>
-                    <Text>Tipo de partida: {room.room_game_type}</Text>
-                    <Text>Jogadores na sala: {room.room_current_players}</Text>
+                    <Text>Nome: {room.name}</Text>
+                    <Text>Tipo de partida: {room.match_type}</Text>
+                    <Text>Jogadores na sala: {room.connected_players?.length}</Text>
                     <Pressable
                         style={{ position: "absolute", right: 8, backgroundColor: 'red', height: 104, width: '30%', justifyContent: "center", alignItems: "center" }}
                         onPress={
@@ -62,12 +62,12 @@ export default function GameRoom() {
 
             )}
             <View style={[styles.slots, { backgroundColor: 'yellow' }]}>
-                {room.players_in_match?.map(_player => (
-                    <PlayerRoomMini key={_player.id} id={_player.id} isReady={_player.ready} />
+                {room.connected_players?.map(_player => (
+                    <PlayerRoomMini key={_player.id} id={_player.id!} isReady={_player.ready} />
                 ))}
                 {open_player_slot.map(player => { return player })}
             </View>
-            {room.stage === 0 && (
+            {room.room_stage === 0 && (
                 <>
                     <View style={{ backgroundColor: 'red', height: 100 }}>
                         <Text> Meu Deck</Text>
@@ -92,7 +92,7 @@ export default function GameRoom() {
                 </>
             )}
             <Modal
-                visible={room.stage == 1 && !player?.ready}
+                visible={room.room_stage == 1 && !player?.ready}
                 transparent
                 presentationStyle='overFullScreen'
             >

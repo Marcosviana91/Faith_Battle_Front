@@ -1,20 +1,31 @@
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
+import { useEnterRoomsMutation } from '@/store/api';
+import { setRoom } from "@/store/reducers/matchReducer";
 
 import { StyleSheet, View, Text, TouchableHighlight, Modal, TextInput } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { globalStyles } from '@/constants/Styles';
 
 type ModalProps = {
     onClose: () => void;
 }
 
 export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
-    const userData = useSelector((state: RootReducer) => state.authReducer.data)
-    const WS = useWebSocket(`ws://${URI}/websocket_conn`, { share: true });
+    const dispatch = useDispatch()
+    const [roomPass, setRoomPass] = useState("")
+    const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
+    const [enterRoom, { data: roomData }] = useEnterRoomsMutation()
+
+    useEffect(() => {
+        if (roomData?.room_data) {
+            dispatch(setRoom(roomData.room_data))
+            props.onClose()
+        }
+    }, [roomData])
 
     return (
         <Modal presentationStyle='overFullScreen' transparent>
@@ -23,7 +34,7 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
                 <View style={styles.dialog}>
                     {/* Header */}
                     <View style={{ flexDirection: "row", width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Text style={{ paddingStart: 8 }}>Sala: {props.id}</Text>
+                        <Text style={{ paddingStart: 8 }}>ID:: <strong>{props.id}</strong></Text>
                         <TouchableHighlight onPress={props.onClose} style={{ alignSelf: 'flex-end', backgroundColor: '#700', borderRadius: 50 }}>
                             <Ionicons name="close-circle-outline" size={48} color="black" />
                         </TouchableHighlight>
@@ -31,13 +42,17 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
 
                     {/* Content */}
                     <View style={{ flex: 1, padding: 8 }}>
-                        <Text >{props.room_name}</Text>
-                        <Text >{props.room_game_type}</Text>
-                        <Text >{props.room_current_players} / {props.room_max_players}</Text>
+                        <Text >Nome: <strong>{props.name}</strong></Text>
+                        <Text >Tipo da partida: {props.match_type}</Text>
+                        <Text >Jogadores: {props.connected_players?.length} / {props.max_players}</Text>
                         {props.has_password && (
-                            <View>
-                                <Text>Digite a senha</Text>
-                                <TextInput style={{ backgroundColor: '#009' }} />
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                                <Text>Digite a senha:</Text>
+                                <TextInput
+                                    style={[globalStyles.textInput, { backgroundColor: 'cyan' }]}
+                                    value={roomPass}
+                                    onChangeText={setRoomPass}
+                                />
                             </View>
                         )}
                     </View>
@@ -46,16 +61,25 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
                     <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 8 }}>
                         <TouchableHighlight onPress={() => {
                             console.log("Conectando")
-                            WS.sendJsonMessage({
-                                data_type: 'connect',
-                                room_data: {
-                                    id: props.id
-                                },
-                                user_data: {
-                                    id: userData?.id
-                                }
+                            if (roomPass == "") {
+                                setRoomPass("undefined")
+                            }
+                            enterRoom({
+                                id: props.id,
+                                password: roomPass,
+                                connected_players: [
+                                    {
+                                        id: userData?.id,
+                                        available_cards: [
+                                            'abraao', 'adao', 'daniel',
+                                            'davi', 'elias', 'ester',
+                                            'eva', 'jaco', "jose-do-egito",
+                                            "josue", "maria", "moises"
+                                        ],
+                                        xp_points: 200
+                                    }
+                                ]
                             })
-                            props.onClose()
                         }} style={{ backgroundColor: '#090', borderRadius: 8 }}>
                             <Ionicons name="enter-outline" size={48} color="black" />
                         </TouchableHighlight>

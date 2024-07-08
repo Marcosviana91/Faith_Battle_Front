@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { TextInput, View, Text, ScrollView, StyleSheet } from "react-native"
+import { TextInput, View, Text, ScrollView, StyleSheet, Pressable } from "react-native"
 
 import SearchRoomRow from '@/components/searchRoomRow';
 
 import { globalStyles } from '@/constants/Styles';
+import { Ionicons } from '@expo/vector-icons';
 
 import { useGetRoomsQuery } from '@/store/api';
 
@@ -14,12 +15,8 @@ export default function SearchRoomList() {
 
 
     useEffect(() => {
-        dataRoomList.refetch()
-        if (dataRoomList.data?.room_list) {
-            setRoomList(dataRoomList.data.room_list)
-        }
-    }, [])
-
+        setRoomList(dataRoomList.data?.room_list!)
+    }, [dataRoomList])
 
     return (
 
@@ -27,8 +24,13 @@ export default function SearchRoomList() {
             <View style={{ flexDirection: 'row', gap: 10 }}>
                 <Text>Filtro:</Text>
                 <TextInput style={[globalStyles.textInput, { flex: 1 }]} />
+                <Pressable
+                    onPress={dataRoomList.refetch}
+                >
+                    <Ionicons name="reload-outline" size={24} color="black" />
+                </Pressable>
             </View>
-            <SearchRoomRow id={0} />
+            <SearchRoomRow id={'0'} />
             {roomList && (
                 <ScrollView style={{ height: 270 }}>
                     <View style={styles.roomListContainer} >

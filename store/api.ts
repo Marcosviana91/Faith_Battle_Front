@@ -11,8 +11,7 @@ const api = createApi({
             query: userData => ({
                 url: "/auth/token",
                 method: "POST",
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: new URLSearchParams(userData),
+                body: userData,
             })
         }),
         newUser: builder.mutation<any, UserProps>({
@@ -30,9 +29,27 @@ const api = createApi({
                 body: newUserData
             })
         }),
+        createRooms: builder.mutation<APIResponseProps, RoomApiProps>({
+            query: (newRoomData) => ({
+                url: "/room/",
+                method: "POST",
+                body: newRoomData
+            })
+        }),
+        enterRooms: builder.mutation<APIResponseProps, RoomApiProps>({
+            query: (roomData) => ({
+                url: `/room/${roomData.id}/?password=${roomData.password}`,
+                method: "POST",
+                body: {
+                    "id": roomData.connected_players![0].id,
+                    "available_cards": roomData.connected_players![0].available_cards,
+                    "xp_points": roomData.connected_players![0].xp_points
+                }
+            })
+        }),
         getRooms: builder.query<APIResponseProps, void>({
             query: () => ({
-                url: "/match",
+                url: "/room/",
             })
         }),
     })
@@ -43,6 +60,8 @@ export const {
     useLoginMutation,
     useNewUserMutation,
     useEditUserMutation,
+    useCreateRoomsMutation,
+    useEnterRoomsMutation,
     useGetRoomsQuery
 } = api
 export default api
