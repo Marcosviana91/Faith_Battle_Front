@@ -20,7 +20,9 @@ export default function GameRoom() {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
 
-    const WS = useWebSocket(`ws://${URI}/websocket_conn`, {share:true});
+    const WS = useWebSocket(`ws://${URI}/ws/`, {share:true});
+    
+
 
     if (!room || !userData) {
         // navigation.navigate("Home" as never)

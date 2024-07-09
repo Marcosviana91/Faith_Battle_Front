@@ -34,7 +34,7 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
                 <View style={styles.dialog}>
                     {/* Header */}
                     <View style={{ flexDirection: "row", width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Text style={{ paddingStart: 8 }}>ID:: <strong>{props.id}</strong></Text>
+                        <Text style={{ paddingStart: 8 }}>ID:: {props.id}</Text>
                         <TouchableHighlight onPress={props.onClose} style={{ alignSelf: 'flex-end', backgroundColor: '#700', borderRadius: 50 }}>
                             <Ionicons name="close-circle-outline" size={48} color="black" />
                         </TouchableHighlight>
@@ -42,7 +42,7 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
 
                     {/* Content */}
                     <View style={{ flex: 1, padding: 8 }}>
-                        <Text >Nome: <strong>{props.name}</strong></Text>
+                        <Text >Nome: {props.name}</Text>
                         <Text >Tipo da partida: {props.match_type}</Text>
                         <Text >Jogadores: {props.connected_players?.length} / {props.max_players}</Text>
                         {props.has_password && (
