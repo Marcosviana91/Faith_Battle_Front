@@ -21,7 +21,9 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.marcosvianadev.faithbattle",
-      "permissions": ["android.permission.INTERNET"]
+      "permissions": [
+        "android.permission.INTERNET"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -29,7 +31,8 @@
       "favicon": "./assets/images/Faith_Batlle.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-build-properties"
     ],
     "experiments": {
       "typedRoutes": true
