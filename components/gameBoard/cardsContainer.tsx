@@ -4,7 +4,7 @@ import Card from "@/components/cards";
 
 type Props = {
     size?: "normal" | "small";
-    cards?: string[];
+    cards?: CardProps[];
 }
 
 export default function CardsContainer(props: Props) {
@@ -24,8 +24,8 @@ export default function CardsContainer(props: Props) {
     })
 
     return (<View style={[styles.cardsContainer,]}>
-        {props.cards?.map((card_id, _index) => (
-            <Card key={_index} slug={card_id} size={props.size === 'normal' ? 'small' : 'minimum'} in_game />
+        {props.cards?.map((card) => (
+            <Card key={card.in_game_id} slug={card.slug} size={props.size === 'normal' ? 'small' : 'minimum'} in_game />
         ))}
     </View>)
 }

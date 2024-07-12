@@ -202,7 +202,7 @@ type Props = {
     slug?: string; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
     in_game?: boolean;
-    slug_match?: string;
+    in_game_id?: string;
 }
 
 function getCardSource(slug: string | undefined) {
@@ -288,7 +288,7 @@ export default function Card(props: Props) {
 
             <Modal visible={showModal} transparent animationType='fade' >
                 <Pressable
-
+                    style={{width: "100%", height: "100%"}}
                     onPress={() => {
                         setShowModal(!showModal)
                     }}
