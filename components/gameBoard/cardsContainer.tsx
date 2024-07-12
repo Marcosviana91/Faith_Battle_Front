@@ -25,7 +25,7 @@ export default function CardsContainer(props: Props) {
 
     return (<View style={[styles.cardsContainer,]}>
         {props.cards?.map((card_id, _index) => (
-            <Card key={_index} slug={card_id} size={props.size === 'normal' ? 'small' : 'minimum'} in_game />
+            <Card key={_index} slug={card_id} size={props.size === 'normal' ? 'small' : 'minimum'} />
         ))}
     </View>)
 }

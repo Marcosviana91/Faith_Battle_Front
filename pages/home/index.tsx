@@ -17,7 +17,7 @@ export default function HomeScreen() {
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const roomData = useSelector((state: RootReducer) => state.matchReducer.room_data)
-    const [ws_url, setWsUrl] = useState("ws://localhost")
+    const [ws_url, setWsUrl] = useState("")
 
 
     const WS = useWebSocket(ws_url, {
@@ -47,7 +47,7 @@ export default function HomeScreen() {
             setWsUrl(`ws://${URI}/ws/`)
         }
         else {
-            setWsUrl('ws://localhost')
+            setWsUrl(``)
         }
     }, [userData])
 

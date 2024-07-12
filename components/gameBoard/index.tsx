@@ -4,10 +4,7 @@ import Card from "@/components/cards";
 import CardsContainer from "./cardsContainer";
 
 export default function GameBoard(props: PlayersInMatchApiProps) {
-    const wisdom_cards = []
-    for (let wp = 0; wp < props.wisdom_points!; wp++) {
-        wisdom_cards.push(`wisdom_card_${wp}`)
-    }
+
     return (
         <>
             <Image
@@ -28,7 +25,7 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
                 <CardsContainer cards={props.card_prepare_camp} />
             </ScrollView>
             <ScrollView horizontal style={styles.zonaSabedoria}>
-                <CardsContainer cards={wisdom_cards} />
+                <CardsContainer />
             </ScrollView>
             <View style={styles.forgotten}>
                 <Card size="minimum" />
