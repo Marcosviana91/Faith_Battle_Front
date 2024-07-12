@@ -66,7 +66,9 @@ export default function LoginScreen() {
 
     useEffect(() => {
         if (userData) {
-            dispatch(login(userData.user_data!))
+            let data = {...userData.user_data!, "token": userToken }
+            console.log(data)
+            dispatch(login(data))
         }
     }, [userData])
 
