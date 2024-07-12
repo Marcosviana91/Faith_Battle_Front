@@ -1,114 +1,102 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-var initialState: MatchReducerProps = {
+var _initialState: MatchReducerProps = {
     room_data: undefined,
     match_data: undefined,
     player_data: undefined
 }
 
-var _0initialState: MatchReducerProps = {
-    room_data: {
-        id: "1",
-        room_stage: 0,
-        name: "Sala de Teste",
-        match_type: "survival",
-        max_players: 8,
 
-        connected_players: [
-            {
-                id: 1,
-                ready: true,
-            },
-            {
-                id: 2,
-                ready: true,
-            },
-            {
-                id: 3,
-                ready: true,
-            },
-        ]
-    },
-    player_data: undefined
-}
-
-var _1initialState: MatchReducerProps = {
-    room_data: {
-        id: "1",
-        room_stage: 1,
-        name: "Sala de Teste",
-        match_type: "survival",
-        max_players: 8,
-
-        connected_players: [
-            {
-                id: 1,
-                ready: false,
-            },
-            {
-                id: 2,
-                ready: false,
-            },
-            {
-                id: 3,
-                ready: true,
-            },
-        ]
-    },
-    player_data: {
-        id: 3,
-        card_hand: [
-            'abraao', 'adao', 'daniel',
-            'davi', 'elias',
-        ]
-    }
-}
-
-var _2initialState: MatchReducerProps = {
+var initialState: MatchReducerProps = {
     match_data: {
-        id: "1",
-        match_type: "survival",
-        max_players: 8,
+        "id": "fake_match",
+        "start_match": "2024-07-12T11:58:14.102025",
+        "match_type": "survival",
+        "round_match": 1,
+        "player_turn": 0,
+        "player_focus_id": 0,
+        "can_others_move": false,
+        "players_in_match": [
+            {
+                "id": 1,
+                "card_hand": [
+                    "josue",
+                    "salomao",
+                    "sansao",
+                    "maria",
+                    "ester",
+                    "elias"
+                ],
+                "card_deck": [
+                    "abraao",
+                    "adao",
+                    "daniel",
+                    "davi",
+                    "eva",
+                    "jaco",
+                    "jose-do-egito",
+                    "moises",
+                    "noe"
+                ],
+                "card_prepare_camp": [
 
-        start_match: '0000000000',
+                ],
+                "card_battle_camp": [
 
-        players_in_match: [
-            {
-                id: 1,
-                card_prepare_camp: ['adao', 'daniel'],
-                card_battle_camp: ["sansao"],
-                card_in_forgotten_sea: [],
-                wisdom_points: 2,
-                faith_points: 15,
-                wisdom_used: 0,
+                ],
+                "card_in_forgotten_sea": [
+
+                ],
+                "faith_points": 15,
+                "wisdom_points": 1,
+                "wisdom_used": 0
             },
             {
-                id: 2,
-                card_prepare_camp: ['jaco', "jose-do-egito"],
-                card_battle_camp: ["noe"],
-                card_in_forgotten_sea: [],
-                wisdom_points: 2,
-                faith_points: 15,
-                wisdom_used: 0,
-            },
-            {
-                id: 3,
-                card_prepare_camp: ["salomao", "sansao"],
-                card_battle_camp: ['jaco'],
-                card_in_forgotten_sea: [],
-                wisdom_points: 2,
-                faith_points: 15,
-                wisdom_used: 0,
-            },
+                "id": 10,
+                "card_hand": [
+                    "moises",
+                    "eva",
+                    "maria",
+                    "jose-do-egito",
+                    "josue"
+                ],
+                "card_deck": [
+                    "abraao",
+                    "adao",
+                    "daniel",
+                    "davi",
+                    "elias",
+                    "ester",
+                    "jaco",
+                    "noe",
+                    "salomao",
+                    "sansao"
+                ],
+                "card_prepare_camp": [
+
+                ],
+                "card_battle_camp": [
+
+                ],
+                "card_in_forgotten_sea": [
+
+                ],
+                "faith_points": 15,
+                "wisdom_points": 1,
+                "wisdom_used": 0
+            }
         ]
     },
     player_data: {
-        id: 3,
+        id: 1,
         card_hand: [
-            'abraao', 'adao', 'daniel',
-            'davi', 'elias', 'ester',
+            "josue",
+            "salomao",
+            "sansao",
             "maria",
-        ]
+            "ester",
+            "elias"
+        ],
     }
 }
 

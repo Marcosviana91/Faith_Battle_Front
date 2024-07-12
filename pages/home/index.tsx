@@ -34,9 +34,11 @@ export default function HomeScreen() {
         }
     });
 
-    useEffect(()=>{
-        if (matchData || roomData) {
-            navigation.navigate('Jogar' as never)
+    useEffect(() => {
+        if (userData) {
+            if (matchData || roomData) {
+                navigation.navigate('Jogar' as never)
+            }
         }
     }, [matchData, roomData])
 

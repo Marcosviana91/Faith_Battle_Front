@@ -2,12 +2,11 @@ declare type MatchApiProps = {
     id?: string;
     start_match?: string;
     match_type?: string;
-    players_in_match?: PlayersInMatchApiProps[];
     round_match?: number;
-    max_players?: number;
     player_turn?: number;
     player_focus_id?: number;
     can_others_move?: boolean;
+    players_in_match?: PlayersInMatchApiProps[];
     end_match?: string;
 }
 

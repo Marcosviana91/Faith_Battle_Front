@@ -19,10 +19,10 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
                 <Card size="minimum" />
             </View>
             <ScrollView horizontal style={styles.zonaBatalha}>
-                <CardsContainer cards={props.cards_in_battle_zone} />
+                <CardsContainer cards={props.card_battle_camp} />
             </ScrollView>
             <ScrollView horizontal style={styles.zonaPreparacao}>
-                <CardsContainer cards={props.cards_in_prepare_zone} />
+                <CardsContainer cards={props.card_prepare_camp} />
             </ScrollView>
             <ScrollView horizontal style={styles.zonaSabedoria}>
                 <CardsContainer />

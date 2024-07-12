@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialState: UserStoreProps = {
     user_data: undefined,
-    player_data: undefined,
 }
 
 
@@ -17,7 +16,6 @@ const authSlice = createSlice({
         },
         logout: (state) => {
             state.user_data = undefined
-            state.player_data = undefined
         }
     }
 })

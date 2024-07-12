@@ -1,18 +1,42 @@
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet, Text } from "react-native";
 import { globalStyles } from "@/constants/Styles";
+
+import { AntDesign } from '@expo/vector-icons';
 
 import GameBoard from "@/components/gameBoard";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
 
-
 import CardsContainer from "@/components/gameBoard/cardsContainer";
 
 
+
+function contaTempo(tempoInicial: string) {
+    const medidas = {
+        h: 3600000,
+        m: 60000,
+        s: 1000
+    }
+    const inicialDate = new Date(tempoInicial).getTime()
+    const actualDate = new Date().getTime()
+
+    const horasPercorrido = Math.floor(Math.abs(actualDate - inicialDate) / medidas.h)
+    const minutosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.m) - horasPercorrido * 24)
+    const segundosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.s) - minutosPercorrido * 60)
+    const stringMinuto = minutosPercorrido < 10 ? `0${minutosPercorrido}` : `${minutosPercorrido}`
+    const stringSegundo = segundosPercorrido < 10 ? `0${segundosPercorrido}` : `${segundosPercorrido}`
+    if (horasPercorrido < 1) {
+        return `${stringMinuto}:${stringSegundo}`
+    }
+    return `${horasPercorrido}:${stringMinuto}:${stringSegundo}`
+}
+
+
 export default function GameBoardTable() {
-    // console.log("Dados da Partida: ", props);
+    const [tempoPercorrido, setTempoPercorrido] = useState("")
 
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
@@ -22,9 +46,17 @@ export default function GameBoardTable() {
         const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
         return _data[0]
     }
+    setInterval(() => {
+        setTempoPercorrido(contaTempo(matchData?.start_match!))
+    }, 500)
 
     return (
         <View style={globalStyles.container}>
+            {/* Relógio */}
+            <View style={{ flexDirection: "column-reverse", position: "absolute", top: 8, left: 8, gap: 4, alignItems:'center' }}>
+                <AntDesign name="clockcircleo" size={18} color="black" />
+                <Text>{tempoPercorrido}</Text>
+            </View>
             {/* Icones dos jogadores */}
             <View style={[styles.gameBoardHeader,]}>
                 {matchData?.players_in_match?.map((player) => (
@@ -33,9 +65,9 @@ export default function GameBoardTable() {
             </View>
             {/*  */}
             <View style={[globalStyles.contentContainer, styles.container]}>
-                {player_focus && <View style={[styles.enemyBoard]}>
+                {player_focus !== 0 && <View style={[styles.enemyBoard]}>
                     {/* Verificar ID do jogador focado, não usar mais indice da lista */}
-                    <GameBoard {...getPlayerData(player_focus)} />
+                    <GameBoard {...getPlayerData(player_focus!)} />
                 </View>}
                 <View>
                     {/* Verificar ID do jogador logado */}
