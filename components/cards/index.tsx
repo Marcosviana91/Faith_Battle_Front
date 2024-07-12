@@ -202,6 +202,7 @@ type Props = {
     slug?: string; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
     in_game?: boolean;
+    slug_match?: string;
 }
 
 function getCardSource(slug: string | undefined) {
@@ -243,6 +244,12 @@ export default function Card(props: Props) {
                     <View style={{position: "absolute", zIndex: 10, backgroundColor:"#ffffff90", width:"100%", height:"100%", borderRadius:10,alignItems:"center" }}>
                         <Pressable
                             onPress={()=>{
+                                const card_move = {
+                                    "data_type": "match_move",
+                                    "card": {
+                                        "slug_match": "",
+                                    }
+                                }
                                 console.log("Mover.")
                                 setShowComands(false)
                             }}

@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-var _initialState: MatchReducerProps = {
+var initialState: MatchReducerProps = {
     room_data: undefined,
     match_data: undefined,
     player_data: undefined
 }
 
 
-var initialState: MatchReducerProps = {
+var _initialState: MatchReducerProps = {
     match_data: {
         "id": "fake_match",
         "start_match": "2024-07-12T13:00:14.102025",

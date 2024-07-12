@@ -13,6 +13,7 @@ declare type MatchApiProps = {
 declare type CardProps = {
     slug: string,
     path: ImageSourcePropType,
+    slug_match?: string
 }
 
 
