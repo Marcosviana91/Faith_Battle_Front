@@ -11,14 +11,14 @@ import { useDispatch } from "react-redux";
 import { HelloWave } from '@/components/HelloWave';
 import { globalStyles } from '@/constants/Styles';
 
-import { useLoginMutation, useNewUserMutation } from '@/store/api'
+import { useLoginMutation, useNewUserMutation, useGetUserDataMutation } from '@/store/api'
 import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
 
-function parseJwt (token: string): TokenProps {
+function parseJwt(token: string): TokenProps {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 
@@ -27,8 +27,11 @@ function parseJwt (token: string): TokenProps {
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
+    const [userId, setUserId] = useState('')
+    const [userToken, setUserToken] = useState('')
 
-    const [doLogin, { data: tokenAuthData, error : authError }] = useLoginMutation();
+    const [doLogin, { data: tokenAuthData, error: authError }] = useLoginMutation();
+    const [getUser, { data: userData, error: userError }] = useGetUserDataMutation();
     const [createUser, { data: newUserData }] = useNewUserMutation();
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
@@ -48,17 +51,24 @@ export default function LoginScreen() {
         }
         if (tokenAuthData) {
             if (tokenAuthData.token_type === "Bearer") {
-                const token = tokenAuthData.access_token
-                // console.log(token)
-                const userData = parseJwt(tokenAuthData.access_token).inf
-                userData.token = token
-                // console.log(userData)
-                dispatch(login(userData))
-                
+                setUserToken(tokenAuthData.access_token)
+                setUserId(parseJwt(tokenAuthData.access_token).sub)
             }
-
         }
     }, [authError, tokenAuthData])
+
+    useEffect(() => {
+        if (userId) {
+            getUser(userId)
+        }
+
+    }, [userId])
+
+    useEffect(() => {
+        if (userData) {
+            dispatch(login(userData.user_data!))
+        }
+    }, [userData])
 
     return (
         <ThemedView style={globalStyles.container}>

@@ -21,6 +21,12 @@ const api = createApi({
                 body: newUserData
             })
         }),
+        getUserData: builder.mutation<APIResponseProps, string>({
+            query: userId => ({
+                url: `/user/${userId}`,
+                method: 'GET',
+            })
+        }),
         editUser: builder.mutation<APIResponseProps, UserProps>({
             query: newUserData => ({
                 url: `/user/${newUserData.id}`,
@@ -59,9 +65,10 @@ const api = createApi({
 export const {
     useLoginMutation,
     useNewUserMutation,
+    useGetUserDataMutation,
     useEditUserMutation,
     useCreateRoomsMutation,
     useEnterRoomsMutation,
-    useGetRoomsQuery
+    useGetRoomsQuery,
 } = api
 export default api
