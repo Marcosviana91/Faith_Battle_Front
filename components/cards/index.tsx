@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, Modal, Pressable } from "react-native";
+import { FontAwesome } from '@expo/vector-icons';
 
 export const card_list: CardProps[] = [
     // Artefatos
@@ -179,17 +180,31 @@ export const card_list: CardProps[] = [
         slug: "",
         path: require("@/assets/images/Cards/Pecados/Traição.png"),
     },
+    // Sabedoria
+    {
+        slug: "wisdom_card_0",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_0.png")
+    },
+    {
+        slug: "wisdom_card_1",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_0.png")
+    },
+    {
+        slug: "wisdom_card_2",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_0.png")
+    },
 ]
 
 var default_card = require('@/assets/images/Cards/Card.png')
 
 
 type Props = {
-    slug?: string; //Caso não seja passado um ID, deve renderizar uma carta virada de costa
+    slug?: string; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
+    in_game?: boolean;
 }
 
-function getCardSource(slug: string|undefined) {
+function getCardSource(slug: string | undefined) {
     if (!slug) {
         return default_card
     }
@@ -202,6 +217,7 @@ function getCardSource(slug: string|undefined) {
 
 export default function Card(props: Props) {
     const [showModal, setShowModal] = useState(false)
+    const [showComands, setShowComands] = useState(false)
     var cardSize = styles.image
     switch (props.size) {
         case 'medium':
@@ -222,9 +238,36 @@ export default function Card(props: Props) {
 
     return (
         <>
+            <View>
+                {showComands &&
+                    <View style={{position: "absolute", zIndex: 10, backgroundColor:"#ffffff90", width:"100%", height:"100%", borderRadius:10,alignItems:"center" }}>
+                        <Pressable
+                            onPress={()=>{
+                                console.log("Mover.")
+                                setShowComands(false)
+                            }}
+                        >
+                            <FontAwesome name="arrow-up" size={40} color="black" />
+                        </Pressable>
+                        <Pressable
+                            onPress={() => {
+                                setShowModal(!showModal)
+                                setShowComands(false)
+                            }}
+                        >
+                            <FontAwesome name="eye" size={50} color="black" />
+                        </Pressable>
+                    </View>
+                }
                 <Pressable
                     onPress={() => {
-                        setShowModal(!showModal)
+                        if (props.in_game) {
+                            setShowComands(true)
+                        }
+                        else {
+                            setShowModal(!showModal)
+
+                        }
                     }}
                 >
                     <Image
@@ -234,6 +277,8 @@ export default function Card(props: Props) {
                     />
                 </Pressable>
 
+            </View>
+
             <Modal visible={showModal} transparent animationType='fade' >
                 <Pressable
 
@@ -242,11 +287,11 @@ export default function Card(props: Props) {
                     }}
                 >
                     <View style={{ width: '100%', height: "100%", backgroundColor: '#000c', alignItems: "center", justifyContent: "center" }}>
-                            <Image
-                                resizeMode="contain"
-                                style={styles.image}
-                                source={getCardSource(props.slug)}
-                            />
+                        <Image
+                            resizeMode="contain"
+                            style={styles.image}
+                            source={getCardSource(props.slug)}
+                        />
                     </View>
                 </Pressable>
             </Modal>
