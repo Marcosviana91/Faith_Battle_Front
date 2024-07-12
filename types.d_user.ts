@@ -26,6 +26,7 @@ declare type PlayerProps = {
 
 declare type PlayersInMatchApiProps = {
     id: number;
+    ready?: boolean;
     card_deck?: string[]
     card_hand?: string[]
     card_prepare_camp?: string[]

@@ -14,12 +14,12 @@ import CardsContainer from "@/components/gameBoard/cardsContainer";
 export default function GameBoardTable() {
     // console.log("Dados da Partida: ", props);
 
-    const room = useSelector((state: RootReducer) => state.matchReducer.room_data)
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_focus = room?.player_focus
+    const player_focus = matchData?.player_focus_id
 
     function getPlayerData(player_id: number) {
-        const _data = room!.players_in_match!.filter((player) => player.id === player_id)
+        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
         return _data[0]
     }
 
@@ -27,7 +27,7 @@ export default function GameBoardTable() {
         <View style={globalStyles.container}>
             {/* Icones dos jogadores */}
             <View style={[styles.gameBoardHeader,]}>
-                {room?.players_in_match?.map((player) => (
+                {matchData?.players_in_match?.map((player) => (
                     <PlayerIcon key={player.id} id={player.id} />
                 ))}
             </View>
@@ -45,7 +45,7 @@ export default function GameBoardTable() {
             {/* Mão do jogador */}
             <View style={[styles.playerFooter,]}>
                 <ScrollView horizontal>
-                    <CardsContainer size="normal" cards={player!.cards_in_hand} />
+                    <CardsContainer size="normal" cards={player!.card_hand} />
                 </ScrollView>
             </View>
         </View>

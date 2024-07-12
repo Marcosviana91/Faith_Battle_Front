@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigation } from '@react-navigation/native';
 
 import { RootReducer } from '@/store';
 
@@ -12,7 +13,10 @@ import { setRoom, setPlayer, leaveMatch, setMatch } from "@/store/reducers/match
 
 export default function HomeScreen() {
     const dispatch = useDispatch()
+    const navigation = useNavigation()
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
+    const roomData = useSelector((state: RootReducer) => state.matchReducer.room_data)
     const [ws_url, setWsUrl] = useState("")
 
 
@@ -30,8 +34,13 @@ export default function HomeScreen() {
         }
     });
 
+    useEffect(()=>{
+        if (matchData || roomData) {
+            navigation.navigate('Jogar' as never)
+        }
+    }, [matchData, roomData])
+
     useEffect(() => {
-        console.log(userData)
         if (userData) {
             setWsUrl(`ws://${URI}/ws/`)
         }
