@@ -10,7 +10,7 @@ var _initialState: MatchReducerProps = {
 var initialState: MatchReducerProps = {
     match_data: {
         "id": "fake_match",
-        "start_match": "2024-07-12T11:58:14.102025",
+        "start_match": "2024-07-12T13:00:14.102025",
         "match_type": "survival",
         "round_match": 1,
         "player_turn": 0,

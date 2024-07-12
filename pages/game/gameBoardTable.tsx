@@ -24,8 +24,9 @@ function contaTempo(tempoInicial: string) {
     const actualDate = new Date().getTime()
 
     const horasPercorrido = Math.floor(Math.abs(actualDate - inicialDate) / medidas.h)
-    const minutosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.m) - horasPercorrido * 24)
-    const segundosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.s) - minutosPercorrido * 60)
+    const minutosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.m) - horasPercorrido * 60)
+    const segundosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.s) - ((minutosPercorrido) * 60)-3600)
+
     const stringMinuto = minutosPercorrido < 10 ? `0${minutosPercorrido}` : `${minutosPercorrido}`
     const stringSegundo = segundosPercorrido < 10 ? `0${segundosPercorrido}` : `${segundosPercorrido}`
     if (horasPercorrido < 1) {
