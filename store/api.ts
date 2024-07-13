@@ -21,7 +21,7 @@ const api = createApi({
                 body: newUserData
             })
         }),
-        getUserData: builder.mutation<APIResponseProps, string>({
+        getUserData: builder.mutation<APIResponseProps, number>({
             query: userId => ({
                 url: `/user/${userId}`,
                 method: 'GET',

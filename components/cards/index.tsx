@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, Modal, Pressable } from "react-native";
-import { FontAwesome } from '@expo/vector-icons';
+import { View, Image, StyleSheet, Modal, Pressable } from "react-native";
+
 
 export const card_list: CardProps[] = [
     // Artefatos
@@ -202,7 +202,7 @@ type Props = {
     slug?: string; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
     in_game?: boolean;
-    in_game_id?: string;
+    on_press?: () => void;
 }
 
 function getCardSource(slug: string | undefined) {
@@ -218,7 +218,7 @@ function getCardSource(slug: string | undefined) {
 
 export default function Card(props: Props) {
     const [showModal, setShowModal] = useState(false)
-    const [showComands, setShowComands] = useState(false)
+
     var cardSize = styles.image
     switch (props.size) {
         case 'medium':
@@ -240,40 +240,13 @@ export default function Card(props: Props) {
     return (
         <>
             <View>
-                {showComands &&
-                    <View style={{position: "absolute", zIndex: 10, backgroundColor:"#ffffff90", width:"100%", height:"100%", borderRadius:10,alignItems:"center" }}>
-                        <Pressable
-                            onPress={()=>{
-                                const card_move = {
-                                    "data_type": "match_move",
-                                    "card": {
-                                        "slug_match": "",
-                                    }
-                                }
-                                console.log("Mover.")
-                                setShowComands(false)
-                            }}
-                        >
-                            <FontAwesome name="arrow-up" size={40} color="black" />
-                        </Pressable>
-                        <Pressable
-                            onPress={() => {
-                                setShowModal(!showModal)
-                                setShowComands(false)
-                            }}
-                        >
-                            <FontAwesome name="eye" size={50} color="black" />
-                        </Pressable>
-                    </View>
-                }
                 <Pressable
                     onPress={() => {
-                        if (props.in_game) {
-                            setShowComands(true)
-                        }
-                        else {
+                        if (!props.in_game) {
                             setShowModal(!showModal)
-
+                        }
+                        else if (props.on_press) {
+                            props.on_press()
                         }
                     }}
                 >

@@ -10,8 +10,7 @@ declare type UserProps = {
 }
 
 declare type UserStoreProps = {
-    user_data?: UserProps,
-    player_data?: PlayerProps,
+    user_data?: UserProps
 }
 
 declare type PlayerProps = {

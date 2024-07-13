@@ -6,10 +6,10 @@ declare type AuthProps = {
 declare type TokenAuthProps = {
     access_token: string,
     token_type: string,
+    sub: number,
 }
 
 declare type TokenProps = {
     exp: string,
     sub: string,
-    inf: UserProps,
 }

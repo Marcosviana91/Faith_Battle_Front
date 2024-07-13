@@ -38,6 +38,7 @@ export const globalStyles = StyleSheet.create({
         height: 32,
         borderRadius: 8,
         paddingHorizontal: 8,
+        minWidth: 200
     }
 });
 

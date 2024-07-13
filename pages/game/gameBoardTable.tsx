@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { View, ScrollView, StyleSheet, Text } from "react-native";
+import { View, ScrollView, StyleSheet, Text, Image } from "react-native";
 import { globalStyles } from "@/constants/Styles";
 
 import { AntDesign } from '@expo/vector-icons';
@@ -11,7 +11,6 @@ import GameBoard from "@/components/gameBoard";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
 
 import CardsContainer from "@/components/gameBoard/cardsContainer";
-
 
 
 function contaTempo(tempoInicial: string) {
@@ -25,7 +24,7 @@ function contaTempo(tempoInicial: string) {
 
     const horasPercorrido = Math.floor(Math.abs(actualDate - inicialDate) / medidas.h)
     const minutosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.m) - horasPercorrido * 60)
-    const segundosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.s) - ((minutosPercorrido) * 60)-(horasPercorrido* 3600))
+    const segundosPercorrido = Math.floor((Math.abs(actualDate - inicialDate) / medidas.s) - ((minutosPercorrido) * 60) - (horasPercorrido * 3600))
 
     const stringMinuto = minutosPercorrido < 10 ? `0${minutosPercorrido}` : `${minutosPercorrido}`
     const stringSegundo = segundosPercorrido < 10 ? `0${segundosPercorrido}` : `${segundosPercorrido}`
@@ -34,7 +33,6 @@ function contaTempo(tempoInicial: string) {
     }
     return `${horasPercorrido}:${stringMinuto}:${stringSegundo}`
 }
-
 
 export default function GameBoardTable() {
     const [tempoPercorrido, setTempoPercorrido] = useState("")
@@ -54,17 +52,25 @@ export default function GameBoardTable() {
     return (
         <View style={globalStyles.container}>
             {/* Relógio */}
-            <View style={{ flexDirection: "column-reverse", position: "absolute", top: 8, left: 8, gap: 4, alignItems:'center' }}>
+            <View style={{ flexDirection: "column-reverse", position: "absolute", top: 8, left: 8, gap: 4, alignItems: 'center' }}>
                 <AntDesign name="clockcircleo" size={18} color="black" />
                 <Text>{tempoPercorrido}</Text>
+            </View>
+            {/* Contador de Sabedoria */}
+            <View style={{ flexDirection: "row", position: "absolute", top: 8, right: 8, gap: 4, justifyContent: 'center', alignItems: "center", borderColor: "#0000008d", borderWidth: 1, borderRadius: 8, width: 100 }}>
+                <Text>{player?.wisdom_used}</Text>
+                <Image
+                    source={require('@/assets/images/Icons/wisdon.png')}
+                />
+                <Text>{player?.wisdom_points}</Text>
             </View>
             {/* Icones dos jogadores */}
             <View style={[styles.gameBoardHeader,]}>
                 {matchData?.players_in_match?.map((player) => (
-                    <PlayerIcon key={player.id} id={player.id} />
+                    <PlayerIcon key={player.id} id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} />
                 ))}
             </View>
-            {/*  */}
+            {/* GameBoards */}
             <View style={[globalStyles.contentContainer, styles.container]}>
                 {player_focus !== 0 && <View style={[styles.enemyBoard]}>
                     {/* Verificar ID do jogador focado, não usar mais indice da lista */}
@@ -78,7 +84,7 @@ export default function GameBoardTable() {
             {/* Mão do jogador */}
             <View style={[styles.playerFooter,]}>
                 <ScrollView horizontal>
-                    <CardsContainer size="normal" cards={player!.card_hand} />
+                    <CardsContainer size="small" zone='hand' cards={player!.card_hand} />
                 </ScrollView>
             </View>
         </View>

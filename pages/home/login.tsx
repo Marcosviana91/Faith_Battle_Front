@@ -15,19 +15,19 @@ import { useLoginMutation, useNewUserMutation, useGetUserDataMutation } from '@/
 import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
 
-function parseJwt(token: string): TokenProps {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+// function parseJwt(token: string): TokenProps {
+//     var base64Url = token.split('.')[1];
+//     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+//     var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+//         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+//     }).join(''));
 
-    return JSON.parse(jsonPayload);
-}
+//     return JSON.parse(jsonPayload);
+// }
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
-    const [userId, setUserId] = useState('')
+    const [userId, setUserId] = useState(0)
     const [userToken, setUserToken] = useState('')
 
     const [doLogin, { data: tokenAuthData, error: authError }] = useLoginMutation();
@@ -52,7 +52,7 @@ export default function LoginScreen() {
         if (tokenAuthData) {
             if (tokenAuthData.token_type === "Bearer") {
                 setUserToken(tokenAuthData.access_token)
-                setUserId(parseJwt(tokenAuthData.access_token).sub)
+                setUserId(tokenAuthData.sub)
             }
         }
     }, [authError, tokenAuthData])
@@ -67,7 +67,6 @@ export default function LoginScreen() {
     useEffect(() => {
         if (userData) {
             let data = {...userData.user_data!, "token": userToken }
-            console.log(data)
             dispatch(login(data))
         }
     }, [userData])

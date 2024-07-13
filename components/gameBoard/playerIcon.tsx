@@ -17,7 +17,7 @@ type Props = {
 
 export default function PlayerIcon(props: Props) {
     const dispatch = useDispatch();
-    const playerData = useSelector((state: RootReducer) => state.authReducer.data)
+    const playerData = useSelector((state: RootReducer) => state.authReducer.user_data)
 
     return (
         <View style={globalStyles.container}>
