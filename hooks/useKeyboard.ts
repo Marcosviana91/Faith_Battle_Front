@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Platform } from 'react-native';
 
 /**
  * Return a list with a boolean indicating if keyboard is showing, and their dict metrics
@@ -22,6 +22,5 @@ export function useKeyboard() {
             hideSubscription.remove();
         };
     }, [keyboardIsShow]);
-
-    return [keyboardIsShow, Keyboard.metrics()];
+    return (Platform.OS === 'android' ? [keyboardIsShow, Keyboard.metrics()] : [false]);
 }
