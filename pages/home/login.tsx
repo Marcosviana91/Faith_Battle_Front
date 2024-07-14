@@ -1,6 +1,8 @@
-import { Image, StyleSheet, TextInput, Button, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { Image, StyleSheet, View, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
+import { ThemedTextInput } from '@/components/ThemedTextInput'
+import BasicButton from '@/components/button/basic';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -8,25 +10,15 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
 
-import { HelloWave } from '@/components/HelloWave';
 import { globalStyles } from '@/constants/Styles';
 
 import { useLoginMutation, useNewUserMutation, useGetUserDataMutation } from '@/store/api'
 import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
 
-// function parseJwt(token: string): TokenProps {
-//     var base64Url = token.split('.')[1];
-//     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-//     var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
-//         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-//     }).join(''));
-
-//     return JSON.parse(jsonPayload);
-// }
-
 export default function LoginScreen() {
     const dispatch = useDispatch();
+    const [backGroundImage, setBackGroundImage] = useState(0)
     const [userId, setUserId] = useState(0)
     const [userToken, setUserToken] = useState('')
 
@@ -40,6 +32,22 @@ export default function LoginScreen() {
     const [isCreating, setCreating] = useState(false)
     const [realName, setRealName] = useState('')
     const [email, setEmail] = useState('')
+
+    const backGroun_list = [
+        require("@/assets/images/Backgrounds/01.png"),
+        require("@/assets/images/Backgrounds/02.png")
+    ]
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (backGroundImage < backGroun_list.length - 1) {
+                setBackGroundImage(backGroundImage + 1)
+            } else {
+                setBackGroundImage(0)
+            }
+        }, 10000)
+    }, [backGroundImage])
+
 
     useEffect(() => {
         if (authError) {
@@ -66,97 +74,105 @@ export default function LoginScreen() {
 
     useEffect(() => {
         if (userData) {
-            let data = {...userData.user_data!, "token": userToken }
+            let data = { ...userData.user_data!, "token": userToken }
             dispatch(login(data))
         }
     }, [userData])
 
     return (
-        <ThemedView style={globalStyles.container}>
-            <View style={[globalStyles.headerContainer, { flexBasis: 250 }]}>
-                <Image
-                    source={require('@/assets/images/Faith_Batlle.png')}
-                    style={styles.gameLogo}
-                />
-            </View>
-            <View style={[globalStyles.contentContainer, { flexBasis: 300 }]}>
-                <Text>Usuário:</Text>
-                <TextInput style={globalStyles.textInput} value={userName.trim()} onChangeText={setUserName} />
-                <View style={{ flexDirection: 'row' }}>
-                    <Text>Senha: </Text>
-                    <TouchableOpacity onPress={() => { setHidePassword(!hidePassword) }} >
-                        <Ionicons
-                            name={hidePassword ? 'eye-off' : 'eye'}
-                            size={20}
-                        />
-                    </TouchableOpacity>
+        <ImageBackground
+            source={backGroun_list[backGroundImage]}
+            style={{ flex: 1, }}
+            imageStyle={{ width: "100%", height: "100%" }}
+            resizeMode='stretch'
+            blurRadius={3}
+        >
+            <ThemedView style={globalStyles.container} lightColor="#fff7" darkColor="#000c">
+                <ThemedView style={{ height: 50 }} lightColor="#fffc" darkColor="#000c" />
+                <View style={{ flexBasis: 300 }}>
+                    <Image
+                        source={require('@/assets/images/Faith_Batlle.png')}
+                        style={styles.gameLogo}
+                    />
                 </View>
-                <TextInput secureTextEntry={hidePassword} style={globalStyles.textInput} value={password} onChangeText={setPassword} />
-                {isCreating && (
-                    <>
-                        <Text>Nome Completo:</Text>
-                        <TextInput style={globalStyles.textInput} value={realName} onChangeText={setRealName} />
-                        <Text>E-mail:</Text>
-                        <TextInput style={globalStyles.textInput} value={email} onChangeText={setEmail} />
-                    </>
-                )}
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 300 }}>
-                    {isCreating ? (
+                <View style={{ flexBasis: 500, justifyContent: "flex-start", alignItems: "center" }}>
+                    <ThemedText>Usuário:</ThemedText>
+                    <ThemedTextInput value={userName.trim()} onChangeText={setUserName} />
+                    <View style={{ flexDirection: 'row' }}>
+                        <ThemedText>Senha: </ThemedText>
+                        <TouchableOpacity onPress={() => { setHidePassword(!hidePassword) }} >
+                            <ThemedText>
+                                <Ionicons
+                                    name={hidePassword ? 'eye-off' : 'eye'}
+                                    size={20}
+                                />
+                            </ThemedText>
+                        </TouchableOpacity>
+                    </View>
+                    <ThemedTextInput secureTextEntry={hidePassword} value={password} onChangeText={setPassword} />
+                    {isCreating && (
                         <>
-                            <Button color={'green'} title='Salvar' onPress={() => {
-                                console.log("Criando...");
-                                createUser({
-                                    email: email,
-                                    real_name: realName,
-                                    password: password,
-                                    username: userName,
-                                })
-
-                                setRealName('')
-                                setEmail('')
-                                setCreating(false)
-                            }} />
-                            <Button color={'red'} title='Cancelar' onPress={() => {
-                                setRealName('')
-                                setEmail('')
-                                setCreating(false)
-                            }} />
-                        </>
-                    ) : (
-                        <>
-                            <Button title='Logar' onPress={() => {
-                                if (userName === '') {
-                                    window.alert("Insira um nome")
-                                }
-                                else if (password === '') {
-                                    window.alert('Digite uma senha')
-                                }
-                                else {
-                                    doLogin({ username: userName, password: password })
-                                }
-                            }} />
-                            <Button title='Criar Conta' onPress={() => {
-                                setCreating(true)
-                            }} />
+                            <ThemedText>Nome Completo:</ThemedText>
+                            <ThemedTextInput value={realName} onChangeText={setRealName} />
+                            <ThemedText>E-mail:</ThemedText>
+                            <ThemedTextInput value={email} onChangeText={setEmail} />
                         </>
                     )}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 300 }}>
+                        {isCreating ? (
+                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10 }}>
+                                <BasicButton
+                                    darkColor='#060'
+                                    lightColor='#1ad81a'
+                                onPress={() => {
+                                    createUser({
+                                        email: email,
+                                        real_name: realName,
+                                        password: password,
+                                        username: userName,
+                                    })
+                                    setRealName('')
+                                    setEmail('')
+                                    setCreating(false)
+                                }}>Criar</BasicButton>
+                                <BasicButton
+                                darkColor='#770000'
+                                lightColor='#ff6161'
+                                    onPress={() => {
+                                        setRealName('')
+                                        setEmail('')
+                                        setCreating(false)
+                                    }}
+                                >Cancelar</BasicButton>
+                            </View>
+                        ) : (
+                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10 }}>
+                                <BasicButton onPress={() => {
+                                    if (userName === '') {
+                                        window.alert("Insira um nome")
+                                    }
+                                    else if (password === '') {
+                                        window.alert('Digite uma senha')
+                                    }
+                                    else {
+                                        doLogin({ username: userName, password: password })
+                                    }
+                                }} >Logar</BasicButton>
+                                <BasicButton
+                                    darkColor='#060'
+                                    lightColor='#1ad81a'
+                                    onPress={() => {
+                                        setCreating(true)
+                                    }}
+                                >Criar Conta</BasicButton>
+                            </View>
+                        )}
+                    </View>
                 </View>
-            </View>
-            <View style={globalStyles.footerContainer}>
-                <TouchableOpacity>
-                    <Ionicons name='logo-youtube' size={40} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Ionicons name='logo-twitter' size={40} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Ionicons name='logo-whatsapp' size={40} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Ionicons name='earth' size={40} />
-                </TouchableOpacity>
-            </View>
-        </ThemedView>
+                <ThemedText type='defaultSemiBold' lightColor="#000" style={{ position: "absolute", bottom: 8, left: 8 }}>Não oficial</ThemedText>
+            </ThemedView>
+        </ImageBackground>
+
     );
 
 }

@@ -5,13 +5,14 @@
 
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
-const headerBackgound = '#0f0';
+const headerBackgound = '#000';
 const footerBackgound = '#000';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#D9BD76',
+    text: '#000',
+    button_txtInput: "#00CDFD",
+    background: '#11181C',
     tint: tintColorLight,
     icon: '#687076',
     tabIconDefault: '#687076',
@@ -20,8 +21,9 @@ export const Colors = {
     footerBackgound: footerBackgound,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#4b4025',
+    text: '#687076',
+    button_txtInput: "#27419B",
+    background: '#000',
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
