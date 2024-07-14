@@ -15,11 +15,15 @@ export function ThemedTextInput({
 }: ThemedTextInputProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'button_txtInput');
   const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const color = useThemeColor({ light: "#2f3235", dark: "#bebebe" }, 'text');
+  const coloselectionColorr = useThemeColor({ light: "#bebebe", dark: "#2f3235" }, 'text');
 
   return (
     <TextInput
+      cursorColor={color}
+      selectionColor={coloselectionColorr}
       style={[
-        { backgroundColor, borderColor },
+        { backgroundColor, borderColor, color },
         styles.textInput,
         style,
       ]}
