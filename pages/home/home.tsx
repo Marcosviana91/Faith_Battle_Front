@@ -1,7 +1,7 @@
-import { StyleSheet, View } from 'react-native';
+import {  StyleSheet, View } from 'react-native';
 
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
+import { ThemedText } from '@/components/themed/ThemedText'
+import { ThemedView } from '@/components/themed/ThemedView'
 
 import { HelloWave } from '@/components/HelloWave';
 

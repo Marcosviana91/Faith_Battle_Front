@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View, TouchableOpacity, Alert, ImageBackground } from 'react-native';
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { ThemedTextInput } from '@/components/ThemedTextInput'
+import { ThemedText } from '@/components/themed/ThemedText'
+import { ThemedView } from '@/components/themed/ThemedView'
+import { ThemedTextInput } from '@/components/themed/ThemedTextInput'
 import BasicButton from '@/components/button/basic';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -96,7 +96,7 @@ export default function LoginScreen() {
                     />
                 </View>}
                 <View style={{ flexBasis: 500, justifyContent: ((keyboardIsShow[0] && isCreating) ? "center" : "flex-start"), alignItems: "center" }}>
-                    <View style={{backgroundColor:"#b4b4b4d5", padding:16, borderRadius:8, borderColor:"#000", borderWidth:1}}>
+                    <ThemedView lightColor='#b4b4b4d5' darkColor='#242424d3' style={{ padding:16, borderRadius:8, borderColor:"#000", borderWidth:1}}>
                         <ThemedText>Usuário:</ThemedText>
                         <ThemedTextInput value={userName.trim()} onChangeText={setUserName} />
                         <View style={{ flexDirection: 'row' }}>
@@ -119,7 +119,7 @@ export default function LoginScreen() {
                             <ThemedTextInput value={email} onChangeText={setEmail} />
                         </>
                     )}
-                    </View>
+                    </ThemedView>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 300 }}>
                         {isCreating ? (
                             <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10 }}>

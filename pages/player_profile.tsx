@@ -10,8 +10,8 @@ import { Text, TextInput, View, TouchableOpacity, Modal } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/themed/ThemedView";
+import { ThemedText } from "@/components/themed/ThemedText";
 import { globalStyles } from '@/constants/Styles';
 
 import { useEditUserMutation } from '@/store/api'
