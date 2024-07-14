@@ -1,3 +1,5 @@
+import { ThemedText } from '@/components/themed/ThemedText'
+import { ThemedView } from '@/components/themed/ThemedView'
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Card from "@/components/cards/index";
 
@@ -15,13 +17,16 @@ const card_list = [
 export default function CardScreen() {
 
     return (
-        <ScrollView>
-            <View style={[styles.container,]}>
-                { card_list.map((card_slug, index) => (
-                    <Card key={index} size="small" slug={card_slug}></Card>
-                ))}
-            </View>
-        </ScrollView>
+        <ThemedView style={{flex:1}}>
+            <ScrollView>
+                <ThemedText>Standard Heros:</ThemedText>
+                <View style={[styles.container,]}>
+                    {card_list.map((card_slug, index) => (
+                        <Card key={index} size="small" slug={card_slug}></Card>
+                    ))}
+                </View>
+            </ScrollView>
+        </ThemedView>
 
     )
 }

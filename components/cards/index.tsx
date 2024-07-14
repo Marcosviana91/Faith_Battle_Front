@@ -268,8 +268,8 @@ export default function Card(props: Props) {
                 >
                     <View style={{ width: '100%', height: "100%", backgroundColor: '#000c', alignItems: "center", justifyContent: "center" }}>
                         <Image
-                            resizeMode="contain"
-                            style={styles.image}
+                            resizeMode="stretch"
+                            style={[styles.image, {width: "100%"}]}
                             source={getCardSource(props.slug)}
                         />
                     </View>
