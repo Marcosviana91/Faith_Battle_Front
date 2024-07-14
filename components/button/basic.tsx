@@ -22,7 +22,6 @@ export default function BasicButton(props: Props) {
             borderRadius: 16,
             borderColor: "gray",
             borderWidth: 1,
-            shadowRadius: 8,
         },
     });
 

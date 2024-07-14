@@ -96,7 +96,7 @@ export default function LoginScreen() {
                     />
                 </View>}
                 <View style={{ flexBasis: 500, justifyContent: ((keyboardIsShow[0] && isCreating) ? "center" : "flex-start"), alignItems: "center" }}>
-                    <ThemedView lightColor='#b4b4b4d5' darkColor='#242424d3' style={{ padding:16, borderRadius:8, borderColor:"#000", borderWidth:1}}>
+                    <ThemedView lightColor='#b4b4b4d5' darkColor='#242424d3' style={{ padding: 16, borderRadius: 8, borderColor: "#000", borderWidth: 1 }}>
                         <ThemedText>Usuário:</ThemedText>
                         <ThemedTextInput value={userName.trim()} onChangeText={setUserName} />
                         <View style={{ flexDirection: 'row' }}>
@@ -110,15 +110,20 @@ export default function LoginScreen() {
                                 </ThemedText>
                             </TouchableOpacity>
                         </View>
-                    <ThemedTextInput secureTextEntry={hidePassword} value={password} onChangeText={setPassword} />
-                    {isCreating && (
-                        <>
-                            <ThemedText>Nome Completo:</ThemedText>
-                            <ThemedTextInput value={realName} onChangeText={setRealName} />
-                            <ThemedText>E-mail:</ThemedText>
-                            <ThemedTextInput value={email} onChangeText={setEmail} />
-                        </>
-                    )}
+                        <ThemedTextInput
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry={hidePassword}
+                            keyboardType={(hidePassword ? 'default' : "visible-password")}
+                        />
+                        {isCreating && (
+                            <>
+                                <ThemedText>Nome Completo:</ThemedText>
+                                <ThemedTextInput value={realName} onChangeText={setRealName} />
+                                <ThemedText>E-mail:</ThemedText>
+                                <ThemedTextInput value={email} onChangeText={setEmail} />
+                            </>
+                        )}
                     </ThemedView>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 300 }}>
                         {isCreating ? (
