@@ -6,12 +6,13 @@ import { RootReducer } from '@/store';
 import { logout } from "@/store/reducers/authReducer";
 import { leaveMatch } from "@/store/reducers/matchReducer";
 
-import { Text, TextInput, View, TouchableOpacity, Modal } from 'react-native';
+import { View, TouchableOpacity, Modal } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { ThemedView } from "@/components/themed/ThemedView";
 import { ThemedText } from "@/components/themed/ThemedText";
+import { ThemedTextInput } from '@/components/themed/ThemedTextInput'
 import { globalStyles } from '@/constants/Styles';
 
 import { useEditUserMutation } from '@/store/api'
@@ -34,7 +35,7 @@ export default function ProfileScreen() {
         if (newUserData?.data_type == "user_updated" && newUserData.user_data) {
             console.log(newUserData.user_data);
         }
-        }, [newUserData])
+    }, [newUserData])
 
     return (
         <ThemedView style={[globalStyles.container, { padding: 10 }]}>
@@ -74,133 +75,153 @@ export default function ProfileScreen() {
                         transparent
                         animationType='fade'
                     >
-                        <View
-                            style={{ flex: 1, backgroundColor: '#000000d1', justifyContent: 'center', alignItems: 'center' }}
+                        <ThemedView
+                            lightColor='#ffffffd1'
+                            darkColor='#000000d1'
+                            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                         >
-                            <View
-                                style={{ width: '90%', height: 300, backgroundColor: "white", borderRadius: 16, padding: 24 }}
+                            <ThemedView
+                                style={{ width: '90%', borderRadius: 16, padding: 24, borderWidth: 1 }}
                             >
+                                {/* Form */}
                                 <View style={{ rowGap: 10 }}>
-                                    <View style={{ flexDirection: 'row', columnGap: 16 }}>
-                                        <Text style={{ width: 120 }}>Nome Completo:</Text>
-                                        <TextInput
-                                            style={[globalStyles.textInput, { flex: 1 }]}
-                                            value={realName}
-                                            onChangeText={setRealName}
-                                        />
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setRealName(playerData?.real_name);
-                                            }}
-                                        >
-                                            <MaterialIcons name="restart-alt" size={24} color="black" />
-                                        </TouchableOpacity>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                        <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Nome Completo:</ThemedText>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <ThemedTextInput
+                                                value={realName}
+                                                onChangeText={setRealName}
+                                            />
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    setRealName(playerData?.real_name);
+                                                }}
+                                            >
+                                                <ThemedText>
+                                                    <MaterialIcons name="restart-alt" size={24} />
+                                                </ThemedText>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 16 }}>
-                                        <Text style={{ width: 120 }}>Email:</Text>
-                                        <TextInput
-                                            style={[globalStyles.textInput, { flex: 1 }]}
-                                            value={email}
-                                            onChangeText={setEmail}
-                                        />
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setEmail(playerData?.email);
-                                            }}
-                                        >
-                                            <MaterialIcons name="restart-alt" size={24} color="black" />
-                                        </TouchableOpacity>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                        <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Email:</ThemedText>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <ThemedTextInput
+                                                value={email}
+                                                onChangeText={setEmail}
+                                            />
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    setEmail(playerData?.email);
+                                                }}
+                                            >
+                                                <ThemedText>
+                                                    <MaterialIcons name="restart-alt" size={24} />
+                                                </ThemedText>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 16 }}>
-                                        <Text style={{ width: 120 }}>Confirma email:</Text>
-                                        <TextInput
-                                            style={[globalStyles.textInput, { flex: 1 }]}
-                                            value={email2}
-                                            onChangeText={setEmail2}
-                                        />
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setEmail2(playerData?.email);
-                                            }}
-                                        >
-                                            <MaterialIcons name="restart-alt" size={24} color="black" />
-                                        </TouchableOpacity>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                        <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Confirma email:</ThemedText>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <ThemedTextInput
+                                                value={email2}
+                                                onChangeText={setEmail2}
+                                            />
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    setEmail2(playerData?.email);
+                                                }}
+                                            >
+                                                <ThemedText>
+                                                    <MaterialIcons name="restart-alt" size={24} />
+                                                </ThemedText>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 16 }}>
-                                        <Text style={{ width: 120 }}>Senha:</Text>
-                                        <TextInput
-                                            style={[globalStyles.textInput, { flex: 1 }]}
-                                            value={password}
-                                            onChangeText={setPassword}
-                                            placeholder='Deixe vazio para não alterar'
-                                            placeholderTextColor={'#55f4ff'}
-                                        />
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setPassword('');
-                                            }}
-                                        >
-                                            <MaterialIcons name="restart-alt" size={24} color="black" />
-                                        </TouchableOpacity>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                        <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Senha:</ThemedText>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <ThemedTextInput
+                                                value={password}
+                                                onChangeText={setPassword}
+                                                placeholder='Deixe vazio para não alterar'
+                                                placeholderTextColor={'#55f4ff'}
+                                            />
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    setPassword('');
+                                                }}
+                                            >
+                                                <ThemedText>
+                                                    <MaterialIcons name="restart-alt" size={24} />
+                                                </ThemedText>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 16 }}>
-                                        <Text style={{ width: 120 }}>Confirma senha:</Text>
-                                        <TextInput
-                                            style={[globalStyles.textInput, { flex: 1 }]}
-                                            value={password2}
-                                            onChangeText={setPassword2}
-                                            placeholder='Deixe vazio para não alterar'
-                                            placeholderTextColor={'#55f4ff'}
-                                        />
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setPassword2('');
-                                            }}
-                                        >
-                                            <MaterialIcons name="restart-alt" size={24} color="black" />
-                                        </TouchableOpacity>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                        <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Confirma senha:</ThemedText>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <ThemedTextInput
+                                                value={password2}
+                                                onChangeText={setPassword2}
+                                                placeholder='Deixe vazio para não alterar'
+                                                placeholderTextColor={'#55f4ff'}
+                                            />
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    setPassword2('');
+                                                }}
+                                            >
+                                                <ThemedText>
+                                                    <MaterialIcons name="restart-alt" size={24} />
+                                                </ThemedText>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
                                 </View>
-                                {/* SAVE AND CLOSE MODAL */}
-                                <TouchableOpacity
-                                    style={{ position: "absolute", right: 8, bottom: 8, width: 48, height: 48, borderRadius: 16, backgroundColor: "green", justifyContent: 'center', alignItems: 'center' }}
-                                    onPress={() => {
-                                        const datatosend:UserProps = {
-                                            id: playerData.id,
-                                            username: playerData.username,
-                                            password: password,
-                                            real_name: realName,
-                                            email: email,
-                                            token: playerData.token,
-                                        }
-                                        if (password == "") {
-                                            datatosend.password = "__not-change__";
-                                        }
-                                        sendUserData(datatosend)
-                                        setEditting(false);
-                                        // dispatch(logout())
-                                        // navigation.navigate('Home' as never)
-                                    }}
-                                >
-                                    <MaterialIcons name="save" size={24} color="black" />
-                                </TouchableOpacity>
-                                {/* CANCEL AND CLOSE MODAL */}
-                                <TouchableOpacity
-                                    style={{ position: "absolute", left: 8, bottom: 8, width: 48, height: 48, borderRadius: 16, backgroundColor: "red", justifyContent: 'center', alignItems: 'center' }}
-                                    onPress={() => {
-                                        setEditting(false);
-                                        setRealName(playerData?.real_name);
-                                        setEmail(playerData?.email);
-                                        setEmail2(playerData?.email);
-                                        setPassword("");
-                                        setPassword2("");
-                                    }}
-                                >
-                                    <MaterialIcons name="edit-off" size={24} color="black" />
-                                </TouchableOpacity>
-
-                            </View>
-                        </View>
+                                {/* Modal buttons */}
+                                <ThemedView style={{ flexDirection: "row", justifyContent: "space-between", borderTopWidth: 1, marginTop: 10, paddingTop: 16 }}>
+                                    {/* SAVE AND CLOSE MODAL */}
+                                    <TouchableOpacity
+                                        style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: "green", justifyContent: 'center', alignItems: 'center' }}
+                                        onPress={() => {
+                                            const datatosend: UserProps = {
+                                                id: playerData.id,
+                                                username: playerData.username,
+                                                password: password,
+                                                real_name: realName,
+                                                email: email,
+                                                token: playerData.token,
+                                            }
+                                            if (password == "") {
+                                                datatosend.password = "__not-change__";
+                                            }
+                                            sendUserData(datatosend)
+                                            setEditting(false);
+                                            // dispatch(logout())
+                                            // navigation.navigate('Home' as never)
+                                        }}
+                                    >
+                                        <MaterialIcons name="save" size={24} color="black" />
+                                    </TouchableOpacity>
+                                    {/* CANCEL AND CLOSE MODAL */}
+                                    <TouchableOpacity
+                                        style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: "red", justifyContent: 'center', alignItems: 'center' }}
+                                        onPress={() => {
+                                            setEditting(false);
+                                            setRealName(playerData?.real_name);
+                                            setEmail(playerData?.email);
+                                            setEmail2(playerData?.email);
+                                            setPassword("");
+                                            setPassword2("");
+                                        }}
+                                    >
+                                        <MaterialIcons name="edit-off" size={24} color="black" />
+                                    </TouchableOpacity>
+                                </ThemedView>
+                            </ThemedView>
+                        </ThemedView>
                     </Modal>
                 </>
             )}
