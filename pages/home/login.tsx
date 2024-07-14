@@ -15,6 +15,7 @@ import { globalStyles } from '@/constants/Styles';
 import { useLoginMutation, useNewUserMutation, useGetUserDataMutation } from '@/store/api'
 import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
+import { useKeyboard } from "@/hooks/useKeyboard";
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
@@ -32,11 +33,12 @@ export default function LoginScreen() {
     const [isCreating, setCreating] = useState(false)
     const [realName, setRealName] = useState('')
     const [email, setEmail] = useState('')
-
     const backGroun_list = [
         require("@/assets/images/Backgrounds/01.png"),
         require("@/assets/images/Backgrounds/02.png")
     ]
+    const keyboardIsShow = useKeyboard()
+
 
     useEffect(() => {
         setTimeout(() => {
@@ -47,7 +49,6 @@ export default function LoginScreen() {
             }
         }, 10000)
     }, [backGroundImage])
-
 
     useEffect(() => {
         if (authError) {
@@ -88,27 +89,27 @@ export default function LoginScreen() {
             blurRadius={3}
         >
             <ThemedView style={globalStyles.container} lightColor="#fff7" darkColor="#000c">
-                <ThemedView style={{ height: 50 }} lightColor="#fffc" darkColor="#000c" />
-                <View style={{ flexBasis: 300 }}>
+                {!(keyboardIsShow[0] && isCreating) && <View style={{ flexBasis: (keyboardIsShow[0] ? 200 : 300) }}>
                     <Image
                         source={require('@/assets/images/Faith_Batlle.png')}
-                        style={styles.gameLogo}
+                        style={(keyboardIsShow[0] ? styles.gameLogo_kb_did_show : styles.gameLogo)}
                     />
-                </View>
-                <View style={{ flexBasis: 500, justifyContent: "flex-start", alignItems: "center" }}>
-                    <ThemedText>Usuário:</ThemedText>
-                    <ThemedTextInput value={userName.trim()} onChangeText={setUserName} />
-                    <View style={{ flexDirection: 'row' }}>
-                        <ThemedText>Senha: </ThemedText>
-                        <TouchableOpacity onPress={() => { setHidePassword(!hidePassword) }} >
-                            <ThemedText>
-                                <Ionicons
-                                    name={hidePassword ? 'eye-off' : 'eye'}
-                                    size={20}
-                                />
-                            </ThemedText>
-                        </TouchableOpacity>
-                    </View>
+                </View>}
+                <View style={{ flexBasis: 500, justifyContent: ((keyboardIsShow[0] && isCreating) ? "center" : "flex-start"), alignItems: "center" }}>
+                    <View style={{backgroundColor:"#b4b4b4d5", padding:16, borderRadius:8, borderColor:"#000", borderWidth:1}}>
+                        <ThemedText>Usuário:</ThemedText>
+                        <ThemedTextInput value={userName.trim()} onChangeText={setUserName} />
+                        <View style={{ flexDirection: 'row' }}>
+                            <ThemedText>Senha: </ThemedText>
+                            <TouchableOpacity onPress={() => { setHidePassword(!hidePassword) }} >
+                                <ThemedText>
+                                    <Ionicons
+                                        name={hidePassword ? 'eye-off' : 'eye'}
+                                        size={20}
+                                    />
+                                </ThemedText>
+                            </TouchableOpacity>
+                        </View>
                     <ThemedTextInput secureTextEntry={hidePassword} value={password} onChangeText={setPassword} />
                     {isCreating && (
                         <>
@@ -118,26 +119,27 @@ export default function LoginScreen() {
                             <ThemedTextInput value={email} onChangeText={setEmail} />
                         </>
                     )}
+                    </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 300 }}>
                         {isCreating ? (
                             <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10 }}>
                                 <BasicButton
                                     darkColor='#060'
                                     lightColor='#1ad81a'
-                                onPress={() => {
-                                    createUser({
-                                        email: email,
-                                        real_name: realName,
-                                        password: password,
-                                        username: userName,
-                                    })
-                                    setRealName('')
-                                    setEmail('')
-                                    setCreating(false)
-                                }}>Criar</BasicButton>
+                                    onPress={() => {
+                                        createUser({
+                                            email: email,
+                                            real_name: realName,
+                                            password: password,
+                                            username: userName,
+                                        })
+                                        setRealName('')
+                                        setEmail('')
+                                        setCreating(false)
+                                    }}>Criar</BasicButton>
                                 <BasicButton
-                                darkColor='#770000'
-                                lightColor='#ff6161'
+                                    darkColor='#770000'
+                                    lightColor='#ff6161'
                                     onPress={() => {
                                         setRealName('')
                                         setEmail('')
@@ -182,6 +184,11 @@ const styles = StyleSheet.create({
     gameLogo: {
         height: 226,
         width: 312,
+        margin: 'auto',
+    },
+    gameLogo_kb_did_show: {
+        height: 226 * 0.8,
+        width: 312 * 0.8,
         margin: 'auto',
     }
 });
