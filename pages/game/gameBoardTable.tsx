@@ -11,6 +11,8 @@ import GameBoard from "@/components/gameBoard";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
 
 import CardsContainer from "@/components/gameBoard/cardsContainer";
+import { ThemedView } from '@/components/themed/ThemedView';
+import { ThemedText } from '@/components/themed/ThemedText';
 
 
 function contaTempo(tempoInicial: string) {
@@ -50,19 +52,21 @@ export default function GameBoardTable() {
     }, 500)
 
     return (
-        <View style={globalStyles.container}>
-            {/* Relógio */}
-            <View style={{ flexDirection: "column-reverse", position: "absolute", top: 8, left: 8, gap: 4, alignItems: 'center' }}>
-                <AntDesign name="clockcircleo" size={18} color="black" />
-                <Text>{tempoPercorrido}</Text>
-            </View>
-            {/* Contador de Sabedoria */}
-            <View style={{ flexDirection: "row", position: "absolute", top: 8, right: 8, gap: 4, justifyContent: 'center', alignItems: "center", borderColor: "#0000008d", borderWidth: 1, borderRadius: 8, width: 100 }}>
-                <Text>{player?.wisdom_used}</Text>
-                <Image
-                    source={require('@/assets/images/Icons/wisdon.png')}
-                />
-                <Text>{player?.wisdom_points}</Text>
+        <ThemedView style={globalStyles.container}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", padding: 4 }}>
+                {/* Relógio */}
+                <View style={{ flexDirection: "row-reverse", gap: 4, alignItems: 'center', zIndex: 1 }}>
+                    <ThemedText><AntDesign name="clockcircleo" size={18} /></ThemedText>
+                    <ThemedText>{tempoPercorrido}</ThemedText>
+                </View>
+                {/* Contador de Sabedoria */}
+                <ThemedView style={{ flexDirection: "row", gap: 4, justifyContent: 'center', alignItems: "center", borderWidth: 1, borderRadius: 8, width: 100 }}>
+                    <ThemedText>{player?.wisdom_used}</ThemedText>
+                    <Image
+                        source={require('@/assets/images/Icons/wisdon.png')}
+                    />
+                    <ThemedText>{player?.wisdom_points}</ThemedText>
+                </ThemedView>
             </View>
             {/* Icones dos jogadores */}
             <View style={[styles.gameBoardHeader,]}>
@@ -71,7 +75,7 @@ export default function GameBoardTable() {
                 ))}
             </View>
             {/* GameBoards */}
-            <View style={[globalStyles.contentContainer, styles.container]}>
+            <View style={[globalStyles.contentContainer]}>
                 {player_focus !== 0 && <View style={[styles.enemyBoard]}>
                     {/* Verificar ID do jogador focado, não usar mais indice da lista */}
                     <GameBoard {...getPlayerData(player_focus!)} />
@@ -82,32 +86,20 @@ export default function GameBoardTable() {
                 </View>
             </View>
             {/* Mão do jogador */}
-            <View style={[styles.playerFooter,]}>
-                <ScrollView horizontal>
-                    <CardsContainer size="small" zone='hand' cards={player!.card_hand} />
-                </ScrollView>
+            <View>
+                <CardsContainer size="small" zone='hand' cards={player!.card_hand} />
             </View>
-        </View>
+        </ThemedView>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#d84b09',
-
-    },
     gameBoardHeader: {
-        backgroundColor: "#00000094",
         height: 60,
         width: '100%',
         flexDirection: "row",
     },
     enemyBoard: {
         transform: [{ rotateZ: '180deg' }]
-    },
-    playerFooter: {
-        backgroundColor: "#46000075",
-        height: 120,
-        paddingHorizontal: 10,
     },
 })
