@@ -102,7 +102,7 @@ export default function GameRoom() {
                     <View style={{ backgroundColor: '#fff', width: '90%', padding: 16, borderRadius: 8, gap: 16 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
                             {player?.card_hand?.map((card, index) => (
-                                <Card key={index} size="small" slug={card as string} />
+                                <Card key={index} size="small" slug={card as unknown as string} />
                             ))}
                         </View>
                         <View style={{ flexDirection: 'row', gap: 8, borderTopWidth: 1, paddingTop: 16 }}>

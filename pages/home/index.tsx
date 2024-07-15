@@ -70,7 +70,7 @@ export default function HomeScreen() {
             else if (data.data_type === "match_update") {
                 console.log('match_update')
                 dispatch(setRoom(undefined))
-                dispatch(setMatch(data.match_data!))
+                dispatch(setMatch({...data.match_data!, player_focus_id: data.match_data?.player_focus_id}))
             }
         }
     }, [WS.lastJsonMessage])

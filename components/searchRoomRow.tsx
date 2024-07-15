@@ -44,10 +44,9 @@ const styles = StyleSheet.create({
     row_item: {
         backgroundColor: "cyan",
         flexGrow: 1,
-        height: 30,
+        height: 40,
         verticalAlign: "middle",
         fontSize: 14,
         textAlign: 'center',
-        fontFamily: 'monospace',
     }
 })

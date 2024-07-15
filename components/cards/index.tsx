@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, Modal, Pressable } from "react-native";
+import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions } from "react-native";
 
 
 export const card_list: CardProps[] = [
@@ -217,7 +217,48 @@ function getCardSource(slug: string | undefined) {
 }
 
 export default function Card(props: Props) {
+    const { width: windowWidth, height: windowHeight } = useWindowDimensions();
     const [showModal, setShowModal] = useState(false)
+
+// tamanho padrão
+//  height: 600,
+//  width: 430,
+const defaultHeight = windowWidth*1.3
+const defaultWidth = windowWidth
+const mediumFactor = 4 //Usado na Página de Cartas
+const smallFactor = 6 // Usado na mão do jogador
+const minimumFactor = 8 // Usado no GameBoard
+
+const styles = StyleSheet.create({
+    image: {
+        height: defaultHeight,
+        width: defaultWidth,
+        borderColor: 'green',
+        borderWidth: 2,
+        borderRadius: 14,
+    },
+    imageMedium: {
+        height: (defaultHeight / mediumFactor),
+        width: (defaultWidth / mediumFactor),
+        borderColor: 'green',
+        borderWidth: 2,
+        borderRadius: 12,
+    },
+    imageSmall: {
+        height: (defaultHeight / smallFactor),
+        width: (defaultWidth / smallFactor),
+        borderColor: 'green',
+        borderWidth: 2,
+        borderRadius: 12,
+    },
+    imageMinimum: {
+        height: (defaultHeight / minimumFactor),
+        width: (defaultWidth / minimumFactor),
+        borderColor: 'green',
+        borderWidth: 2,
+        borderRadius: 12,
+    },
+})
 
     var cardSize = styles.image
     switch (props.size) {
@@ -278,43 +319,3 @@ export default function Card(props: Props) {
         </>
     )
 }
-
-// tamanho padrão
-//  height: 600,
-//  width: 430,
-const defaultHeight = 600
-const defaultWidth = 430
-const mediumFactor = 4
-const smallFactor = 6
-const minimumFactor = 10
-
-const styles = StyleSheet.create({
-    image: {
-        height: defaultHeight,
-        width: defaultWidth,
-        borderColor: 'green',
-        borderWidth: 2,
-        borderRadius: 14,
-    },
-    imageMedium: {
-        height: (defaultHeight / mediumFactor),
-        width: (defaultWidth / mediumFactor),
-        borderColor: 'green',
-        borderWidth: 2,
-        borderRadius: 12,
-    },
-    imageSmall: {
-        height: (defaultHeight / smallFactor),
-        width: (defaultWidth / smallFactor),
-        borderColor: 'green',
-        borderWidth: 2,
-        borderRadius: 12,
-    },
-    imageMinimum: {
-        height: (defaultHeight / minimumFactor),
-        width: (defaultWidth / minimumFactor),
-        borderColor: 'green',
-        borderWidth: 2,
-        borderRadius: 12,
-    },
-})

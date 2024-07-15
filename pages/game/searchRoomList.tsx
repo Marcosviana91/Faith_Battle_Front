@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
-import { TextInput, View, Text, ScrollView, StyleSheet, Pressable } from "react-native"
+import {  View, Text, ScrollView, StyleSheet, Pressable } from "react-native"
 
 import SearchRoomRow from '@/components/searchRoomRow';
+import { ThemedTextInput } from "@/components/themed/ThemedTextInput";
 
-import { globalStyles } from '@/constants/Styles';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useGetRoomsQuery } from '@/store/api';
 
 
 export default function SearchRoomList() {
     const [roomList, setRoomList] = useState<RoomApiProps[]>([])
+    const [showFilter, setShowFilter] = useState(false)
+    const [filterText, setFilterText] = useState("")
     const dataRoomList = useGetRoomsQuery()
 
 
@@ -21,21 +23,40 @@ export default function SearchRoomList() {
     return (
 
         <View style={{ width: '100%' }}>
-            <View style={{ flexDirection: 'row', gap: 10 }}>
-                <Text>Filtro:</Text>
-                <TextInput style={[globalStyles.textInput, { flex: 1 }]} />
-                <Pressable
-                    onPress={dataRoomList.refetch}
-                >
-                    <Ionicons name="reload-outline" size={24} color="black" />
-                </Pressable>
+            <View style={{ marginBottom: 12 }}>
+                <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
+                    <Pressable
+                        onPress={() => {
+                            setShowFilter(!showFilter)
+                        }}
+                    >
+                        {showFilter ? <MaterialCommunityIcons name="filter-remove" size={32} color="black" /> : <MaterialCommunityIcons name="filter-plus" size={32} color="black" />}
+                    </Pressable>
+                    <ThemedTextInput style={{ flex: 1 }} onChangeText={setFilterText} placeholder='filtrar por id ou nome' />
+                    <Pressable
+                        onPress={dataRoomList.refetch}
+                    >
+                        <MaterialCommunityIcons name="reload" size={32} color="black" />
+                    </Pressable>
+                </View>
+                {showFilter &&
+                    <View>
+                        <Text>Estilo: </Text>
+                        <Text>Sala com senha: </Text>
+                        <Text>Permite Espectadores: </Text>
+                    </View>
+                }
             </View>
-            <SearchRoomRow id={'0'} />
             {roomList && (
                 <ScrollView style={{ height: 270 }}>
-                    <View style={styles.roomListContainer} >
+                    <View style={[styles.roomListContainer, { paddingBottom: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }]} >
+                        <SearchRoomRow id={'0'} />
+                    </View>
+                    <View style={[styles.roomListContainer, { borderTopLeftRadius: 0, borderTopRightRadius: 0 }]} >
                         {roomList.map((room) => {
-                            return <SearchRoomRow key={room.id} {...room} />
+                            if (room.name?.toLowerCase().includes(filterText.toLowerCase()) || room.id?.toLowerCase().includes(filterText.toLowerCase())) {
+                                return <SearchRoomRow key={room.id} {...room} />
+                            }
                         })}
                     </View>
                 </ScrollView>
@@ -49,7 +70,6 @@ export default function SearchRoomList() {
 const styles = StyleSheet.create({
     roomListContainer: {
         backgroundColor: "red",
-        width: "95%",
         flex: 1,
         borderRadius: 8,
         padding: 8,

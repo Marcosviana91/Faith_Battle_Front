@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 import { useCreateRoomsMutation } from '@/store/api'
 import { setRoom } from "@/store/reducers/matchReducer";
@@ -11,13 +11,12 @@ import SearchRoomList from '@/pages/game/searchRoomList'
 import ToggleButton from '@/components/button/toggle';
 import BasicButton from '@/components/button/basic';
 
-import { globalStyles } from '@/constants/Styles';
+import { ThemedTextInput } from '@/components/themed/ThemedTextInput';
 
 
 export default function SearchRoom() {
     const dispatch = useDispatch()
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
-    const playerData = useSelector((state: RootReducer) => state.authReducer.player_data)
     const [ createRoom, { data: createdRoomData}] = useCreateRoomsMutation();
 
 
@@ -53,8 +52,8 @@ export default function SearchRoom() {
                     <View style={styles.roomListContainer} >
                         <View style={styles.container}>
                             <Text>Nome da Sala</Text>
-                            <TextInput
-                                style={[globalStyles.textInput, { width: "100%", }]}
+                            <ThemedTextInput
+                                style={{ width: "100%" }}
                                 placeholder='Insira um nome'
                                 value={newRoomName}
                                 onChangeText={setNewRoomName}
@@ -69,8 +68,7 @@ export default function SearchRoom() {
                         </View>
                         <View style={[styles.container, { flexDirection: 'row', gap: 15 }]}>
                             <Text>Jogadores:</Text>
-                            <TextInput
-                                style={globalStyles.textInput}
+                            <ThemedTextInput
                                 inputMode='numeric'
                                 placeholder='2 - 8'
                                 value={newRoomPlayerQtd}
@@ -79,14 +77,12 @@ export default function SearchRoom() {
                         </View>
                         <View style={[styles.container, { flexDirection: 'row', gap: 15 }]}>
                             <Text>Senha:</Text>
-                            <TextInput style={globalStyles.textInput} placeholder='letras e números apenas'
+                            <ThemedTextInput placeholder='letras e números apenas'
                                 value={newRoomPassword}
                                 onChangeText={setNewRoomPassword}
                             />
                         </View>
                         <BasicButton onPress={() => {
-                            // ToastAndroid.show(`Criando sala...\n\nNome: ${newRoomName}\nEstilo: ${gameTypesList[newRoomGameType]}\nQuantidade: ${newRoomPlayerQtd}\nSenha: ${newRoomPassword === '' ? '[sala aberta]' : newRoomPassword}\n`, ToastAndroid.LONG)
-
                             createRoom({
                                 name: newRoomName,
                                 created_by: {

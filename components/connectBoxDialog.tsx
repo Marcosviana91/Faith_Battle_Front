@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { StyleSheet, View, Text, TouchableHighlight, Modal } from 'react-native';
 import { RootReducer } from '@/store';
 
 import { useEnterRoomsMutation } from '@/store/api';
 import { setRoom } from "@/store/reducers/matchReducer";
 
-import { StyleSheet, View, Text, TouchableHighlight, Modal, TextInput } from 'react-native';
+import { ThemedTextInput } from '@/components/themed/ThemedTextInput';
+import { ThemedView } from '@/components/themed/ThemedView';
+import { ThemedText } from '@/components/themed/ThemedText';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { globalStyles } from '@/constants/Styles';
 
 type ModalProps = {
     onClose: () => void;
@@ -19,6 +21,7 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
     const [roomPass, setRoomPass] = useState("")
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const [enterRoom, { data: roomData }] = useEnterRoomsMutation()
+    const isFull = (props.connected_players?.length == props.max_players)
 
     useEffect(() => {
         if (roomData?.room_data) {
@@ -31,25 +34,27 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
         <Modal presentationStyle='overFullScreen' transparent>
 
             <View style={styles.container}>
-                <View style={styles.dialog}>
+                <ThemedView style={[styles.dialog, { borderWidth: 1, borderRadius: 24, padding: 8 }]}>
                     {/* Header */}
-                    <View style={{ flexDirection: "row", width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Text style={{ paddingStart: 8 }}>ID:: {props.id}</Text>
-                        <TouchableHighlight onPress={props.onClose} style={{ alignSelf: 'flex-end', backgroundColor: '#700', borderRadius: 50 }}>
-                            <Ionicons name="close-circle-outline" size={48} color="black" />
+                    <View style={{ flexDirection: "row", width: '100%', height: 50, alignItems: 'center', justifyContent: 'space-between' }}>
+                        <ThemedText style={{ paddingStart: 8 }} type='subtitle'>ID: {props.id}</ThemedText>
+                        <TouchableHighlight onPress={props.onClose} style={{ borderRadius: 50 }}>
+                            <ThemedText style={{ height: "100%", lineHeight: 48 }}>
+                                <Ionicons name="close-circle-outline" size={48} style={{ height: "100%" }} />
+                            </ThemedText>
                         </TouchableHighlight>
                     </View>
 
                     {/* Content */}
                     <View style={{ flex: 1, padding: 8 }}>
-                        <Text >Nome: {props.name}</Text>
-                        <Text >Tipo da partida: {props.match_type}</Text>
-                        <Text >Jogadores: {props.connected_players?.length} / {props.max_players}</Text>
+                        <ThemedText >Nome: {props.name}</ThemedText>
+                        <ThemedText >Tipo da partida: {props.match_type}</ThemedText>
+                        <ThemedText >Jogadores: {props.connected_players?.length} / {props.max_players}</ThemedText>
+                        {/* Senhas */}
                         {props.has_password && (
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-                                <Text>Digite a senha:</Text>
-                                <TextInput
-                                    style={[globalStyles.textInput, { backgroundColor: 'cyan' }]}
+                                <ThemedText>Digite a senha:</ThemedText>
+                                <ThemedTextInput
                                     value={roomPass}
                                     onChangeText={setRoomPass}
                                 />
@@ -59,33 +64,38 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
 
                     {/* Footer */}
                     <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 8 }}>
-                        <TouchableHighlight onPress={() => {
-                            console.log("Conectando")
-                            if (roomPass == "") {
-                                setRoomPass("undefined")
-                            }
-                            enterRoom({
-                                id: props.id,
-                                password: roomPass,
-                                connected_players: [
-                                    {
-                                        id: userData?.id,
-                                        available_cards: [
-                                            'abraao', 'adao', 'daniel',
-                                            'davi', 'elias', 'ester',
-                                            'eva', 'jaco', "jose-do-egito",
-                                            "josue", "maria", "moises"
-                                        ],
-                                        xp_points: 200
+                        <TouchableHighlight
+                            disabled={isFull}
+                            onPress={() => {
+                                if (!isFull) {
+                                    if (roomPass == "") {
+                                        setRoomPass("undefined")
                                     }
-                                ]
-                            })
-                        }} style={{ backgroundColor: '#090', borderRadius: 8 }}>
+                                    enterRoom({
+                                        id: props.id,
+                                        password: roomPass,
+                                        connected_players: [
+                                            {
+                                                id: userData?.id,
+                                                available_cards: [
+                                                    'abraao', 'adao', 'daniel',
+                                                    'davi', 'elias', 'ester',
+                                                    'eva', 'jaco', "jose-do-egito",
+                                                    "josue", "maria", "moises"
+                                                ],
+                                                xp_points: 200
+                                            }
+                                        ]
+                                    })
+                                }
+                            }}
+                            style={{ backgroundColor: isFull ? '#888' : "#090", borderRadius: 8 }}
+                        >
                             <Ionicons name="enter-outline" size={48} color="black" />
                         </TouchableHighlight>
                     </View>
-                </View>
-            </View>
+                </ThemedView>
+            </View >
         </Modal >
     )
 }
@@ -98,7 +108,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     dialog: {
-        backgroundColor: "#fff",
         width: "90%",
         height: 300,
     },

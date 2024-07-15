@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
-import { View, StyleSheet, Pressable, Modal } from "react-native";
+import { View, StyleSheet, Pressable, Modal, ScrollView } from "react-native";
 import Card from "@/components/cards";
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -73,7 +73,7 @@ export default function CardsContainer(props: CardsContainerProps) {
     const styles = StyleSheet.create({
         cardsContainer: {
             backgroundColor: "#000000cc",
-            height: props.size === 'small' ? 120 : 60,
+            height: props.size === 'small' ? "auto" : "100%",
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
@@ -83,9 +83,11 @@ export default function CardsContainer(props: CardsContainerProps) {
         },
     })
     return (<View style={[styles.cardsContainer,]}>
+        <ScrollView horizontal>
         {props.cards?.map((card, _index) => (
             <IndividualContainer key={_index} card={card} size={props.size} />
         ))}
+        </ScrollView>
     </View>)
 }
 
