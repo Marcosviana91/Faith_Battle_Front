@@ -60,9 +60,10 @@ export default function GameBoardTable() {
         <ThemedView style={globalStyles.container}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", padding: 4 }}>
                 {/* Relógio */}
-                <View style={{ flexDirection: "row-reverse", gap: 4, alignItems: 'center', zIndex: 1 }}>
-                    <ThemedText><AntDesign name="clockcircleo" size={18} /></ThemedText>
+                <View style={{ flexDirection: "row", gap: 4, alignItems: 'center', zIndex: 1 }}>
                     <ThemedText>{tempoPercorrido}</ThemedText>
+                    <ThemedText><AntDesign name="clockcircleo" size={18} /></ThemedText>
+                    <ThemedText>Round {matchData?.round_match}</ThemedText>
                 </View>
                 {(matchData?.player_turn === player?.id) && <View>
                     <BasicButton
