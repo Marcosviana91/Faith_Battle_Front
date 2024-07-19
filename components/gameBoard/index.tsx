@@ -42,10 +42,10 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
         },
         zonaBatalha: {
             position: "absolute",
-            bottom: windowHeight * 0.18,
+            bottom: windowHeight * 0.16,
             left: windowWidth * 0.015,
             width: windowWidth * 0.92,
-            height: windowHeight * 0.106,
+            height: windowHeight * 0.15,
         },
     })
 

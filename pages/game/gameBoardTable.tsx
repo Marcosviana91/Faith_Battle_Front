@@ -41,13 +41,13 @@ function contaTempo(tempoInicial: string) {
 }
 
 export default function GameBoardTable() {
-    const [tempoPercorrido, setTempoPercorrido] = useState("")
-
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const player_focus = matchData?.player_focus_id
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
-
+    
+    const [tempoPercorrido, setTempoPercorrido] = useState("")
+    
     function getPlayerData(player_id: number) {
         const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
         return _data[0]

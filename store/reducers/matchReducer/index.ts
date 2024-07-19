@@ -3,7 +3,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 var initialState: MatchReducerProps = {
     room_data: undefined,
     match_data: undefined,
-    player_data: undefined
+    player_data: undefined,
+    player_match_settings: {
+        player_view_id: undefined,
+        cards_to_attack:[]
+    },
 }
 
 
@@ -23,6 +27,20 @@ const matchSlice = createSlice({
         setPlayerFocus: (state, action: PayloadAction<number>) => {
             state.match_data!.player_focus_id = action.payload
         },
+        toggleAttackList: (state, action: PayloadAction<CardProps>) => {
+            let __temp_list = state.player_match_settings!.cards_to_attack?.map((card) => card)
+            const card = action.payload
+            if (__temp_list!.find((_card) => _card.in_game_id == card.in_game_id)) {
+                // Não funciona
+                console.log('remover')
+                __temp_list = __temp_list?.filter((_card) => _card !== card)
+
+            } else {
+                __temp_list?.push(card)
+            }
+            console.log(__temp_list, card)
+            state.player_match_settings!.cards_to_attack = __temp_list
+        },
         leaveMatch: (state) => {
             state.room_data = undefined
             state.match_data = undefined
@@ -31,5 +49,5 @@ const matchSlice = createSlice({
 
     }
 })
-export const { setMatch, setRoom, setPlayer, setPlayerFocus, leaveMatch } = matchSlice.actions
+export const { setMatch, setRoom, setPlayer, setPlayerFocus, toggleAttackList, leaveMatch } = matchSlice.actions
 export default matchSlice.reducer

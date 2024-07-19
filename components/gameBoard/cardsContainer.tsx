@@ -16,7 +16,6 @@ export default function CardsContainer(props: CardsContainerProps) {
             height: props.size === 'small' ? "auto" : "100%",
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "center",
             borderRadius: 4,
 
             columnGap: (props.zone == "select" || props.zone == "retry") ? 0 : 8,

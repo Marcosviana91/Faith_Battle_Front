@@ -1,7 +1,7 @@
 import { Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
-import { setPlayer } from '@/store/reducers/matchReducer';
+import { setPlayer, toggleAttackList } from '@/store/reducers/matchReducer';
 
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
@@ -11,7 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 type Props = {
     onPress?: () => void
     card: CardProps
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea"
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" |"will_fight"
 }
 
 export function CardRetry(props: Props) {
@@ -133,7 +133,32 @@ export function CardMoveToBattle(props: Props) {
     )
 }
 
-export function CardMoveToAttack(props: Props) {
+export function CardToggleAttack(props: Props) {
+    const dispatch = useDispatch()
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const player_match_settings = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)
+    const player_focus = matchData?.player_focus_id
+    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+
+    if (matchData?.player_turn !== player?.id) {
+        return null
+    }
+
+    return (
+        <Pressable
+            style={{backgroundColor:"red"}}
+            onPress={() => {
+                dispatch(toggleAttackList(props.card))
+                if (props.onPress) {props.onPress()}
+            }}
+        >
+            <MaterialCommunityIcons name="sword" size={80} color="black" />
+        </Pressable>
+    )
+}
+
+export function CardRemoveToAttack(props: Props) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const player_focus = matchData?.player_focus_id
