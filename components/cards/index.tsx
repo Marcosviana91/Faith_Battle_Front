@@ -2,7 +2,9 @@ import React, { useState, } from 'react';
 import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions } from "react-native";
 import { ThemedView } from '../themed/ThemedView';
 
-import { CardRetry, CardSendToPrepare, CardSendToBattle } from "@/components/cards/cards_commands";
+import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardMoveToAttack } from "@/components/cards/cards_commands";
+import { useSelector } from 'react-redux';
+import { RootReducer } from '@/store';
 
 
 export const card_list: CardProps[] = [
@@ -220,8 +222,10 @@ function getCardSource(slug: string | undefined) {
 }
 
 export default function Card(props: Props) {
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const { width: windowWidth } = useWindowDimensions();
     const [showModal, setShowModal] = useState(false)
+    const player_id = props.card?.in_game_id?.split("-")[0]
 
     // tamanho padrão
     //  width: 430,
@@ -335,23 +339,28 @@ export default function Card(props: Props) {
                         }}
                     >
                         {/* Card Commands */}
-                        <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
+                        {(player_id == player?.id) && <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
                             {(props.zone === 'select' || props.zone === 'retry') &&
                                 <CardRetry card={props.card!} zone={props.zone} onPress={() => {
                                     setShowModal(!showModal)
                                 }} />
                             }
                             {(props.zone === 'hand') && (props.card?.status === "ready") &&
-                                <CardSendToPrepare card={props.card!} zone={props.zone} onPress={() => {
+                                <CardMoveToPrepare card={props.card!} zone={props.zone} onPress={() => {
                                     setShowModal(!showModal)
                                 }} />
                             }
                             {(props.zone === 'prepare') && (props.card?.status === "ready") &&
-                                <CardSendToBattle card={props.card!} zone={props.zone} onPress={() => {
+                                <CardMoveToBattle card={props.card!} zone={props.zone} onPress={() => {
                                     setShowModal(!showModal)
                                 }} />
                             }
-                        </View>
+                            {(props.zone === 'battle') && (props.card?.status === "ready") &&
+                                <CardMoveToAttack card={props.card!} zone={props.zone} onPress={() => {
+                                    setShowModal(!showModal)
+                                }} />
+                            }
+                        </View>}
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                             <Image
                                 resizeMode="stretch"

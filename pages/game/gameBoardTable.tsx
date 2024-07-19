@@ -67,7 +67,7 @@ export default function GameBoardTable() {
                 </View>
                 {(matchData?.player_turn === player?.id) && <View>
                     <BasicButton
-                        onPress={()=>{
+                        onPress={() => {
                             WS.sendJsonMessage({
                                 "data_type": "match_move",
                                 "user_data": {
@@ -85,7 +85,7 @@ export default function GameBoardTable() {
                             })
                         }}
                     >
-                    Finalizar
+                        Finalizar
                     </BasicButton>
                 </View>}
                 {/* Contador de Sabedoria */}
@@ -105,14 +105,12 @@ export default function GameBoardTable() {
             </View>
             {/* GameBoards */}
             <View style={[globalStyles.contentContainer]}>
-                {player_focus !== 0 && <View style={[styles.enemyBoard]}>
-                    {/* Verificar ID do jogador focado, não usar mais indice da lista */}
+                {/* Enemy board */}
+                {player_focus !== 0 && player_focus !== player?.id &&
                     <GameBoard {...getPlayerData(player_focus!)} />
-                </View>}
-                <View>
-                    {/* Verificar ID do jogador logado */}
-                    <GameBoard {...getPlayerData(player?.id!)} />
-                </View>
+                }
+                {/* Player board */}
+                <GameBoard {...getPlayerData(player?.id!)} />
             </View>
             {/* Mão do jogador */}
             <View>
@@ -127,8 +125,5 @@ const styles = StyleSheet.create({
         height: 60,
         width: '100%',
         flexDirection: "row",
-    },
-    enemyBoard: {
-        transform: [{ rotateZ: '180deg' }]
-    },
+    }
 })

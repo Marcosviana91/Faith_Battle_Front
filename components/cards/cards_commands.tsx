@@ -59,10 +59,9 @@ export function CardRetry(props: Props) {
     )
 }
 
-export function CardSendToPrepare(props: Props) {
+export function CardMoveToPrepare(props: Props) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_focus = matchData?.player_focus_id
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
 
     if (matchData?.player_turn !== player?.id) {
@@ -97,7 +96,7 @@ export function CardSendToPrepare(props: Props) {
     )
 }
 
-export function CardSendToBattle(props: Props) {
+export function CardMoveToBattle(props: Props) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
@@ -134,8 +133,7 @@ export function CardSendToBattle(props: Props) {
     )
 }
 
-
-export function CardAttack(props: Props) {
+export function CardMoveToAttack(props: Props) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const player_focus = matchData?.player_focus_id
