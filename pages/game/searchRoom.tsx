@@ -15,30 +15,30 @@ import { ThemedTextInput } from '@/components/themed/ThemedTextInput';
 
 
 const card_list = [
-    {"slug":'abraao'},
-    {"slug":'adao'},
-    {"slug":'daniel'},
-    {"slug":'davi'},
-    {"slug":'elias'},
-    {"slug":'ester'},
-    {"slug":'eva'},
-    {"slug":'jaco'},
-    {"slug":"jose-do-egito"},
-    {"slug":"josue"},
-    {"slug":"maria"},
-    {"slug":"moises"},
-    {"slug":"noe"},
-    {"slug":"salomao"},
-    {"slug":"sansao"},
+    { "slug": 'abraao' },
+    { "slug": 'adao' },
+    { "slug": 'daniel' },
+    { "slug": 'davi' },
+    { "slug": 'elias' },
+    { "slug": 'ester' },
+    { "slug": 'eva' },
+    { "slug": 'jaco' },
+    { "slug": "jose-do-egito" },
+    { "slug": "josue" },
+    { "slug": "maria" },
+    { "slug": "moises" },
+    { "slug": "noe" },
+    { "slug": "salomao" },
+    { "slug": "sansao" },
 ]
 
 export default function SearchRoom() {
     const dispatch = useDispatch()
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
-    const [ createRoom, { data: createdRoomData}] = useCreateRoomsMutation();
+    const [createRoom, { data: createdRoomData }] = useCreateRoomsMutation();
 
 
-    const gameTypesList = ['cooperativo', 'sobrevivência']
+    const gameTypesList = ['survival', 'cooperative']
     // Create new room 'form' values
     const [newRoomName, setNewRoomName] = useState(`Sala de ${userData!.username}`)
     const [newRoomGameType, setNewRoomGameType] = useState('survival')
@@ -80,6 +80,7 @@ export default function SearchRoom() {
                         <View style={styles.container}>
                             <Text>Estilo de Jogo</Text>
                             <ToggleButton
+                                disabled
                                 values={gameTypesList}
                                 onPress={setNewRoomGameType}
                             />

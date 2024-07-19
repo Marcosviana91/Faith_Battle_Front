@@ -4,6 +4,7 @@ import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 type Props = {
     values: String[]
     onPress?: (arg0: any) => void;
+    disabled?: boolean
 }
 
 export default function ToggleButton(props: Props) {
@@ -24,9 +25,10 @@ export default function ToggleButton(props: Props) {
                 }
                 return (
                     <TouchableOpacity
+                        disabled={props.disabled}
                         style={[styles.buttonItem, buttonStyle, buttonActive]}
                         key={_index}
-                        onPress={()=>{
+                        onPress={() => {
                             if (props.onPress) {
                                 props.onPress(_index)
                             }
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         height: 50,
         width: '100%',
-        flex:1,
+        flex: 1,
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     buttonItemEnd: {
         borderTopEndRadius: 16,
         borderBottomEndRadius: 16,
-        
+
     },
     buttonItemActive: {
         shadowRadius: 8,
