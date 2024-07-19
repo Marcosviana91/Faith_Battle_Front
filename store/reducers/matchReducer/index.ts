@@ -28,17 +28,13 @@ const matchSlice = createSlice({
             state.match_data!.player_focus_id = action.payload
         },
         toggleAttackList: (state, action: PayloadAction<CardProps>) => {
-            let __temp_list = state.player_match_settings!.cards_to_attack?.map((card) => card)
+            let __temp_list = state.player_match_settings!.cards_to_attack!.map((card) => card)
             const card = action.payload
             if (__temp_list!.find((_card) => _card.in_game_id == card.in_game_id)) {
-                // Não funciona
-                console.log('remover')
-                __temp_list = __temp_list?.filter((_card) => _card !== card)
-
+                __temp_list = __temp_list.filter((_card) => _card.in_game_id != card.in_game_id)
             } else {
                 __temp_list?.push(card)
             }
-            console.log(__temp_list, card)
             state.player_match_settings!.cards_to_attack = __temp_list
         },
         leaveMatch: (state) => {

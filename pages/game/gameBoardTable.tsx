@@ -43,11 +43,12 @@ function contaTempo(tempoInicial: string) {
 export default function GameBoardTable() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const player_match_settings = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)
     const player_focus = matchData?.player_focus_id
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
-    
+
     const [tempoPercorrido, setTempoPercorrido] = useState("")
-    
+
     function getPlayerData(player_id: number) {
         const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
         return _data[0]
@@ -65,7 +66,7 @@ export default function GameBoardTable() {
                     <ThemedText><AntDesign name="clockcircleo" size={18} /></ThemedText>
                     <ThemedText>Round {matchData?.round_match}</ThemedText>
                 </View>
-                {(matchData?.player_turn === player?.id) && <View>
+                {(matchData?.player_turn === player?.id) && !(player_match_settings?.cards_to_attack?.length! > 0) && <View>
                     <BasicButton
                         onPress={() => {
                             WS.sendJsonMessage({
@@ -86,6 +87,38 @@ export default function GameBoardTable() {
                         }}
                     >
                         Finalizar
+                    </BasicButton>
+                </View>}
+                {(player_match_settings?.cards_to_attack?.length! > 0) && <View>
+                    <BasicButton
+                        onPress={() => {
+                            if (!player_focus || player_focus == player?.id) {
+                                console.log("Escolha um oponente")
+                            } else {
+                                const data: APIResponseProps = {
+                                    "data_type": "match_move",
+                                    "user_data": {
+                                        "id": player?.id
+                                    },
+                                    "room_data": {
+                                        "id": matchData?.id
+                                    },
+                                    "match_move": {
+                                        "match_id": matchData?.id,
+                                        "round_match": matchData?.round_match,
+                                        "player_move": player?.id,
+                                        "move_type": "attack",
+                                        "player_target": player_focus,
+                                        "attack_cards": player_match_settings?.cards_to_attack!,
+                                    }
+                                }
+                                console.log(data)
+                                WS.sendJsonMessage(data)
+                            }
+
+                        }}
+                    >
+                        Atacar
                     </BasicButton>
                 </View>}
                 {/* Contador de Sabedoria */}

@@ -23,13 +23,14 @@ declare type CardProps = {
 
 
 declare type APIMoveProps = {
-    match_room_id?: number;
-    match_round?: number;
+    match_id?: string;
+    round_match?: number;
     player_move?: number;
     card_id?: number;
     move_type?: string
     player_target?: number
     card_target?: string
+    attack_cards?: CardProps[]
 }
 
 declare type MatchReducerProps = {
@@ -38,7 +39,7 @@ declare type MatchReducerProps = {
     player_data?: PlayersInMatchApiProps,
     player_match_settings?: {
         player_view_id?: number,
-        cards_to_attack?: CardProps[]
+        cards_to_attack: CardProps[]
     },
 }
 

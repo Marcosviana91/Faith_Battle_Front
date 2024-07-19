@@ -6,6 +6,6 @@ declare type APIResponseProps = {
     match_data?: MatchApiProps,
     player_data?: PlayersInMatchApiProps
     room_list?: RoomApiProps[]
-    // player_in_match_data?: any,
+    match_move?: APIMoveProps,
     // card_data?: any,
 }
