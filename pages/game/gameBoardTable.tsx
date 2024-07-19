@@ -2,17 +2,21 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { View, ScrollView, StyleSheet, Text, Image } from "react-native";
+import useWebSocket from 'react-use-websocket';
+import { URI } from "@/store/server_urls";
+
+import { View, StyleSheet, Image } from "react-native";
 import { globalStyles } from "@/constants/Styles";
 
 import { AntDesign } from '@expo/vector-icons';
+import { ThemedView } from '@/components/themed/ThemedView';
+import { ThemedText } from '@/components/themed/ThemedText';
 
 import GameBoard from "@/components/gameBoard";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
 
 import CardsContainer from "@/components/gameBoard/cardsContainer";
-import { ThemedView } from '@/components/themed/ThemedView';
-import { ThemedText } from '@/components/themed/ThemedText';
+import BasicButton from '@/components/button/basic';
 
 
 function contaTempo(tempoInicial: string) {
@@ -42,6 +46,7 @@ export default function GameBoardTable() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const player_focus = matchData?.player_focus_id
+    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
 
     function getPlayerData(player_id: number) {
         const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
@@ -59,9 +64,32 @@ export default function GameBoardTable() {
                     <ThemedText><AntDesign name="clockcircleo" size={18} /></ThemedText>
                     <ThemedText>{tempoPercorrido}</ThemedText>
                 </View>
+                {(matchData?.player_turn === player?.id) && <View>
+                    <BasicButton
+                        onPress={()=>{
+                            WS.sendJsonMessage({
+                                "data_type": "match_move",
+                                "user_data": {
+                                    "id": player?.id
+                                },
+                                "room_data": {
+                                    "id": matchData?.id
+                                },
+                                "match_move": {
+                                    "match_id": matchData?.id,
+                                    "round_match": matchData?.round_match,
+                                    "player_move": player?.id,
+                                    "move_type": "done"
+                                }
+                            })
+                        }}
+                    >
+                    Finalizar
+                    </BasicButton>
+                </View>}
                 {/* Contador de Sabedoria */}
                 <ThemedView style={{ flexDirection: "row", gap: 4, justifyContent: 'center', alignItems: "center", borderWidth: 1, borderRadius: 8, width: 100 }}>
-                    <ThemedText>{player?.wisdom_used}</ThemedText>
+                    <ThemedText>{player?.wisdom_available}</ThemedText>
                     <Image
                         source={require('@/assets/images/Icons/wisdon.png')}
                     />

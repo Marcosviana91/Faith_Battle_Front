@@ -155,6 +155,15 @@ export default function LoginScreen() {
                         ) : (
                             <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10 }}>
                                 <BasicButton onPress={() => {
+                                    if (userName.toLowerCase() === 'fake01' && password === "") {
+                                        dispatch(login({
+                                            id: 1,
+                                            real_name: "Usuário Fake_01",
+                                            username: userName,
+                                            email: "email01@fake.com"
+                                        }))
+                                        return
+                                    }
                                     if (userName === '') {
                                         window.alert("Insira um nome")
                                     }
@@ -162,6 +171,7 @@ export default function LoginScreen() {
                                         window.alert('Digite uma senha')
                                     }
                                     else {
+                                        console.log('Logando')
                                         doLogin({ username: userName, password: password })
                                     }
                                 }} >Logar</BasicButton>

@@ -16,7 +16,7 @@ declare type RoomApiProps = {
 
 declare type MoveProps = {
     match_id: string;
-    match_round: number;
+    round_match: number;
     player_move: number;
     card_id: string;
     move_type: string // move_to_prepare, move_to_battle, attack, defense, attach, dettach, active, passive

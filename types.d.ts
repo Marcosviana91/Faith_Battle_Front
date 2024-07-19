@@ -12,11 +12,12 @@ declare type MatchApiProps = {
 
 declare type CardProps = {
     slug: string,
-    path: ImageSourcePropType,
+    path?: ImageSourcePropType,
     in_game_id?: string,
     attack_point?: number,
     defense_points?: number,
     wisdom_cost?: number,
+    status?: "ready" | "not-enough" | "used"
 }
 
 

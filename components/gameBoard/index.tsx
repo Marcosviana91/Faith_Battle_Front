@@ -64,7 +64,7 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
             </View>
             {/* Zona de Batalha */}
             <View style={styles.zonaBatalha}>
-                <CardsContainer zone="battle" cards={props.card_battle_camp} />
+                <CardsContainer zone="battle" cards={props.card_battle_camp} size="minimum" />
             </View>
             {/* Zona de Preparação */}
             <View style={styles.zonaPreparacao}>

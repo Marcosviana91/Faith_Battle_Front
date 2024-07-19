@@ -15,12 +15,12 @@ declare type UserStoreProps = {
 
 declare type PlayerProps = {
     id?: number;
-    available_cards?: string[];
+    available_cards?: CardProps[];
     xp_points?: number;
     ready?: boolean;
-    card_deck?: string[];
+    card_deck?: CardProps[];
     deck_try?: number;
-    card_hand?: string[];
+    card_hand?: CardProps[];
 }
 
 declare type PlayersInMatchApiProps = {
@@ -28,11 +28,12 @@ declare type PlayersInMatchApiProps = {
     ready?: boolean;
     card_deck?: CardProps[]
     card_hand?: CardProps[]
+    card_retry?: CardProps[];
     card_prepare_camp?: CardProps[]
     card_battle_camp?: CardProps[]
     card_in_forgotten_sea?: CardProps[]
     faith_points?: number,
     wisdom_points?: number
-    wisdom_used?: number
+    wisdom_available?: number
 }
 
