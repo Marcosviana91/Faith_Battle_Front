@@ -12,7 +12,7 @@ type CardsContainerProps = {
 export default function CardsContainer(props: CardsContainerProps) {
     const styles = StyleSheet.create({
         cardsContainer: {
-            backgroundColor: "#000000cc",
+            // backgroundColor: "#000000cc",
             height: props.size === 'small' ? "auto" : "100%",
             flexDirection: "row",
             alignItems: "center",

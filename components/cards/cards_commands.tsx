@@ -1,7 +1,7 @@
 import { Pressable, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
-import { setPlayer, toggleCardsToFight } from '@/store/reducers/matchReducer';
+import { addNotDefenseCardsToFight, setPlayer, toggleCardsToFight } from '@/store/reducers/matchReducer';
 
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
@@ -11,7 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 type Props = {
     onPress?: () => void
     card: CardProps
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" |"will_fight"
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" |"fighting"
 }
 
 export function CardRetry(props: Props) {
@@ -160,6 +160,27 @@ export function CardToggleAttack(props: Props) {
             }}
         >
             <MaterialCommunityIcons name="sword" size={80} color="black" />
+        </Pressable>
+    )
+}
+
+export function CardNotDefense(props: Props) {
+    const dispatch = useDispatch()
+    const fight_camp = useSelector((state: RootReducer) => state.matchReducer.match_data)?.fight_camp
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+
+
+
+    return (
+        <Pressable
+            style={{backgroundColor:"green"}}
+            onPress={() => {
+                dispatch(addNotDefenseCardsToFight())
+                console.log("Não defender")
+                if (props.onPress) {props.onPress()}
+            }}
+        >
+            <MaterialCommunityIcons name="shield-off" size={80} color="black" />
         </Pressable>
     )
 }

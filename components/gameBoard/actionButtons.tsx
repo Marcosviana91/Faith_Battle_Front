@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { View } from "react-native"
 
 import { RootReducer } from "@/store"
-import { clearCardsToFight } from '@/store/reducers/matchReducer';
+import { clearCardsToFight, toggleCardsToFight } from '@/store/reducers/matchReducer';
 
 import BasicButton from '@/components/button/basic';
 import { MaterialCommunityIcons } from "@expo/vector-icons"
@@ -115,11 +115,12 @@ export default function ActionButtons() {
                 </View>
             }
             {/* Botão de NÃO realizar defesa */}
-            {fight_camp && fight_camp.player_defense_id == player?.id && !(player_match_settings?.cards_to_fight?.length! > 0) && fight_camp.fight_stage == 0 &&
+            {fight_camp && fight_camp.player_defense_id == player?.id && (player_match_settings?.cards_to_fight?.length! < fight_camp.attack_cards?.length!) && fight_camp.fight_stage == 0 &&
                 <View>
                     <BasicButton
                         onPress={() => {
                             console.log("Não defender")
+                            // dispatch(toggleCardsToFight())
                         }}
                     >
                         <MaterialCommunityIcons name="shield-off" size={24} color="black" />

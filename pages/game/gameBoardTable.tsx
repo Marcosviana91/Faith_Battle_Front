@@ -2,14 +2,10 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
-
 import { View, StyleSheet, Image } from "react-native";
 import { globalStyles } from "@/constants/Styles";
 
 import { AntDesign } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
 
@@ -17,7 +13,6 @@ import GameBoard from "@/components/gameBoard";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
 
 import CardsContainer from "@/components/gameBoard/cardsContainer";
-import BasicButton from '@/components/button/basic';
 import ActionButtons from '@/components/gameBoard/actionButtons';
 
 
@@ -81,12 +76,15 @@ export default function GameBoardTable() {
             {/* Icones dos jogadores */}
             {!fight_camp && <View style={[styles.gameBoardHeader,]}>
                 {matchData?.players_in_match?.map((player) => (
-                    <PlayerIcon key={player.id} id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} />
+                    <View key={player.id} style={{alignItems:"center"}}>
+                        <PlayerIcon id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} />
+                        <ThemedText type='defaultSemiBold'>{player.faith_points}</ThemedText>
+                    </View>
                 ))}
             </View>}
-            {/* Fight Camp GERAR COMPONANTE */}
+            {/* Fight Camp GERAR COMPONENTE */}
             {fight_camp &&
-                <ThemedView style={{zIndex:1, backgroundColor:"red", alignItems:"center"}}>
+                <ThemedView style={{ zIndex: 1, backgroundColor: "red", alignItems: "center" }}>
                     <ThemedText>{fight_camp.player_attack_id} VS {fight_camp.player_defense_id}</ThemedText>
                     <CardsContainer size="small" zone='fighting' cards={fight_camp.attack_cards} />
                     <CardsContainer size="small" zone='fighting' cards={fight_camp.defense_cards} />
@@ -113,5 +111,6 @@ const styles = StyleSheet.create({
         height: 60,
         width: '100%',
         flexDirection: "row",
+        justifyContent: "space-around",
     }
 })

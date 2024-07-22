@@ -2,7 +2,7 @@ import React, { useState, } from 'react';
 import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions } from "react-native";
 import { ThemedView } from '../themed/ThemedView';
 
-import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, CardToggleDefense } from "@/components/cards/cards_commands";
+import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, CardToggleDefense, CardNotDefense } from "@/components/cards/cards_commands";
 import { useSelector } from 'react-redux';
 import { RootReducer } from '@/store';
 
@@ -201,18 +201,22 @@ export const card_list: CardProps[] = [
 ]
 
 var default_card = require('@/assets/images/Cards/Card.png')
+var not_defense = require('@/assets/images/Cards/not-defense.png')
 
 
 type Props = {
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
     in_game?: boolean;
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "will_fight" | "fighting"
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting"
 }
 
 function getCardSource(slug: string | undefined) {
     if (!slug) {
         return default_card
+    }
+    if (slug === "not-defense") {
+        return not_defense
     }
     for (const card of card_list) {
         if (card.slug === slug) {
@@ -233,6 +237,7 @@ function isCardInList(card_id: string, card_list: CardProps[]) {
 
 export default function Card(props: Props) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const fight_camp = useSelector((state: RootReducer) => state.matchReducer.match_data)?.fight_camp
     const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight
 
     const player_id = props.card?.in_game_id?.split("-")[0]
@@ -275,11 +280,9 @@ export default function Card(props: Props) {
         },
         card_ready: {
             borderColor: 'green',
-
         },
         card_used: {
             borderColor: 'red',
-
         },
         card_not_enough: {
             borderColor: 'grey',
@@ -334,7 +337,7 @@ export default function Card(props: Props) {
                     }}
                 >
                     <Image
-                        resizeMode="contain"
+                        resizeMode="stretch"
                         style={[cardSize, borderColor]}
                         source={getCardSource(props.card?.slug)}
                     />
@@ -380,7 +383,16 @@ export default function Card(props: Props) {
                                         setShowModal(!showModal)
                                     }} />
                                 }
-                                </>
+
+                            </>
+                            }
+                            {fight_camp && fight_camp.player_defense_id == player?.id && <>
+                                {(props.zone === 'fighting') &&
+                                    <CardNotDefense card={props.card!} zone={props.zone} onPress={() => {
+                                        setShowModal(!showModal)
+                                    }} />
+                                }
+                            </>
                             }
                         </View>
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
