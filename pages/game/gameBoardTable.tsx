@@ -9,6 +9,7 @@ import { View, StyleSheet, Image } from "react-native";
 import { globalStyles } from "@/constants/Styles";
 
 import { AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
 
@@ -17,6 +18,7 @@ import PlayerIcon from "@/components/gameBoard/playerIcon";
 
 import CardsContainer from "@/components/gameBoard/cardsContainer";
 import BasicButton from '@/components/button/basic';
+import ActionButtons from '@/components/gameBoard/actionButtons';
 
 
 function contaTempo(tempoInicial: string) {
@@ -43,9 +45,8 @@ function contaTempo(tempoInicial: string) {
 export default function GameBoardTable() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_match_settings = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)
     const player_focus = matchData?.player_focus_id
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+    const fight_camp = matchData?.fight_camp
 
     const [tempoPercorrido, setTempoPercorrido] = useState("")
 
@@ -66,61 +67,8 @@ export default function GameBoardTable() {
                     <ThemedText><AntDesign name="clockcircleo" size={18} /></ThemedText>
                     <ThemedText>Round {matchData?.round_match}</ThemedText>
                 </View>
-                {(matchData?.player_turn === player?.id) && !(player_match_settings?.cards_to_attack?.length! > 0) && <View>
-                    <BasicButton
-                        onPress={() => {
-                            WS.sendJsonMessage({
-                                "data_type": "match_move",
-                                "user_data": {
-                                    "id": player?.id
-                                },
-                                "room_data": {
-                                    "id": matchData?.id
-                                },
-                                "match_move": {
-                                    "match_id": matchData?.id,
-                                    "round_match": matchData?.round_match,
-                                    "player_move": player?.id,
-                                    "move_type": "done"
-                                }
-                            })
-                        }}
-                    >
-                        Finalizar
-                    </BasicButton>
-                </View>}
-                {(player_match_settings?.cards_to_attack?.length! > 0) && <View>
-                    <BasicButton
-                        onPress={() => {
-                            if (!player_focus || player_focus == player?.id) {
-                                console.log("Escolha um oponente")
-                            } else {
-                                const data: APIResponseProps = {
-                                    "data_type": "match_move",
-                                    "user_data": {
-                                        "id": player?.id
-                                    },
-                                    "room_data": {
-                                        "id": matchData?.id
-                                    },
-                                    "match_move": {
-                                        "match_id": matchData?.id,
-                                        "round_match": matchData?.round_match,
-                                        "player_move": player?.id,
-                                        "move_type": "attack",
-                                        "player_target": player_focus,
-                                        "attack_cards": player_match_settings?.cards_to_attack!,
-                                    }
-                                }
-                                console.log(data)
-                                WS.sendJsonMessage(data)
-                            }
-
-                        }}
-                    >
-                        Atacar
-                    </BasicButton>
-                </View>}
+                {/* Botões de ação dependendo da fase do turno*/}
+                <ActionButtons />
                 {/* Contador de Sabedoria */}
                 <ThemedView style={{ flexDirection: "row", gap: 4, justifyContent: 'center', alignItems: "center", borderWidth: 1, borderRadius: 8, width: 100 }}>
                     <ThemedText>{player?.wisdom_available}</ThemedText>
@@ -131,11 +79,18 @@ export default function GameBoardTable() {
                 </ThemedView>
             </View>
             {/* Icones dos jogadores */}
-            <View style={[styles.gameBoardHeader,]}>
+            {!fight_camp && <View style={[styles.gameBoardHeader,]}>
                 {matchData?.players_in_match?.map((player) => (
                     <PlayerIcon key={player.id} id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} />
                 ))}
-            </View>
+            </View>}
+            {/* Fight Camp GERAR COMPONANTE */}
+            {fight_camp &&
+                <ThemedView style={{zIndex:1, backgroundColor:"red", alignItems:"center"}}>
+                    <ThemedText>{fight_camp.player_attack_id} VS {fight_camp.player_defense_id}</ThemedText>
+                    <CardsContainer size="small" zone='fighting' cards={fight_camp.attack_cards} />
+                    <CardsContainer size="small" zone='fighting' cards={fight_camp.defense_cards} />
+                </ThemedView>}
             {/* GameBoards */}
             <View style={[globalStyles.contentContainer]}>
                 {/* Enemy board */}
