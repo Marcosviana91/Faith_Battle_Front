@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { ThemedView } from "@/components/themed/ThemedView";
 import { ThemedText } from "@/components/themed/ThemedText";
+
 import PlayerRoomMini from "@/components/gameBoard/playerRoomMini";
 import BasicButton from "@/components/button/basic";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -26,16 +27,6 @@ export default function GameRoom() {
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
 
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
-
-    const [allowRetry, setAllowRetry] = useState(false)
-
-    useEffect(() => {
-        if (player?.card_retry) {
-            setAllowRetry(player?.card_retry?.length! > 0)
-
-        }
-        setAllowRetry(false)
-    }, [player?.card_retry])
 
     if (!room || !userData) {
         // navigation.navigate("Home" as never)

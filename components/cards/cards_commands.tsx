@@ -1,7 +1,7 @@
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
-import { setPlayer, toggleAttackList } from '@/store/reducers/matchReducer';
+import { setPlayer, toggleCardsToFight } from '@/store/reducers/matchReducer';
 
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
@@ -21,6 +21,15 @@ export function CardRetry(props: Props) {
 
     var hand_cards: CardProps[] = []
     var retry_cards: CardProps[] = []
+
+    if (player?.deck_try! >= 3) {
+        return (
+            <View style={{ backgroundColor: "red", borderRadius: 8, marginTop:8 }}>
+                <MaterialCommunityIcons name="block-helper" size={80} color="black" />
+
+            </View>
+        )
+    }
 
     return (
         <Pressable
@@ -137,9 +146,6 @@ export function CardToggleAttack(props: Props) {
     const dispatch = useDispatch()
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_match_settings = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)
-    const player_focus = matchData?.player_focus_id
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
 
     if (matchData?.player_turn !== player?.id) {
         return null
@@ -149,7 +155,7 @@ export function CardToggleAttack(props: Props) {
         <Pressable
             style={{backgroundColor:"red"}}
             onPress={() => {
-                dispatch(toggleAttackList(props.card))
+                dispatch(toggleCardsToFight(props.card))
                 if (props.onPress) {props.onPress()}
             }}
         >
@@ -158,7 +164,29 @@ export function CardToggleAttack(props: Props) {
     )
 }
 
-export function CardRemoveToAttack(props: Props) {
+export function CardToggleDefense(props: Props) {
+    const dispatch = useDispatch()
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+
+    if (matchData?.fight_camp?.player_defense_id !== player?.id) {
+        return null
+    }
+
+    return (
+        <Pressable
+            style={{backgroundColor:"green"}}
+            onPress={() => {
+                dispatch(toggleCardsToFight(props.card))
+                if (props.onPress) {props.onPress()}
+            }}
+        >
+            <MaterialCommunityIcons name="shield-sword" size={80} color="black" />
+        </Pressable>
+    )
+}
+
+export function __changeName(props: Props) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const player_focus = matchData?.player_focus_id

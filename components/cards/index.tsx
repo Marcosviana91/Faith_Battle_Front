@@ -2,7 +2,7 @@ import React, { useState, } from 'react';
 import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions } from "react-native";
 import { ThemedView } from '../themed/ThemedView';
 
-import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack } from "@/components/cards/cards_commands";
+import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, CardToggleDefense } from "@/components/cards/cards_commands";
 import { useSelector } from 'react-redux';
 import { RootReducer } from '@/store';
 
@@ -221,12 +221,23 @@ function getCardSource(slug: string | undefined) {
     }
 }
 
+function isCardInList(card_id: string, card_list: CardProps[]) {
+    let card_founded = false;
+    card_list.map(_card => {
+        if (_card.in_game_id == card_id) {
+            card_founded = true;
+        }
+    })
+    return card_founded
+}
+
 export default function Card(props: Props) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight
+
     const player_id = props.card?.in_game_id?.split("-")[0]
     const { width: windowWidth } = useWindowDimensions();
     const [showModal, setShowModal] = useState(false)
-    const [isFighting, setFighting] = useState(false)
 
     // tamanho padrão
     //  width: 430,
@@ -313,13 +324,10 @@ export default function Card(props: Props) {
     if (props.zone == "retry") { borderColor = styles.card_used }
     if (props.zone == "select") { borderColor = styles.card_ready }
 
-    function toggleSetFighting() {
-        setFighting(!isFighting);
-    }
 
     return (
         <>
-            <View style={{ alignSelf: isFighting ? "flex-start" : "center" }}>
+            <View style={{ alignSelf: isCardInList(props.card?.in_game_id!, cards_to_fight!) ? "flex-start" : "center" }}>
                 <Pressable
                     onPress={() => {
                         setShowModal(!showModal)
@@ -364,10 +372,15 @@ export default function Card(props: Props) {
                                 }
                                 {(props.zone === 'battle') && (props.card?.status === "ready") &&
                                     <CardToggleAttack card={props.card!} zone={props.zone} onPress={() => {
-                                        toggleSetFighting()
                                         setShowModal(!showModal)
                                     }} />
-                                }</>
+                                }
+                                {(props.zone === 'battle') &&
+                                    <CardToggleDefense card={props.card!} zone={props.zone} onPress={() => {
+                                        setShowModal(!showModal)
+                                    }} />
+                                }
+                                </>
                             }
                         </View>
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

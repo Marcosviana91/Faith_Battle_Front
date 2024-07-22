@@ -26,6 +26,7 @@ declare type PlayerProps = {
 declare type PlayersInMatchApiProps = {
     id: number;
     ready?: boolean;
+    deck_try?: number;
     card_deck?: CardProps[]
     card_hand?: CardProps[]
     card_retry?: CardProps[];

@@ -4,7 +4,7 @@ import Card from "@/components/cards";
 
 type CardsContainerProps = {
     size?: "small" | "minimum";
-    zone: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea"
+    zone: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting"
     cards?: CardProps[];
 }
 

@@ -8,7 +8,13 @@ declare type MatchApiProps = {
     can_others_move?: boolean;
     players_in_match?: PlayersInMatchApiProps[];
     end_match?: string;
-    fighting?: any;
+    fight_camp?: {
+        player_attack_id?: number;
+        attack_cards?: CardProps[];
+        player_defense_id?: number;
+        defense_cards?: CardProps[];
+        fight_stage: number;
+    };
 }
 
 declare type CardProps = {
@@ -30,7 +36,7 @@ declare type APIMoveProps = {
     move_type?: string
     player_target?: number
     card_target?: string
-    attack_cards?: CardProps[]
+    card_list?: CardProps[]
 }
 
 declare type MatchReducerProps = {
@@ -39,7 +45,7 @@ declare type MatchReducerProps = {
     player_data?: PlayersInMatchApiProps,
     player_match_settings?: {
         player_view_id?: number,
-        cards_to_attack: CardProps[]
+        cards_to_fight: CardProps[]
     },
 }
 
