@@ -1,8 +1,9 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useThemeColor } from '@/hooks/useThemeColor';
+import React from "react";
 
 type Props = {
-    children: string;
+    children: string | React.ReactNode;
     onPress?: () => void;
     disabled?: boolean;
     lightColor?: string;
