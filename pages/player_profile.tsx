@@ -6,7 +6,9 @@ import { RootReducer } from '@/store';
 import { logout } from "@/store/reducers/authReducer";
 import { leaveMatch } from "@/store/reducers/matchReducer";
 
-import { View, TouchableOpacity, Modal } from 'react-native';
+import { View, TouchableOpacity, Modal, Image } from 'react-native';
+
+import { URI } from '@/store/server_urls';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -44,6 +46,12 @@ export default function ProfileScreen() {
                 <>
                     <>
                         <ThemedText type='title'>Olá {playerData.username}!</ThemedText>
+                        <Image
+                        style={{height:100, width: 100}}
+                            source={{
+                                uri: `http://${URI}/static/profile_images/${playerData.id}.png`,
+                            }}
+                        />
                         <ThemedText type='defaultSemiBold' style={{ position: 'absolute', bottom: 8 }}>Seu ID: {playerData.id}</ThemedText>
                         <ThemedText type='subtitle'>Nome: {playerData.real_name}</ThemedText>
                         <ThemedText type='subtitle'>Email: {playerData.email}</ThemedText>
