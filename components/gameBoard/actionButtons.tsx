@@ -2,10 +2,9 @@ import { useSelector, useDispatch } from "react-redux"
 import { View } from "react-native"
 
 import { RootReducer } from "@/store"
-import { clearCardsToFight, toggleCardsToFight } from '@/store/reducers/matchReducer';
+import { clearCardsToFight } from '@/store/reducers/matchReducer';
 
 import BasicButton from '@/components/button/basic';
-import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
@@ -83,90 +82,6 @@ export default function ActionButtons() {
                     </BasicButton>
                 </View>
             }
-            {/* Botão de realizar defesa */}
-            {fight_camp && fight_camp.player_defense_id == player?.id && (player_match_settings?.cards_to_fight?.length! > 0) &&
-                <View>
-                    <BasicButton
-                        onPress={() => {
-                            console.log("Defender")
-                            const data: APIResponseProps = {
-                                "data_type": "match_move",
-                                "user_data": {
-                                    "id": player?.id
-                                },
-                                "room_data": {
-                                    "id": matchData?.id
-                                },
-                                "match_move": {
-                                    "match_id": matchData?.id,
-                                    "round_match": matchData?.round_match,
-                                    "player_move": player?.id,
-                                    "move_type": "defense",
-                                    "player_target": fight_camp.player_attack_id,
-                                    "card_list": player_match_settings?.cards_to_fight!,
-                                }
-                            }
-                            WS.sendJsonMessage(data)
-                            dispatch(clearCardsToFight())
-                        }}
-                    >
-                        <MaterialCommunityIcons name="shield" size={24} color="black" />
-                    </BasicButton>
-                </View>
-            }
-            {/* Botão de NÃO realizar defesa */}
-            {fight_camp && fight_camp.player_defense_id == player?.id && (player_match_settings?.cards_to_fight?.length! < fight_camp.attack_cards?.length!) && fight_camp.fight_stage == 0 &&
-                <View>
-                    <BasicButton
-                        onPress={() => {
-                            console.log("Não defender")
-                            // dispatch(toggleCardsToFight())
-                        }}
-                    >
-                        <MaterialCommunityIcons name="shield-off" size={24} color="black" />
-                    </BasicButton>
-                </View>
-            }
-            {/* Lutar */}
-            {(matchData?.player_turn === player?.id) && fight_camp && fight_camp.fight_stage==1 &&
-                <View>
-                    <BasicButton
-                        onPress={() => {
-                            console.log("Lutar")
-                            const data: APIResponseProps = {
-                                "data_type": "match_move",
-                                "user_data": {
-                                    "id": player?.id
-                                },
-                                "room_data": {
-                                    "id": matchData?.id
-                                },
-                                "match_move": {
-                                    "match_id": matchData?.id,
-                                    "round_match": matchData?.round_match,
-                                    "player_move": player?.id,
-                                    "move_type": "fight",
-                                }
-                            }
-                            WS.sendJsonMessage(data)
-                        }}
-                    >
-                        <MaterialCommunityIcons name="sword-cross" size={24} color="black" />
-                    </BasicButton>
-                </View>
-            }
-            {/* Usar milagre */}
-            {/* {(matchData?.player_turn === player?.id) && fight_camp && fight_camp.fight_stage==1 &&
-                <View>
-                    <BasicButton
-                        onPress={() => {
-                            console.log("Lutar")
-                        }}
-                    >
-                        <MaterialCommunityIcons name="magic-staff" size={24} color="black" />
-                    </BasicButton>
-                </View>
-            } */}
         </>
     )
 }

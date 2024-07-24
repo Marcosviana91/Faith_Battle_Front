@@ -3,9 +3,10 @@ import Card from "@/components/cards";
 
 
 type CardsContainerProps = {
-    size?: "small" | "minimum";
-    zone: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting"
+    size?: "small" | "minimum" | "medium";
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight"
     cards?: CardProps[];
+    target?: number
 }
 
 
@@ -22,11 +23,12 @@ export default function CardsContainer(props: CardsContainerProps) {
             padding: (props.zone == "select" || props.zone == "retry") ? 0 : 4,
         },
     })
+
     return (
         <ScrollView horizontal>
             <View style={[styles.cardsContainer,]}>
                 {props.cards?.map((card, _index) => (
-                    <Card key={_index} card={card} size={props.size} zone={props.zone} />
+                    <Card key={_index} index={props.target! >= 0 ? props.target : _index} card={card} size={props.size} zone={props.zone} />
                 )
                 )}
             </View>

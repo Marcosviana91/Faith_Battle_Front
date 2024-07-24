@@ -37,11 +37,8 @@ const matchSlice = createSlice({
             }
             state.player_match_settings!.cards_to_fight = __temp_list
         },
-        addNotDefenseCardsToFight: (state) => {
-            let __temp_list = state.player_match_settings!.cards_to_fight!.map((card) => card)
-            const card: CardProps = {slug: "not-defense"}
-            __temp_list?.push(card)
-            state.player_match_settings!.cards_to_fight = __temp_list
+        setCardsToFight: (state, action: PayloadAction<CardProps[]>) => {
+            state.player_match_settings!.cards_to_fight = action.payload
         },
         clearCardsToFight: (state) => {
             state.player_match_settings!.cards_to_fight = []
@@ -54,5 +51,5 @@ const matchSlice = createSlice({
 
     }
 })
-export const { setMatch, setRoom, setPlayer, setPlayerFocus, toggleCardsToFight,addNotDefenseCardsToFight, clearCardsToFight, leaveMatch } = matchSlice.actions
+export const { setMatch, setRoom, setPlayer, setPlayerFocus, toggleCardsToFight, setCardsToFight, clearCardsToFight, leaveMatch } = matchSlice.actions
 export default matchSlice.reducer

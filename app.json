@@ -2,7 +2,7 @@
   "expo": {
     "name": "Faith_Batlle",
     "slug": "faith-battle",
-    "version": "1.0.0",
+    "version": "pre-alpha-1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/Faith_Batlle.png",
     "scheme": "myapp",

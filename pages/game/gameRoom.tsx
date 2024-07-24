@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/native";
 import { ThemedView } from "@/components/themed/ThemedView";
 import { ThemedText } from "@/components/themed/ThemedText";
 
-import PlayerRoomMini from "@/components/gameBoard/playerRoomMini";
 import BasicButton from "@/components/button/basic";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -16,6 +15,7 @@ import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
 
 import CardsContainer from "@/components/gameBoard/cardsContainer";
+import PlayerIcon from "@/components/gameBoard/playerIcon";
 
 
 
@@ -35,17 +35,19 @@ export default function GameRoom() {
 
     const open_player_slot = []
     for (let index = 0; index < room.max_players! - room.connected_players!.length; index++) {
-        open_player_slot.push(<PlayerRoomMini key={index} id={0} />)
+        open_player_slot.push(<PlayerIcon type="normal" key={index} id={0} />)
     }
 
     return (
         <ThemedView style={{ flex: 1, margin: 8 }}>
+            {/* Header */}
             {room.room_stage === 0 && (
                 <View style={{ height: 120, padding: 8 }}>
                     <ThemedText>ID: {room.id}</ThemedText>
                     <ThemedText>Nome: {room.name}</ThemedText>
                     <ThemedText>Tipo de partida: {room.match_type}</ThemedText>
                     <ThemedText>Jogadores na sala: {room.connected_players?.length}</ThemedText>
+                    {/* Botão de sair */}
                     <Pressable
                         style={{
                             backgroundColor: '#f00',
@@ -71,16 +73,17 @@ export default function GameRoom() {
                         <MaterialCommunityIcons name="exit-run" size={48} color="black" />
                     </Pressable>
                 </View>
-
             )}
+            {/* Slots */}
             <View style={[styles.slots, { backgroundColor: '#ffffff53' }]}>
                 {room.connected_players?.map(_player => (
-                    <PlayerRoomMini key={_player.id} id={_player.id!} isReady={_player.ready} />
+                    <PlayerIcon type="normal" key={_player.id} id={_player.id!} isReady={_player.ready} />
                 ))}
                 {open_player_slot.map(player => { return player })}
             </View>
+            {/* Botão de ficar pronto */}
             {room.room_stage === 0 && (
-                <View style={{ height: 100, width: '100%', position: 'absolute', bottom: 0 }}>
+                <View style={{ height: 100, width: '100%', backgroundColor: '#ffffff53' }}>
                     <BasicButton
                         onPress={() => {
                             WS.sendJsonMessage({
@@ -98,6 +101,7 @@ export default function GameRoom() {
                     </BasicButton>
                 </View>
             )}
+
             {player && <Modal
                 visible={room.room_stage == 1 && !player?.ready}
                 transparent

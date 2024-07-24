@@ -1,8 +1,9 @@
 import React, { useState, } from 'react';
 import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions } from "react-native";
 import { ThemedView } from '../themed/ThemedView';
+import { ThemedText } from '../themed/ThemedText';
 
-import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, CardToggleDefense, CardNotDefense } from "@/components/cards/cards_commands";
+import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, ShowCardDefense, CardToggleDefense } from "@/components/cards/cards_commands";
 import { useSelector } from 'react-redux';
 import { RootReducer } from '@/store';
 
@@ -208,7 +209,8 @@ type Props = {
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
     in_game?: boolean;
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting"
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight";
+    index?: number;
 }
 
 function getCardSource(slug: string | undefined) {
@@ -255,8 +257,8 @@ export default function Card(props: Props) {
 
     const styles = StyleSheet.create({
         image: {
-            height: defaultHeight,
-            width: defaultWidth,
+            height: "70%",
+            width: "90%",
             borderWidth: 2,
             borderRadius: 14,
         },
@@ -327,13 +329,14 @@ export default function Card(props: Props) {
     if (props.zone == "retry") { borderColor = styles.card_used }
     if (props.zone == "select") { borderColor = styles.card_ready }
 
-
     return (
         <>
             <View style={{ alignSelf: isCardInList(props.card?.in_game_id!, cards_to_fight!) ? "flex-start" : "center" }}>
                 <Pressable
                     onPress={() => {
-                        setShowModal(!showModal)
+                        if (props.zone) {
+                            setShowModal(!showModal)
+                        }
                     }}
                 >
                     <Image
@@ -361,46 +364,45 @@ export default function Card(props: Props) {
                                     setShowModal(!showModal)
                                 }} />
                             }
-                            {(player_id == player?.id) && <>
-
-                                {(props.zone === 'hand') && (props.card?.status === "ready") &&
-                                    <CardMoveToPrepare card={props.card!} zone={props.zone} onPress={() => {
-                                        setShowModal(!showModal)
-                                    }} />
-                                }
-                                {(props.zone === 'prepare') && (props.card?.status === "ready") &&
-                                    <CardMoveToBattle card={props.card!} zone={props.zone} onPress={() => {
-                                        setShowModal(!showModal)
-                                    }} />
-                                }
-                                {(props.zone === 'battle') && (props.card?.status === "ready") &&
-                                    <CardToggleAttack card={props.card!} zone={props.zone} onPress={() => {
-                                        setShowModal(!showModal)
-                                    }} />
-                                }
-                                {(props.zone === 'battle') &&
-                                    <CardToggleDefense card={props.card!} zone={props.zone} onPress={() => {
-                                        setShowModal(!showModal)
-                                    }} />
-                                }
-
-                            </>
+                            {(player_id == player?.id) && (props.card?.status === "ready") &&
+                                <>
+                                    {(props.zone === 'hand') &&
+                                        <CardMoveToPrepare card={props.card!} zone={props.zone} onPress={() => {
+                                            setShowModal(!showModal)
+                                        }} />
+                                    }
+                                    {(props.zone === 'prepare') &&
+                                        <CardMoveToBattle card={props.card!} zone={props.zone} onPress={() => {
+                                            setShowModal(!showModal)
+                                        }} />
+                                    }
+                                    {(props.zone === 'battle') &&
+                                        <CardToggleAttack card={props.card!} zone={props.zone} onPress={() => {
+                                            setShowModal(!showModal)
+                                        }} />
+                                    }
+                                </>
                             }
-                            {fight_camp && fight_camp.player_defense_id == player?.id && <>
-                                {(props.zone === 'fighting') &&
-                                    <CardNotDefense card={props.card!} zone={props.zone} onPress={() => {
-                                        setShowModal(!showModal)
-                                    }} />
-                                }
-                            </>
+                            {(props.zone === 'will-fight') && player?.id === fight_camp?.player_defense_id &&
+                                <CardToggleDefense card={props.card!} zone={props.zone} index={props.index} onPress={() => {
+                                    setShowModal(!showModal)
+                                }} />
                             }
                         </View>
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                             <Image
                                 resizeMode="stretch"
-                                style={[styles.image, { width: "90%" }]}
+                                style={[styles.image]}
                                 source={getCardSource(props.card?.slug)}
                             />
+                            {(props.zone === 'fighting') && player?.id === fight_camp?.player_defense_id &&
+                                <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                    <ThemedText>Escolha uma carta para defender</ThemedText>
+                                    <ShowCardDefense card={props.card!} zone={props.zone} index={props.index} onPress={() => {
+                                        setShowModal(!showModal)
+                                    }} />
+                                </View>
+                            }
                         </View>
                     </Pressable>
                 </ThemedView>
