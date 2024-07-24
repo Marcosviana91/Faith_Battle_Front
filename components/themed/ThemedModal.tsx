@@ -6,6 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 type Props = ModalProps & {
     title: string;
+    hideCloseButton?: boolean
     closeModal: () => void;
 }
 
@@ -18,13 +19,13 @@ export function ThemedModal(props : Props) {
                     <View style={{ height: 30, width: "100%", flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", marginBottom: 12 }}>
                         <ThemedText type='subtitle'>{props.title}</ThemedText>
                         {/* Close Button */}
-                        <Pressable
+                        {!props.hideCloseButton && <Pressable
                             onPress={props.closeModal}
                         >
                             <ThemedText type='subtitle'>
                                 <AntDesign name="closecircleo" size={24} />
                             </ThemedText>
-                        </Pressable>
+                        </Pressable>}
                     </View>
                     {/* Modal Content */}
                     {props.children}

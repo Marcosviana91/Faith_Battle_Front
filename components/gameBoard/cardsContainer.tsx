@@ -4,9 +4,10 @@ import Card from "@/components/cards";
 
 type CardsContainerProps = {
     size?: "small" | "minimum" | "medium";
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight"
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy"
     cards?: CardProps[];
-    target?: number
+    target_index?: number;
+    target_slug?: string;
 }
 
 
@@ -24,11 +25,13 @@ export default function CardsContainer(props: CardsContainerProps) {
         },
     })
 
+    console.log("Container target: " + props.target_slug)
+
     return (
         <ScrollView horizontal>
             <View style={[styles.cardsContainer,]}>
                 {props.cards?.map((card, _index) => (
-                    <Card key={_index} index={props.target! >= 0 ? props.target : _index} card={card} size={props.size} zone={props.zone} />
+                    <Card key={_index} index={props.target_index! >= 0 ? props.target_index : _index} card={card} size={props.size} zone={props.zone} target_slug={props.target_slug} />
                 )
                 )}
             </View>

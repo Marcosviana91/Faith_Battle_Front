@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions } from "
 import { ThemedView } from '../themed/ThemedView';
 import { ThemedText } from '../themed/ThemedText';
 
-import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, ShowCardDefense, CardToggleDefense } from "@/components/cards/cards_commands";
+import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, ShowCardDefense, CardToggleDefense, CardDestroy } from "@/components/cards/cards_commands";
 import { useSelector } from 'react-redux';
 import { RootReducer } from '@/store';
 
@@ -209,8 +209,9 @@ type Props = {
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
     in_game?: boolean;
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight";
-    index?: number;
+    zone?: "gallery" | "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy";
+    index?: number ;
+    target_slug?: string;
 }
 
 function getCardSource(slug: string | undefined) {
@@ -257,8 +258,8 @@ export default function Card(props: Props) {
 
     const styles = StyleSheet.create({
         image: {
-            height: "70%",
-            width: "90%",
+            height: defaultHeight,
+            width: defaultWidth,
             borderWidth: 2,
             borderRadius: 14,
         },
@@ -383,8 +384,14 @@ export default function Card(props: Props) {
                                     }
                                 </>
                             }
+                            {(props.zone === 'elias_destroy') &&
+                                // <CardDestroy card={props.card!} zone={props.zone} index={props.index} card_id={props.card?.in_game_id} onPress={() => {
+                                <CardDestroy card={props.card!} zone={props.zone} target_index={props.index} target_slug={props.target_slug} onPress={() => {
+                                    setShowModal(!showModal)
+                                }} />
+                            }
                             {(props.zone === 'will-fight') && player?.id === fight_camp?.player_defense_id &&
-                                <CardToggleDefense card={props.card!} zone={props.zone} index={props.index} onPress={() => {
+                                <CardToggleDefense card={props.card!} zone={props.zone} target_index={props.index} onPress={() => {
                                     setShowModal(!showModal)
                                 }} />
                             }
@@ -392,13 +399,13 @@ export default function Card(props: Props) {
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                             <Image
                                 resizeMode="stretch"
-                                style={[styles.image]}
+                                style={[styles.image, { width: "90%", height: "70%" }]}
                                 source={getCardSource(props.card?.slug)}
                             />
                             {(props.zone === 'fighting') && player?.id === fight_camp?.player_defense_id &&
                                 <View style={{ alignItems: "center", justifyContent: "center" }}>
                                     <ThemedText>Escolha uma carta para defender</ThemedText>
-                                    <ShowCardDefense card={props.card!} zone={props.zone} index={props.index} onPress={() => {
+                                    <ShowCardDefense card={props.card!} zone={props.zone} target_index={props.index} onPress={() => {
                                         setShowModal(!showModal)
                                     }} />
                                 </View>

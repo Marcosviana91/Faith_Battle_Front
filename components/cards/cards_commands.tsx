@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
@@ -7,14 +8,15 @@ import CardsContainer from "@/components/gameBoard/cardsContainer";
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Card from '.';
+import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
+import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
 
 type Props = {
     onPress?: () => void
     card: CardProps
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight"
-    index?: number;
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy"
+    target_index?: number;
+    target_slug?: string;
 }
 
 export function CardRetry(props: Props) {
@@ -76,35 +78,48 @@ export function CardMoveToPrepare(props: Props) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
 
+    const [showInvoke, setShowInvoke] = useState(false)
+
     if (matchData?.player_turn !== player?.id) {
         return null
     }
 
     return (
-        <Pressable
-            style={{ backgroundColor: "red" }}
-            onPress={() => {
-                WS.sendJsonMessage({
-                    "data_type": "match_move",
-                    "user_data": {
-                        "id": player?.id
-                    },
-                    "room_data": {
-                        "id": matchData?.id
-                    },
-                    "match_move": {
-                        "match_id": matchData?.id,
-                        "round_match": matchData?.round_match,
-                        "player_move": player?.id,
-                        "card_id": props.card.in_game_id,
-                        "move_type": "move_to_prepare"
+        <>
+            {showInvoke && 
+                <EliasOnInvoke in_game_id={props.card.in_game_id!} />
+            }
+            <Pressable
+                style={{ backgroundColor: "red" }}
+                onPress={() => {
+                    // Ativar a Passiva de Elias
+                    if (props.card.slug == 'elias') {
+                        setShowInvoke(true)
                     }
-                })
-                if (props.onPress) { props.onPress() }
-            }}
-        >
-            <MaterialCommunityIcons name="arrow-up" size={80} color="black" />
-        </Pressable>
+                    else {
+                        WS.sendJsonMessage({
+                            "data_type": "match_move",
+                            "user_data": {
+                                "id": player?.id
+                            },
+                            "room_data": {
+                                "id": matchData?.id
+                            },
+                            "match_move": {
+                                "match_id": matchData?.id,
+                                "round_match": matchData?.round_match,
+                                "player_move": player?.id,
+                                "card_id": props.card.in_game_id,
+                                "move_type": "move_to_prepare"
+                            }
+                        })
+                        if (props.onPress) { props.onPress() }
+                    }
+                }}
+            >
+                <MaterialCommunityIcons name="arrow-up" size={80} color="black" />
+            </Pressable>
+        </>
     )
 }
 
@@ -145,6 +160,53 @@ export function CardMoveToBattle(props: Props) {
     )
 }
 
+export function CardDestroy(props: Props) {
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const player_focus = matchData?.player_focus_id
+    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+
+    // Aplicar DRY
+    function getPlayerData(player_id: number) {
+        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
+        return _data[0]
+    }
+    const card_target = getPlayerData(player_focus!).card_battle_camp![props.target_index!].in_game_id
+
+    if (matchData?.player_turn !== player?.id) {
+        return null
+    }
+
+    return (
+        <Pressable
+            style={{ backgroundColor: "red" }}
+            onPress={() => {
+                // console.log(props.target_slug + " destriur "+ card_target)
+                WS.sendJsonMessage({
+                    "data_type": "match_move",
+                    "user_data": {
+                        "id": player?.id
+                    },
+                    "room_data": {
+                        "id": matchData?.id
+                    },
+                    "match_move": {
+                        "match_id": matchData?.id,
+                        "round_match": matchData?.round_match,
+                        "player_move": player?.id,
+                        "card_id": props.target_slug,
+                        "move_type": "move_to_prepare",
+                        "player_target": player_focus,
+                        "card_target": card_target,
+                    }
+                })
+                if (props.onPress) { props.onPress() }
+            }}
+        >
+            <FontAwesome6 name="explosion" size={80} color="black" />
+        </Pressable>
+    )
+}
 export function CardToggleAttack(props: Props) {
     const dispatch = useDispatch()
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
@@ -182,7 +244,7 @@ export function ShowCardDefense(props: Props) {
 
     return (
         // Mostrar Cartas na zona de batalha 
-        < CardsContainer zone="will-fight" cards={getPlayerData(player?.id!).card_battle_camp} size="medium" target={props.index} />
+        < CardsContainer zone="will-fight" cards={getPlayerData(player?.id!).card_battle_camp} size="medium" target_index={props.target_index} />
     )
 }
 
@@ -198,7 +260,7 @@ export function CardToggleDefense(props: Props) {
 
     const card = props.card
     const not_defense = { slug: 'not-defense' }
-    const index = props.index!
+    const index = props.target_index!
 
     return (
         <Pressable

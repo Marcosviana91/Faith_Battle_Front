@@ -32,7 +32,7 @@ export default function CardScreen() {
                 <ThemedText>Standard Heros:</ThemedText>
                 <View style={[styles.container,]}>
                     {card_list.map((card_slug, index) => (
-                        <Card key={index} size="medium" card={card_slug}></Card>
+                        <Card key={index} size="medium" card={card_slug} zone='gallery' />
                     ))}
                 </View>
             </ScrollView>

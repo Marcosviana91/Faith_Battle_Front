@@ -32,6 +32,7 @@ export default function GameBoardTable() {
     return (
         <ThemedView style={globalStyles.container}>
             <TopBar />
+            {/* Aplicar DRY */}
             {/* Icones dos jogadores */}
             {!fight_camp &&
                 <View style={[styles.gameBoardHeader,]}>
