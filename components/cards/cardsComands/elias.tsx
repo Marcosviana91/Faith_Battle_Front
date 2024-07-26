@@ -1,4 +1,4 @@
-import { Pressable, View, Text } from 'react-native';
+import { View } from 'react-native';
 
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
@@ -8,13 +8,12 @@ import { ThemedModal } from '@/components/themed/ThemedModal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import PlayerIcon from '@/components/gameBoard/playerIcon';
 import { ThemedText } from '@/components/themed/ThemedText';
-import CardsContainer from '@/components/gameBoard/cardsContainer';
+import {CardsContainer} from '@/components/cards/';
 
 export function OnInvoke(props: { in_game_id: string }) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const player_focus = matchData?.player_focus_id
-    const fight_camp = matchData?.fight_camp
 
     // Aplicar DRY
     function getPlayerData(player_id: number) {

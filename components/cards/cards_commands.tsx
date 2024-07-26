@@ -3,13 +3,15 @@ import { Pressable, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 import { setPlayer, setCardsToFight, toggleCardsToFight } from '@/store/reducers/matchReducer';
-import CardsContainer from "@/components/gameBoard/cardsContainer";
+// Importação circular: CardsContainer
+import {CardsContainer} from "@/components/cards/";
 
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
 
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
+import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
 
 type Props = {
     onPress?: () => void
@@ -83,17 +85,35 @@ export function CardMoveToPrepare(props: Props) {
     if (matchData?.player_turn !== player?.id) {
         return null
     }
+    
+    const CARDS_ONINVOKE_LIST = ['elias', 'ester']
+    var render = <></>
 
+
+    switch (CARDS_ONINVOKE_LIST.find((nome) => nome == props.card.slug)) {
+        case 'elias':
+            render = <EliasOnInvoke in_game_id={props.card.in_game_id!} />
+            break;
+        case 'ester':
+            render = <EsterOnInvoke in_game_id={props.card.in_game_id!} />
+            break;
+    
+        default:
+            break;
+    }
+    
     return (
         <>
             {showInvoke && 
-                <EliasOnInvoke in_game_id={props.card.in_game_id!} />
+                <>
+                    {render}
+                </>
             }
             <Pressable
                 style={{ backgroundColor: "red" }}
                 onPress={() => {
                     // Ativar a Passiva de Elias
-                    if (props.card.slug == 'elias') {
+                    if (CARDS_ONINVOKE_LIST.find((nome) => nome == props.card.slug)) {
                         setShowInvoke(true)
                     }
                     else {
