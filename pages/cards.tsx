@@ -1,26 +1,26 @@
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 import { View, StyleSheet, ScrollView } from "react-native";
-import Card from "@/components/cards/index";
+import { Card } from "@/components/cards/";
 
 // import { card_list } from "@/components/cards/index";
 
 const card_list = [
-    {"slug":'abraao'},
-    {"slug":'adao'},
-    {"slug":'daniel'},
-    {"slug":'davi'},
-    {"slug":'elias'},
-    {"slug":'ester'},
-    {"slug":'eva'},
-    {"slug":'jaco'},
-    {"slug":"jose-do-egito"},
-    {"slug":"josue"},
-    {"slug":"maria"},
-    {"slug":"moises"},
-    {"slug":"noe"},
-    {"slug":"salomao"},
-    {"slug":"sansao"},
+    { "slug": 'abraao' },
+    { "slug": 'adao' },
+    { "slug": 'daniel' },
+    { "slug": 'davi' },
+    { "slug": 'elias' },
+    { "slug": 'ester' },
+    { "slug": 'eva' },
+    { "slug": 'jaco' },
+    { "slug": "jose-do-egito" },
+    { "slug": "josue" },
+    { "slug": "maria" },
+    { "slug": "moises" },
+    { "slug": "noe" },
+    { "slug": "salomao" },
+    { "slug": "sansao" },
 ]
 
 

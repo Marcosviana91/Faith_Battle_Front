@@ -14,7 +14,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
 
-import CardsContainer from "@/components/gameBoard/cardsContainer";
+import {CardsContainer} from "@/components/cards/";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
 
 

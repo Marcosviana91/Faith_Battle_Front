@@ -2,8 +2,7 @@ import { useSelector } from "react-redux";
 import { RootReducer } from "@/store";
 
 import { View, Image, StyleSheet, useWindowDimensions } from "react-native";
-import Card from "@/components/cards";
-import CardsContainer from "./cardsContainer";
+import { CardsContainer, Card } from "@/components/cards";
 
 
 export default function GameBoard(props: PlayersInMatchApiProps) {
