@@ -58,6 +58,7 @@ export default function FightCamp() {
                         marginLeft: 8
                     }}
                 >
+                    {/* Botão para reabir o fight camp */}
                     <Pressable
                         onPress={() => {
                             setShowModal(true)
@@ -84,7 +85,7 @@ export default function FightCamp() {
                         </View>
                         {/* Botão Lutar */}
                         {(matchData?.player_turn === player?.id) && fight_camp && fight_camp.fight_stage == 1 &&
-                            <View>
+                            <View style={{height:50, width:100}}>
                                 <BasicButton
                                     onPress={() => {
                                         console.log("Lutar")
@@ -112,7 +113,7 @@ export default function FightCamp() {
                         }
                         {/* Botão de realizar defesa */}
                         {fight_camp && fight_camp.fight_stage === 0 && fight_camp.player_defense_id == player?.id &&
-                            <View>
+                            <View style={{height:50, width:100}}>
                                 <BasicButton
                                     onPress={() => {
                                         console.log("Defender")
