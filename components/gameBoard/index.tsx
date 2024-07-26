@@ -53,7 +53,7 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
             backgroundColor: "red",
             width: windowWidth * 0.95,
             height: windowHeight * 0.3,
-            transform: [{ rotateZ: player?.id == props.id ? '0' : '180deg' }]
+            transform: [{ rotateZ: player?.id == props.id ? '0deg' : '180deg' }]
         }}>
             <Image
                 style={styles.board}
