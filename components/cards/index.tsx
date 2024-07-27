@@ -10,7 +10,7 @@ import { RootReducer } from '@/store';
 
 type CardsContainerProps = {
     size?: "small" | "minimum" | "medium";
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy" | "gallery" | "ester_deck"
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy" | "gallery";
     cards?: CardProps[];
     target_index?: number;
     target_slug?: string;
@@ -247,7 +247,7 @@ type Props = {
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
     in_game?: boolean;
-    zone?: "gallery" | "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy" | "ester_deck";
+    zone?: "gallery" | "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy";
     index?: number;
     target_slug?: string;
 }

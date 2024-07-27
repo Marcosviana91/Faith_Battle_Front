@@ -12,6 +12,7 @@ import { URI } from "@/store/server_urls";
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
 import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
+import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
 
 type Props = {
     onPress?: () => void
@@ -86,7 +87,7 @@ export function CardMoveToPrepare(props: Props) {
         return null
     }
     
-    const CARDS_ONINVOKE_LIST = ['elias', 'ester']
+    const CARDS_ONINVOKE_LIST = ['elias', 'ester', 'maria']
     var render = <></>
 
 
@@ -96,6 +97,9 @@ export function CardMoveToPrepare(props: Props) {
             break;
         case 'ester':
             render = <EsterOnInvoke in_game_id={props.card.in_game_id!} />
+            break;
+        case 'maria':
+            render = <MariaOnInvoke in_game_id={props.card.in_game_id!} />
             break;
     
         default:
