@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect} from 'react';
 import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions, ScrollView } from "react-native";
 import { ThemedView } from '../themed/ThemedView';
 import { ThemedText } from '../themed/ThemedText';
@@ -35,7 +35,7 @@ export function CardsContainer(props: CardsContainerProps) {
 
     return (
         <ScrollView horizontal>
-            <View style={[styles.cardsContainer,]}>
+            <View style={[styles.cardsContainer]}>
                 {props.cards?.map((card, _index) => (
                     <Card key={_index} index={props.target_index! >= 0 ? props.target_index : _index} card={card} size={props.size} zone={props.zone} target_slug={props.target_slug} />
                 )
@@ -442,7 +442,7 @@ export function Card(props: Props) {
                         </Pressable>
                         {/* Card Commands */}
                         {(props.zone === 'fighting') && player?.id === fight_camp?.player_defense_id &&
-                            <View style={{ alignItems: "center", justifyContent: "center" }}>
+                        <View style={{ alignItems: "center", justifyContent: "center", width:"100%"}}>
                                 <ThemedText>Escolha uma carta para defender</ThemedText>
                                 <ShowCardDefense card={props.card!} zone={props.zone} target_index={props.index} onPress={() => {
                                     setShowModal(!showModal)

@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions, ScrollView } from "react-native";
 import { ThemedView } from '../themed/ThemedView';
 import { ThemedText } from '../themed/ThemedText';

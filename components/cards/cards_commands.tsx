@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 import { setPlayer, setCardsToFight, toggleCardsToFight } from '@/store/reducers/matchReducer';
 // Importação circular: CardsContainer
-import {CardsContainer} from "@/components/cards/";
+import { CardsContainer } from "@/components/cards/";
 
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
@@ -86,7 +86,7 @@ export function CardMoveToPrepare(props: Props) {
     if (matchData?.player_turn !== player?.id) {
         return null
     }
-    
+
     const CARDS_ONINVOKE_LIST = ['elias', 'ester', 'maria']
     var render = <></>
 
@@ -101,14 +101,14 @@ export function CardMoveToPrepare(props: Props) {
         case 'maria':
             render = <MariaOnInvoke in_game_id={props.card.in_game_id!} />
             break;
-    
+
         default:
             break;
     }
-    
+
     return (
         <>
-            {showInvoke && 
+            {showInvoke &&
                 <>
                     {render}
                 </>
@@ -267,8 +267,10 @@ export function ShowCardDefense(props: Props) {
     }
 
     return (
-        // Mostrar Cartas na zona de batalha 
-        < CardsContainer zone="will-fight" cards={getPlayerData(player?.id!).card_battle_camp} size="medium" target_index={props.target_index} />
+        // Mostrar Cartas na zona de batalha
+        <View style={{ width:"100%"}}>
+            < CardsContainer zone="will-fight" cards={getPlayerData(player?.id!).card_battle_camp} size="medium" target_index={props.target_index} />
+        </View>
     )
 }
 
@@ -295,7 +297,7 @@ export function CardToggleDefense(props: Props) {
                 const _index = __temp_list.findIndex(_card => _card.in_game_id === card.in_game_id)
                 if (_index === index) {
                     __temp_list![_index] = not_defense
-                } else if ( _index >= 0) {
+                } else if (_index >= 0) {
                     __temp_list![_index] = not_defense
                     __temp_list![index] = card
                 } else {

@@ -142,14 +142,16 @@ export default function FightCamp() {
                                 </BasicButton>
                             </View>
                         }
-                        {fight_camp.fight_stage === 0
-                            ? <CardsContainer size="small" zone="fighting" cards={fight_camp.attack_cards} />
-                            : <CardsContainer size="small" zone="gallery" cards={fight_camp.attack_cards} />
-                        }
-                        {fight_camp.fight_stage === 0
-                            ? <CardsContainer size="small" cards={player_match_settings?.cards_to_fight!} />
-                            : <CardsContainer size="small" zone='gallery' cards={fight_camp.defense_cards} />
-                        }
+                        <View style={{width:"100%"}}>
+                            {fight_camp.fight_stage === 0
+                                ? <CardsContainer size="small" zone="fighting" cards={fight_camp.attack_cards} />
+                                : <CardsContainer size="small" zone="gallery" cards={fight_camp.attack_cards} />
+                            }
+                            {fight_camp.fight_stage === 0
+                                ? <CardsContainer size="small" cards={player_match_settings?.cards_to_fight!} />
+                                : <CardsContainer size="small" zone='gallery' cards={fight_camp.defense_cards} />
+                            }
+                        </View>
                         {player?.id === fight_camp.player_defense_id &&
                             <>
                                 {/* Cartas da Mão do Jogador - Filtrar cartas jogáveis (milagres, pacados, ect) */}
