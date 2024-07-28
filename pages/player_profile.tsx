@@ -19,6 +19,65 @@ import { globalStyles } from '@/constants/Styles';
 
 import { useEditUserMutation } from '@/store/api'
 
+//////////////////////////////////////
+
+import { StyleSheet } from 'react-native';
+import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, {
+    useSharedValue,
+    withTiming,
+    useAnimatedStyle,
+} from 'react-native-reanimated';
+
+const END_POSITION = 100;
+
+function App() {
+    const onLeft = useSharedValue(true);
+    const position = useSharedValue(0);
+
+    const panGesture = Gesture.Pan()
+        .onUpdate((e) => {
+            if (onLeft.value) {
+                position.value = e.translationX;
+            } else {
+                position.value = END_POSITION + e.translationX;
+            }
+        })
+        .onEnd((e) => {
+            if (position.value > END_POSITION / 2) {
+                position.value = withTiming(END_POSITION, { duration: 100 });
+                onLeft.value = false;
+            } else {
+                position.value = withTiming(0, { duration: 100 });
+                onLeft.value = true;
+            }
+        });
+
+    const animatedStyle = useAnimatedStyle(() => ({
+        transform: [{ translateX: position.value }],
+    }));
+
+    return (
+        <GestureHandlerRootView style={{ flex: 1, justifyContent: "center", alignItems: "flex-start", padding: "25%" }}>
+            <GestureDetector gesture={panGesture}>
+                <Animated.View style={[styles.box, animatedStyle]} />
+            </GestureDetector>
+        </GestureHandlerRootView>
+    );
+}
+
+const styles = StyleSheet.create({
+    box: {
+        height: 50,
+        width: 50,
+        backgroundColor: '#b58df1',
+        borderRadius: 20,
+        marginBottom: 30,
+    },
+});
+
+/////////////////////////////
+
 export default function ProfileScreen() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -47,7 +106,7 @@ export default function ProfileScreen() {
                     <>
                         <ThemedText type='title'>Olá {playerData.username}!</ThemedText>
                         <Image
-                        style={{height:100, width: 100}}
+                            style={{ height: 100, width: 100 }}
                             source={{
                                 uri: `http://${URI}/static/profile_images/${playerData.id}.png`,
                             }}
@@ -78,6 +137,7 @@ export default function ProfileScreen() {
                             <MaterialIcons name="logout" size={24} color="black" />
                         </TouchableOpacity>
                     </>
+                    <App />
                     <Modal
                         visible={isEditting}
                         transparent
@@ -93,7 +153,7 @@ export default function ProfileScreen() {
                             >
                                 {/* Form */}
                                 <View style={{ rowGap: 10 }}>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Nome Completo:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -111,7 +171,7 @@ export default function ProfileScreen() {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Email:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -129,7 +189,7 @@ export default function ProfileScreen() {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Confirma email:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -147,7 +207,7 @@ export default function ProfileScreen() {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Senha:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -167,7 +227,7 @@ export default function ProfileScreen() {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent:"space-between" }}>
+                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Confirma senha:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
