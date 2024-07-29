@@ -87,8 +87,8 @@ export default function ProfileScreen() {
 
     const playerData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const [realName, setRealName] = useState(playerData?.real_name);
-    const [email, setEmail] = useState(playerData?.email);
-    const [email2, setEmail2] = useState(playerData?.email);
+    // const [email, setEmail] = useState(playerData?.email);
+    // const [email2, setEmail2] = useState(playerData?.email);
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
 
@@ -113,7 +113,7 @@ export default function ProfileScreen() {
                         />
                         <ThemedText type='defaultSemiBold' style={{ position: 'absolute', bottom: 8 }}>Seu ID: {playerData.id}</ThemedText>
                         <ThemedText type='subtitle'>Nome: {playerData.real_name}</ThemedText>
-                        <ThemedText type='subtitle'>Email: {playerData.email}</ThemedText>
+                        {/* <ThemedText type='subtitle'>Email: {playerData.email}</ThemedText> */}
                         {/* EDITAR */}
                         <TouchableOpacity
                             onPress={() => {
@@ -171,7 +171,7 @@ export default function ProfileScreen() {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
+                                    {/* <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Email:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -188,8 +188,8 @@ export default function ProfileScreen() {
                                                 </ThemedText>
                                             </TouchableOpacity>
                                         </View>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
+                                    </View> */}
+                                    {/* <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Confirma email:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -206,7 +206,7 @@ export default function ProfileScreen() {
                                                 </ThemedText>
                                             </TouchableOpacity>
                                         </View>
-                                    </View>
+                                    </View> */}
                                     <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Senha:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
@@ -259,7 +259,7 @@ export default function ProfileScreen() {
                                                 username: playerData.username,
                                                 password: password,
                                                 real_name: realName,
-                                                email: email,
+                                                // email: email,
                                                 token: playerData.token,
                                             }
                                             if (password == "") {
@@ -279,8 +279,8 @@ export default function ProfileScreen() {
                                         onPress={() => {
                                             setEditting(false);
                                             setRealName(playerData?.real_name);
-                                            setEmail(playerData?.email);
-                                            setEmail2(playerData?.email);
+                                            // setEmail(playerData?.email);
+                                            // setEmail2(playerData?.email);
                                             setPassword("");
                                             setPassword2("");
                                         }}

@@ -5,7 +5,7 @@ declare type UserProps = {
     created_at?: string,
     last_login?: string,
     real_name?: string,
-    email?: string,
+    // email?: string,
     token?: string,
 }
 

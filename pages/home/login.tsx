@@ -32,7 +32,7 @@ export default function LoginScreen() {
 
     const [isCreating, setCreating] = useState(false)
     const [realName, setRealName] = useState('')
-    const [email, setEmail] = useState('')
+    // const [email, setEmail] = useState('')
     const backGroun_list = [
         require("@/assets/images/Backgrounds/01.png"),
         require("@/assets/images/Backgrounds/02.png")
@@ -120,8 +120,8 @@ export default function LoginScreen() {
                             <>
                                 <ThemedText>Nome Completo:</ThemedText>
                                 <ThemedTextInput value={realName} onChangeText={setRealName} />
-                                <ThemedText>E-mail:</ThemedText>
-                                <ThemedTextInput value={email} onChangeText={setEmail} />
+                                {/* <ThemedText>E-mail:</ThemedText>
+                                <ThemedTextInput value={email} onChangeText={setEmail} /> */}
                             </>
                         )}
                     </ThemedView>
@@ -133,13 +133,13 @@ export default function LoginScreen() {
                                     lightColor='#1ad81a'
                                     onPress={() => {
                                         createUser({
-                                            email: email,
+                                            // email: email,
                                             real_name: realName,
                                             password: password,
                                             username: userName,
                                         })
                                         setRealName('')
-                                        setEmail('')
+                                        // setEmail('')
                                         setCreating(false)
                                     }}>Criar</BasicButton>
                                 <BasicButton
@@ -147,7 +147,7 @@ export default function LoginScreen() {
                                     lightColor='#ff6161'
                                     onPress={() => {
                                         setRealName('')
-                                        setEmail('')
+                                        // setEmail('')
                                         setCreating(false)
                                     }}
                                 >Cancelar</BasicButton>
@@ -160,7 +160,7 @@ export default function LoginScreen() {
                                             id: 1,
                                             real_name: "Usuário Fake_01",
                                             username: userName,
-                                            email: "email01@fake.com"
+                                            // email: "email01@fake.com"
                                         }))
                                         return
                                     }
