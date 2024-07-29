@@ -1,10 +1,10 @@
-import { Image, StyleSheet, View, TouchableOpacity, Alert, ImageBackground } from 'react-native';
+import { Image, StyleSheet, View, TouchableOpacity, Alert, ImageBackground, Pressable, ScrollView } from 'react-native';
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 import { ThemedTextInput } from '@/components/themed/ThemedTextInput'
 import BasicButton from '@/components/button/basic';
 
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
 
 import { useState, useEffect } from 'react';
@@ -16,6 +16,7 @@ import { useLoginMutation, useNewUserMutation, useGetUserDataMutation } from '@/
 import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
 import { useKeyboard } from "@/hooks/useKeyboard";
+import { useAvatar, AVATAR } from '@/hooks/useAvatar';
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
@@ -33,6 +34,9 @@ export default function LoginScreen() {
     const [isCreating, setCreating] = useState(false)
     const [realName, setRealName] = useState('')
     // const [email, setEmail] = useState('')
+    const [showAvatarList, setShowAvatarList] = useState(false);
+    const [myAvatar, setMyAvatar] = useState(0);
+
     const backGroun_list = [
         require("@/assets/images/Backgrounds/01.png"),
         require("@/assets/images/Backgrounds/02.png")
@@ -97,31 +101,84 @@ export default function LoginScreen() {
                 </View>}
                 <View style={{ flexBasis: 500, justifyContent: ((keyboardIsShow[0] && isCreating) ? "center" : "flex-start"), alignItems: "center" }}>
                     <ThemedView lightColor='#b4b4b4d5' darkColor='#242424d3' style={{ padding: 16, borderRadius: 8, borderColor: "#000", borderWidth: 1 }}>
-                        <ThemedText>Usuário:</ThemedText>
-                        <ThemedTextInput value={userName.trim()} onChangeText={setUserName} />
-                        <View style={{ flexDirection: 'row' }}>
-                            <ThemedText>Senha: </ThemedText>
-                            <TouchableOpacity onPress={() => { setHidePassword(!hidePassword) }} >
-                                <ThemedText>
-                                    <Ionicons
-                                        name={hidePassword ? 'eye-off' : 'eye'}
-                                        size={20}
-                                    />
-                                </ThemedText>
-                            </TouchableOpacity>
-                        </View>
-                        <ThemedTextInput
-                            value={password}
-                            onChangeText={setPassword}
-                            secureTextEntry={hidePassword}
-                            keyboardType={(hidePassword ? 'default' : "visible-password")}
-                        />
+                        {!showAvatarList &&
+                            <>
+                                <ThemedText>Usuário:</ThemedText>
+                                <ThemedTextInput value={userName.trim()} onChangeText={setUserName} />
+                                <View style={{ flexDirection: 'row' }}>
+                                    <ThemedText>Senha: </ThemedText>
+                                    <TouchableOpacity onPress={() => { setHidePassword(!hidePassword) }} >
+                                        <ThemedText>
+                                            <Ionicons
+                                                name={hidePassword ? 'eye-off' : 'eye'}
+                                                size={20}
+                                            />
+                                        </ThemedText>
+                                    </TouchableOpacity>
+                                </View>
+                                <ThemedTextInput
+                                    value={password}
+                                    onChangeText={setPassword}
+                                    secureTextEntry={hidePassword}
+                                    keyboardType={(hidePassword ? 'default' : "visible-password")}
+                                />
+                            </>
+                        }
                         {isCreating && (
                             <>
-                                <ThemedText>Nome Completo:</ThemedText>
-                                <ThemedTextInput value={realName} onChangeText={setRealName} />
+                                {!showAvatarList &&
+                                    <>
+                                        <ThemedText>Nome Completo:</ThemedText>
+                                        <ThemedTextInput value={realName} onChangeText={setRealName} />
+                                    </>
+                                }
                                 {/* <ThemedText>E-mail:</ThemedText>
                                 <ThemedTextInput value={email} onChangeText={setEmail} /> */}
+                                {!showAvatarList &&
+                                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingEnd: 16, marginTop: 12 }}>
+                                        <ThemedText>Avatar:</ThemedText>
+                                        <Pressable
+                                            onPress={() => {
+                                                setShowAvatarList(true);
+                                            }}
+                                        >
+                                            <ThemedView>
+                                                <Image
+                                                    style={{ height: 40, width: 40, borderWidth: 2 }}
+                                                    source={useAvatar({ avatar_index: myAvatar! })}
+                                                />
+                                            </ThemedView>
+                                        </Pressable>
+                                    </View>
+                                }
+                                {showAvatarList &&
+                                    <View style={{height:200}}>
+                                        <ScrollView>
+                                            <View style={{gap: 2}}>
+                                                {AVATAR.map((avt, _index) => {
+                                                    return (
+                                                        <Pressable
+                                                            onPress={() => {
+                                                                setMyAvatar(_index);
+                                                                setShowAvatarList(false)
+                                                            }}
+                                                            key={_index}
+                                                        >
+    
+                                                            <ThemedView style={{ flexDirection: "row", width: 150, justifyContent: "space-between", alignItems: 'center', borderWidth: 1, borderRadius: 4, paddingHorizontal: 2, borderColor: _index === myAvatar ? "green" : '' }}>
+                                                                <ThemedText style={{ fontSize: 16, paddingStart: 4 }}>{avt.name}</ThemedText>
+                                                                <Image
+                                                                    style={{ height: 30, width: 30, borderWidth: 2 }}
+                                                                    source={useAvatar({ avatar_index: _index })}
+                                                                />
+                                                            </ThemedView>
+                                                        </Pressable>
+                                                    )
+                                                })}
+                                            </View>
+                                        </ScrollView>
+                                    </View>
+                                }
                             </>
                         )}
                     </ThemedView>
@@ -137,6 +194,7 @@ export default function LoginScreen() {
                                             real_name: realName,
                                             password: password,
                                             username: userName,
+                                            avatar: myAvatar,
                                         })
                                         setRealName('')
                                         // setEmail('')
@@ -149,6 +207,7 @@ export default function LoginScreen() {
                                         setRealName('')
                                         // setEmail('')
                                         setCreating(false)
+                                        setShowAvatarList(false)
                                     }}
                                 >Cancelar</BasicButton>
                             </View>

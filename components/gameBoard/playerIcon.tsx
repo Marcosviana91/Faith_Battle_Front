@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootReducer } from '@/store';
 
@@ -11,7 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useGetUserDataMutation } from '@/store/api'
 import { globalStyles } from "@/constants/Styles";
-import { URI } from "@/store/server_urls";
+import { useAvatar } from "@/hooks/useAvatar";
 
 type Props = {
     id: number
@@ -27,6 +27,7 @@ export default function PlayerIcon(props: Props) {
     const dispatch = useDispatch();
     const playerData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const [getUser, { data: userData, error: userError }] = useGetUserDataMutation();
+    const [avatar, setAvatar ] = useState()
 
 
     const styles = StyleSheet.create({
@@ -76,6 +77,12 @@ export default function PlayerIcon(props: Props) {
             getUser(props.id)
         }
     }, [])
+    useEffect(() => {
+        if (userData) {
+            console.log(userData)
+            setAvatar(useAvatar({avatar_index:userData.user_data?.avatar!}))
+        }
+    }, [userData])
 
     if (props.type === 'normal') {
         if (props.id === 0) {
@@ -92,9 +99,7 @@ export default function PlayerIcon(props: Props) {
                 <View style={[styles.playerIcon, styles.playerImage]}>
                     <Image
                         style={{ height: 125, width: 75 }}
-                        source={{
-                            uri: `http://${URI}/static/profile_images/${props.id}.png`,
-                        }}
+                        source={ avatar}
                     />
                     {props.isReady &&
                         <View style={{ position: 'absolute', height: "100%", width: "100%", justifyContent: "center", alignItems: "center", backgroundColor: "#ffffff9b" }}>
@@ -137,9 +142,7 @@ export default function PlayerIcon(props: Props) {
                     <View style={styles.playerIconMini}>
                         <Image
                             style={{ width: "100%", height: "100%" }}
-                            source={{
-                                uri: `http://${URI}/static/profile_images/${props.id}.png`,
-                            }}
+                            source={avatar}
                         />
                     </View>
                     {props.isTarget && <MaterialCommunityIcons style={styles.playerIconTarget} name="target" />}

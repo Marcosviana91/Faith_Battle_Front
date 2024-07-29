@@ -6,7 +6,7 @@ import { RootReducer } from '@/store';
 import { login, logout } from "@/store/reducers/authReducer";
 import { leaveMatch } from "@/store/reducers/matchReducer";
 
-import { View, TouchableOpacity, Modal, Image, Pressable } from 'react-native';
+import { View, TouchableOpacity, Modal, Image, Pressable, ScrollView } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -135,7 +135,7 @@ export default function ProfileScreen() {
                                 navigation.navigate('Home' as never)
                                 // Navegar para Tela de login
                             }}
-                            style={{ backgroundColor: "red", width: 48, height: 48, position: "absolute", right: 8, justifyContent: "center", alignItems: "center", borderRadius: 16 }}
+                            style={{ width: 48, height: 48, position: "absolute", right: 8, justifyContent: "center", alignItems: "center", borderRadius: 16 }}
                         >
                             <MaterialIcons name="logout" size={24} color="black" />
                         </TouchableOpacity>
@@ -174,27 +174,30 @@ export default function ProfileScreen() {
                                             </Pressable>
                                         }
                                         {showAvatarList &&
-                                            <View style={{ gap: 2, backgroundColor:"white" }}>
-                                                {AVATAR.map((avt, _index) => {
-                                                    return (
-                                                        <Pressable
-                                                            onPress={() => {
-                                                                setMyAvatar(_index);
-                                                                setShowAvatarList(false)
-                                                            }}
-                                                            key={_index}
-                                                        >
-
-                                                            <ThemedView style={{ flexDirection: "row", width: 150, justifyContent: "space-between", alignItems: 'center', borderWidth: 1, borderRadius: 4, paddingHorizontal: 2, borderColor: _index === myAvatar ? "green" : '' }}>
-                                                                <ThemedText style={{ fontSize: 20, paddingStart: 4 }}>{avt.name}</ThemedText>
-                                                                <Image
-                                                                    style={{ height: 40, width: 40, borderWidth: 2 }}
-                                                                    source={useAvatar({ avatar_index: _index })}
-                                                                />
-                                                            </ThemedView>
-                                                        </Pressable>
-                                                    )
-                                                })}
+                                            <View style={{ height: 200 }}>
+                                                <ScrollView>
+                                                    <View style={{ gap: 2 }}>
+                                                        {AVATAR.map((avt, _index) => {
+                                                            return (
+                                                                <Pressable
+                                                                    onPress={() => {
+                                                                        setMyAvatar(_index);
+                                                                        setShowAvatarList(false)
+                                                                    }}
+                                                                    key={_index}
+                                                                >
+                                                                    <ThemedView style={{ flexDirection: "row", width: 150, justifyContent: "space-between", alignItems: 'center', borderWidth: 1, borderRadius: 4, paddingHorizontal: 2, borderColor: _index === myAvatar ? "green" : '' }}>
+                                                                        <ThemedText style={{ fontSize: 20, paddingStart: 4 }}>{avt.name}</ThemedText>
+                                                                        <Image
+                                                                            style={{ height: 40, width: 40, borderWidth: 2 }}
+                                                                            source={useAvatar({ avatar_index: _index })}
+                                                                        />
+                                                                    </ThemedView>
+                                                                </Pressable>
+                                                            )
+                                                        })}
+                                                    </View>
+                                                </ScrollView>
                                             </View>
                                         }
                                     </View>
@@ -330,6 +333,7 @@ export default function ProfileScreen() {
                                             setPassword("");
                                             setPassword2("");
                                             setMyAvatar(playerData?.avatar);
+                                            setShowAvatarList(false);
                                         }}
                                     >
                                         <MaterialIcons name="edit-off" size={24} color="black" />
