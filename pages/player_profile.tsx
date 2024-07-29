@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native';
 
 import { RootReducer } from '@/store';
-import { logout } from "@/store/reducers/authReducer";
+import { login, logout } from "@/store/reducers/authReducer";
 import { leaveMatch } from "@/store/reducers/matchReducer";
 
-import { View, TouchableOpacity, Modal, Image } from 'react-native';
-
-import { URI } from '@/store/server_urls';
+import { View, TouchableOpacity, Modal, Image, Pressable } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
+
+import { useAvatar, AVATAR } from '@/hooks/useAvatar';
 
 import { ThemedView } from "@/components/themed/ThemedView";
 import { ThemedText } from "@/components/themed/ThemedText";
@@ -84,6 +84,7 @@ export default function ProfileScreen() {
 
     const [sendUserData, { data: newUserData }] = useEditUserMutation();
     const [isEditting, setEditting] = useState(false);
+    const [showAvatarList, setShowAvatarList] = useState(false);
 
     const playerData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const [realName, setRealName] = useState(playerData?.real_name);
@@ -91,10 +92,14 @@ export default function ProfileScreen() {
     // const [email2, setEmail2] = useState(playerData?.email);
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
+    const [myAvatar, setMyAvatar] = useState(playerData?.avatar);
+
+    const avatar = useAvatar({ avatar_index: playerData?.avatar! })
 
     useEffect(() => {
         if (newUserData?.data_type == "user_updated" && newUserData.user_data) {
-            console.log(newUserData.user_data);
+            let data = { ...playerData, "avatar": newUserData.user_data.avatar, "real_name": newUserData.user_data.real_name }
+            dispatch(login(data))
         }
     }, [newUserData])
 
@@ -107,9 +112,7 @@ export default function ProfileScreen() {
                         <ThemedText type='title'>Olá {playerData.username}!</ThemedText>
                         <Image
                             style={{ height: 100, width: 100 }}
-                            source={{
-                                uri: `http://${URI}/static/profile_images/${playerData.id}.png`,
-                            }}
+                            source={avatar}
                         />
                         <ThemedText type='defaultSemiBold' style={{ position: 'absolute', bottom: 8 }}>Seu ID: {playerData.id}</ThemedText>
                         <ThemedText type='subtitle'>Nome: {playerData.real_name}</ThemedText>
@@ -153,7 +156,49 @@ export default function ProfileScreen() {
                             >
                                 {/* Form */}
                                 <View style={{ rowGap: 10 }}>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
+                                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                        <ThemedText>Avatar</ThemedText>
+                                        {!showAvatarList &&
+                                            <Pressable
+                                                onPress={() => {
+                                                    setShowAvatarList(true)
+                                                }}
+                                            >
+                                                <ThemedView>
+                                                    <Image
+                                                        style={{ height: 40, width: 40, borderWidth: 2 }}
+                                                        source={useAvatar({ avatar_index: myAvatar! })}
+                                                    />
+                                                </ThemedView>
+
+                                            </Pressable>
+                                        }
+                                        {showAvatarList &&
+                                            <View style={{ gap: 2, backgroundColor:"white" }}>
+                                                {AVATAR.map((avt, _index) => {
+                                                    return (
+                                                        <Pressable
+                                                            onPress={() => {
+                                                                setMyAvatar(_index);
+                                                                setShowAvatarList(false)
+                                                            }}
+                                                            key={_index}
+                                                        >
+
+                                                            <ThemedView style={{ flexDirection: "row", width: 150, justifyContent: "space-between", alignItems: 'center', borderWidth: 1, borderRadius: 4, paddingHorizontal: 2, borderColor: _index === myAvatar ? "green" : '' }}>
+                                                                <ThemedText style={{ fontSize: 20, paddingStart: 4 }}>{avt.name}</ThemedText>
+                                                                <Image
+                                                                    style={{ height: 40, width: 40, borderWidth: 2 }}
+                                                                    source={useAvatar({ avatar_index: _index })}
+                                                                />
+                                                            </ThemedView>
+                                                        </Pressable>
+                                                    )
+                                                })}
+                                            </View>
+                                        }
+                                    </View>
+                                    {!showAvatarList && <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Nome Completo:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -170,7 +215,7 @@ export default function ProfileScreen() {
                                                 </ThemedText>
                                             </TouchableOpacity>
                                         </View>
-                                    </View>
+                                    </View>}
                                     {/* <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Email:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
@@ -207,7 +252,7 @@ export default function ProfileScreen() {
                                             </TouchableOpacity>
                                         </View>
                                     </View> */}
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
+                                    {!showAvatarList && <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Senha:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -226,8 +271,8 @@ export default function ProfileScreen() {
                                                 </ThemedText>
                                             </TouchableOpacity>
                                         </View>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
+                                    </View>}
+                                    {!showAvatarList && <View style={{ flexDirection: 'row', columnGap: 10, alignItems: "center", justifyContent: "space-between" }}>
                                         <ThemedText style={{ minWidth: 80, maxWidth: 120 }}>Confirma senha:</ThemedText>
                                         <View style={{ flexDirection: "row" }}>
                                             <ThemedTextInput
@@ -246,7 +291,7 @@ export default function ProfileScreen() {
                                                 </ThemedText>
                                             </TouchableOpacity>
                                         </View>
-                                    </View>
+                                    </View>}
                                 </View>
                                 {/* Modal buttons */}
                                 <ThemedView style={{ flexDirection: "row", justifyContent: "space-between", borderTopWidth: 1, marginTop: 10, paddingTop: 16 }}>
@@ -259,6 +304,7 @@ export default function ProfileScreen() {
                                                 username: playerData.username,
                                                 password: password,
                                                 real_name: realName,
+                                                avatar: myAvatar,
                                                 // email: email,
                                                 token: playerData.token,
                                             }
@@ -283,6 +329,7 @@ export default function ProfileScreen() {
                                             // setEmail2(playerData?.email);
                                             setPassword("");
                                             setPassword2("");
+                                            setMyAvatar(playerData?.avatar);
                                         }}
                                     >
                                         <MaterialIcons name="edit-off" size={24} color="black" />

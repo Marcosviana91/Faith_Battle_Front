@@ -37,7 +37,7 @@ export default function HomeScreen() {
             <View style={[globalStyles.headerContainer, { flexBasis: 150 }]}>
                 <Animated.View
                     style={{
-                        transform: [{ translateX: pan.x }, { translateY: pan.y }], backgroundColor: "red", zIndex:999
+                        transform: [{ translateX: pan.x }, { translateY: pan.y }], zIndex:999
                     }}
                     {...panResponder.panHandlers}
                 >
