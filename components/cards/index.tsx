@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions, ScrollView } from "react-native";
 import { ThemedView } from '../themed/ThemedView';
 import { ThemedText } from '../themed/ThemedText';
@@ -390,7 +390,6 @@ export function Card(props: Props) {
                 <ThemedView
                     style={{ flex: 1 }}
                 >
-
                     {/* Card Commands */}
                     <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
                         {(props.zone === 'select' || props.zone === 'retry') &&
@@ -430,19 +429,26 @@ export function Card(props: Props) {
                     </View>
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                         <Pressable
-                        onPress={()=>{
-                            setShowModal(!showModal)
-                        }}
-                            style={{ width: "90%", height: "70%" }}>
+                            onPress={() => {
+                                setShowModal(!showModal)
+                            }}
+                            style={{ width: "90%", height: "70%", position:"relative" }}>
                             <Image
                                 resizeMode="stretch"
                                 style={[styles.image, { width: "100%", height: "100%" }]}
                                 source={getCardSource(props.card?.slug)}
                             />
+                            <View style={{ backgroundColor: "yellow", position: 'absolute', width:50, height:50, borderRadius: 40, bottom: 24, left: 24,alignItems:"center", justifyContent:"center" }}>
+                                <ThemedText style={{color: 'black', fontSize:32, fontWeight:700}}>{props.card?.attack_point}</ThemedText>
+                            </View>
+                            <View style={{ backgroundColor: "red", position: 'absolute', width:50, height:50, borderRadius: 40, bottom: 24, right: 24,alignItems:"center", justifyContent:"center" }}>
+                                <ThemedText style={{color: 'black', fontSize:32, fontWeight:700}}>{props.card?.defense_points}</ThemedText>
+                            </View>
+
                         </Pressable>
                         {/* Card Commands */}
                         {(props.zone === 'fighting') && player?.id === fight_camp?.player_defense_id &&
-                        <View style={{ alignItems: "center", justifyContent: "center", width:"100%"}}>
+                            <View style={{ alignItems: "center", justifyContent: "center", width: "100%" }}>
                                 <ThemedText>Escolha uma carta para defender</ThemedText>
                                 <ShowCardDefense card={props.card!} zone={props.zone} target_index={props.index} onPress={() => {
                                     setShowModal(!showModal)
