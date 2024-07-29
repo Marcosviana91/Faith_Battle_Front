@@ -50,7 +50,6 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
 
     return (
         <View style={{
-            backgroundColor: "red",
             width: windowWidth * 0.95,
             height: windowHeight * 0.3,
             transform: [{ rotateZ: player?.id == props.id ? '0deg' : '180deg' }]

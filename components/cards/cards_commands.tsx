@@ -32,7 +32,7 @@ export function CardRetry(props: Props) {
 
     if (player?.deck_try! >= 3) {
         return (
-            <View style={{ backgroundColor: "red", borderRadius: 8, marginTop: 8 }}>
+            <View style={{borderRadius: 8, marginTop: 8 }}>
                 <MaterialCommunityIcons name="block-helper" size={80} color="black" />
 
             </View>
@@ -41,7 +41,7 @@ export function CardRetry(props: Props) {
 
     return (
         <Pressable
-            style={{ backgroundColor: "red", borderRadius: 8, marginTop: 8 }}
+            style={{borderRadius: 8, marginTop: 8 }}
             onPress={() => {
                 if (player?.card_hand?.includes(props.card)) {
                     player?.card_hand!.map(card => {
