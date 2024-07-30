@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { View } from "react-native"
 
 import { RootReducer } from "@/store"
-import { clearCardsToFight } from '@/store/reducers/matchReducer';
+import { clearCardsToFight, leaveMatch } from '@/store/reducers/matchReducer';
 
 import BasicButton from '@/components/button/basic';
 
@@ -21,42 +21,14 @@ export default function ActionButtons() {
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
 
     return (
-        <>
-            {/* Botão de finalizar jogada */}
-            {(matchData?.player_turn === player?.id) && !(player_match_settings?.cards_to_fight?.length! > 0) && fight_camp == undefined &&
-                <View>
-                    <BasicButton
-                        onPress={() => {
-                            WS.sendJsonMessage({
-                                "data_type": "match_move",
-                                "user_data": {
-                                    "id": player?.id
-                                },
-                                "room_data": {
-                                    "id": matchData?.id
-                                },
-                                "match_move": {
-                                    "match_id": matchData?.id,
-                                    "round_match": matchData?.round_match,
-                                    "player_move": player?.id,
-                                    "move_type": "done"
-                                }
-                            })
-                        }}
-                    >
-                        Finalizar
-                    </BasicButton>
-                </View>
-            }
-            {/* Botão de realizar ataque */}
-            {(player_match_settings?.cards_to_fight?.length! > 0) && !fight_camp &&
-                <View>
-                    <BasicButton
-                        onPress={() => {
-                            if (!player_focus || player_focus == player?.id) {
-                                console.log("Escolha um oponente")
-                            } else {
-                                const data: APIResponseProps = {
+        <>{!matchData?.end_match ?
+            <>
+                {/* Botão de finalizar jogada */}
+                {(matchData?.player_turn === player?.id) && !(player_match_settings?.cards_to_fight?.length! > 0) && fight_camp == undefined &&
+                    <View>
+                        <BasicButton
+                            onPress={() => {
+                                WS.sendJsonMessage({
                                     "data_type": "match_move",
                                     "user_data": {
                                         "id": player?.id
@@ -68,20 +40,59 @@ export default function ActionButtons() {
                                         "match_id": matchData?.id,
                                         "round_match": matchData?.round_match,
                                         "player_move": player?.id,
-                                        "move_type": "attack",
-                                        "player_target": player_focus,
-                                        "card_list": player_match_settings?.cards_to_fight!,
+                                        "move_type": "done"
                                     }
+                                })
+                            }}
+                        >
+                            Finalizar
+                        </BasicButton>
+                    </View>
+                }
+                {/* Botão de realizar ataque */}
+                {(player_match_settings?.cards_to_fight?.length! > 0) && !fight_camp &&
+                    <View>
+                        <BasicButton
+                            onPress={() => {
+                                if (!player_focus || player_focus == player?.id) {
+                                    console.log("Escolha um oponente")
+                                } else {
+                                    const data: APIResponseProps = {
+                                        "data_type": "match_move",
+                                        "user_data": {
+                                            "id": player?.id
+                                        },
+                                        "room_data": {
+                                            "id": matchData?.id
+                                        },
+                                        "match_move": {
+                                            "match_id": matchData?.id,
+                                            "round_match": matchData?.round_match,
+                                            "player_move": player?.id,
+                                            "move_type": "attack",
+                                            "player_target": player_focus,
+                                            "card_list": player_match_settings?.cards_to_fight!,
+                                        }
+                                    }
+                                    WS.sendJsonMessage(data)
+                                    dispatch(clearCardsToFight())
                                 }
-                                WS.sendJsonMessage(data)
-                                dispatch(clearCardsToFight())
-                            }
-                        }}
-                    >
-                        Atacar
-                    </BasicButton>
-                </View>
-            }
-        </>
+                            }}
+                        >
+                            Atacar
+                        </BasicButton>
+                    </View>
+                }
+            </> :
+            <View style={{ width: '30%' }}>
+                <BasicButton
+                    onPress={() => {
+                        dispatch(leaveMatch())
+                    }}
+                >
+                    Sair
+                </BasicButton>
+            </View>
+        }</>
     )
 }

@@ -11,7 +11,7 @@ import { ThemedText } from '@/components/themed/ThemedText';
 
 import GameBoard from "@/components/gameBoard";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
-import {CardsContainer} from "@/components/cards/";
+import { CardsContainer } from "@/components/cards/";
 import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
 
@@ -30,39 +30,49 @@ export default function GameBoardTable() {
 
 
     return (
-        <ThemedView style={globalStyles.container}>
-            <TopBar />
-            {/* Aplicar DRY */}
-            {/* Icones dos jogadores */}
-            {!fight_camp &&
-                <View style={[styles.gameBoardHeader,]}>
-                    {matchData?.players_in_match?.map((player) => (
-                        <View key={player.id} style={{ alignItems: "center" }}>
-                            <PlayerIcon id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} type='mini' />
-                            <View style={{ flexDirection: 'row', marginTop: -16 }}>
-                                <MaterialCommunityIcons name="shield-cross" size={24} color="black" />
-                                <ThemedText type='defaultSemiBold'>{player.faith_points}</ThemedText>
-                            </View>
+        <>
+            {!matchData?.end_match &&
+                <ThemedView style={globalStyles.container}>
+                    <TopBar />
+                    {/* Aplicar DRY */}
+                    {/* Icones dos jogadores */}
+                    {!fight_camp &&
+                        <View style={[styles.gameBoardHeader,]}>
+                            {matchData?.players_in_match?.map((player) => (
+                                <View key={player.id} style={{ alignItems: "center" }}>
+                                    <PlayerIcon id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} type='mini' />
+                                    <View style={{ flexDirection: 'row', marginTop: -16 }}>
+                                        <MaterialCommunityIcons name="shield-cross" size={24} color="black" />
+                                        <ThemedText type='defaultSemiBold'>{player.faith_points}</ThemedText>
+                                    </View>
+                                </View>
+                            ))}
                         </View>
-                    ))}
-                </View>
+                    }
+                    {/* Fight Camp */}
+                    <FightCamp />
+                    {/* GameBoards */}
+                    <View style={[globalStyles.contentContainer]}>
+                        {/* Enemy board */}
+                        {player_focus !== 0 && player_focus !== player?.id &&
+                            <GameBoard {...getPlayerData(player_focus!)} />
+                        }
+                        {/* Player board */}
+                        <GameBoard {...getPlayerData(player?.id!)} />
+                    </View>
+                    {/* Mão do jogador */}
+                    <View>
+                        <CardsContainer size="small" zone='hand' cards={player!.card_hand} />
+                    </View>
+                </ThemedView>
             }
-            {/* Fight Camp */}
-            <FightCamp />
-            {/* GameBoards */}
-            <View style={[globalStyles.contentContainer]}>
-                {/* Enemy board */}
-                {player_focus !== 0 && player_focus !== player?.id &&
-                    <GameBoard {...getPlayerData(player_focus!)} />
-                }
-                {/* Player board */}
-                <GameBoard {...getPlayerData(player?.id!)} />
-            </View>
-            {/* Mão do jogador */}
-            <View>
-                <CardsContainer size="small" zone='hand' cards={player!.card_hand} />
-            </View>
-        </ThemedView>
+            {matchData?.end_match &&
+                <ThemedView style={{flex:1, alignItems:"center", justifyContent:"center"}}>
+                    <TopBar />
+                    <ThemedText>A partida acabou: {matchData.end_match}</ThemedText>
+                </ThemedView>
+            }
+        </>
     )
 }
 

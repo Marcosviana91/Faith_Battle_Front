@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Image, Pressable } from "react-native"
 
@@ -48,13 +48,22 @@ export default function TopBar() {
     const dispatch = useDispatch()
 
 
-
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
 
 
-    setInterval(() => {
-        setTempoPercorrido(contaTempo(matchData?.start_match!))
-    }, 500)
+    var timer: NodeJS.Timeout
+
+    useEffect(() => {
+        timer = setInterval(() => {
+            setTempoPercorrido(contaTempo(matchData?.start_match!))
+        }, 500)
+    }, [])
+
+    useEffect(() => {
+        if (matchData?.end_match) {
+            clearInterval(timer)
+        }
+    }, [matchData])
 
     return (
         <View style={{ flexDirection: "row", justifyContent: "space-between", padding: 4, borderBottomWidth: 1, borderColor: "white" }}>
