@@ -17,7 +17,7 @@ import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria
 type Props = {
     onPress?: () => void
     card: CardProps
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy"
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" 
     target_index?: number;
     target_slug?: string;
 }
@@ -222,53 +222,6 @@ export function CardRetreatToPrepare(props: Props) {
     )
 }
 
-export function CardDestroy(props: Props) {
-    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
-    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_focus = matchData?.player_focus_id
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
-
-    // Aplicar DRY
-    function getPlayerData(player_id: number) {
-        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
-        return _data[0]
-    }
-    const card_target = getPlayerData(player_focus!).card_battle_camp![props.target_index!].in_game_id
-
-    if (matchData?.player_turn !== player?.id) {
-        return null
-    }
-
-    return (
-        <Pressable
-            style={{ backgroundColor: "red" }}
-            onPress={() => {
-                // console.log(props.target_slug + " destriur "+ card_target)
-                WS.sendJsonMessage({
-                    "data_type": "match_move",
-                    "user_data": {
-                        "id": player?.id
-                    },
-                    "room_data": {
-                        "id": matchData?.id
-                    },
-                    "match_move": {
-                        "match_id": matchData?.id,
-                        "round_match": matchData?.round_match,
-                        "player_move": player?.id,
-                        "card_id": props.target_slug,
-                        "move_type": "move_to_prepare",
-                        "player_target": player_focus,
-                        "card_target": card_target,
-                    }
-                })
-                if (props.onPress) { props.onPress() }
-            }}
-        >
-            <FontAwesome6 name="explosion" size={80} color="black" />
-        </Pressable>
-    )
-}
 export function CardToggleAttack(props: Props) {
     const dispatch = useDispatch()
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)

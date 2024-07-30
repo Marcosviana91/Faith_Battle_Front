@@ -3,14 +3,14 @@ import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions, ScrollV
 import { ThemedView } from '../themed/ThemedView';
 import { ThemedText } from '../themed/ThemedText';
 
-import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, ShowCardDefense, CardToggleDefense, CardDestroy, CardRetreatToPrepare } from "@/components/cards/cards_commands";
+import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, ShowCardDefense, CardToggleDefense, CardRetreatToPrepare } from "@/components/cards/cards_commands";
 
 import { useSelector } from 'react-redux';
 import { RootReducer } from '@/store';
 
 type CardsContainerProps = {
     size?: "small" | "minimum" | "medium";
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy" | "gallery";
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "gallery";
     cards?: CardProps[];
     target_index?: number;
     target_slug?: string;
@@ -247,7 +247,7 @@ type Props = {
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
     size?: "normal" | "medium" | "small" | "minimum";
     in_game?: boolean;
-    zone?: "gallery" | "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" | "elias_destroy";
+    zone?: "gallery" | "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight"
     index?: number;
     target_slug?: string;
 }
@@ -416,11 +416,6 @@ export function Card(props: Props) {
                                 }
                             </>
                         }
-                        {(props.zone === 'elias_destroy') &&
-                            <CardDestroy card={props.card!} zone={props.zone} target_index={props.index} target_slug={props.target_slug} onPress={() => {
-                                setShowModal(!showModal)
-                            }} />
-                        }
                         {(props.zone === 'will-fight') && player?.id === fight_camp?.player_defense_id &&
                             <CardToggleDefense card={props.card!} zone={props.zone} target_index={props.index} onPress={() => {
                                 setShowModal(!showModal)
@@ -438,13 +433,16 @@ export function Card(props: Props) {
                                 style={[styles.image, { width: "100%", height: "100%" }]}
                                 source={getCardSource(props.card?.slug)}
                             />
-                            <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
-                                <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card?.attack_point}</ThemedText>
-                            </View>
-                            <View style={{ backgroundColor: "red", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, right: 24, alignItems: "center", justifyContent: "center" }}>
-                                <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card?.defense_points}</ThemedText>
-                            </View>
-
+                            {props.card?.in_game_id &&
+                                <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
+                                    <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card?.attack_point}</ThemedText>
+                                </View>
+                            }
+                            {props.card?.in_game_id &&
+                                <View style={{ backgroundColor: "red", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, right: 24, alignItems: "center", justifyContent: "center" }}>
+                                    <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card?.defense_points}</ThemedText>
+                                </View>
+                            }
                         </Pressable>
                         {/* Card Commands */}
                         {(player_id == player?.id) && (props.card?.status === "ready") &&

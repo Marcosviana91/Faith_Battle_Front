@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Pressable } from 'react-native';
 
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
@@ -7,7 +7,6 @@ import { RootReducer } from '@/store';
 import { ThemedModal } from '@/components/themed/ThemedModal';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { ThemedText } from '@/components/themed/ThemedText';
 import { SubCardsContainer } from '@/components/cards/subContainer';
 
 import useWebSocket from 'react-use-websocket';
@@ -57,9 +56,11 @@ export function OnInvoke(props: { in_game_id: string }) {
             {/* Cartas no campo de batalha */}
             <SubCardsContainer
                 cards={cardList}
-                cards_action={<ChangeCardOrder list={cardList as []} selectedCard={selectedCard} onReturn={(val)=>{
-                    setcardList(val as [])
-                }} />}
+                cards_action={
+                    <ChangeCardOrder list={cardList as []} selectedCard={selectedCard} onReturn={(val) => {
+                        setcardList(val as [])
+                    }} />
+                }
                 get_selected_card={(ind) => { setSelectedCard(ind) }}
             />
             <View style={{ width: "50%", height: 50, margin: 16 }}>
@@ -67,21 +68,21 @@ export function OnInvoke(props: { in_game_id: string }) {
                     onPress={() => {
                         console.log("Enviar novo deck");
                         WS.sendJsonMessage({
-                                    "data_type": "match_move",
-                                    "user_data": {
-                                        "id": player?.id
-                                    },
-                                    "room_data": {
-                                        "id": matchData?.id
-                                    },
-                                    "match_move": {
-                                        "match_id": matchData?.id,
-                                        "round_match": matchData?.round_match,
-                                        "player_move": player?.id,
-                                        "card_list": cardList,
-                                        "move_type": "change_deck"
-                                    }
-                                })
+                            "data_type": "match_move",
+                            "user_data": {
+                                "id": player?.id
+                            },
+                            "room_data": {
+                                "id": matchData?.id
+                            },
+                            "match_move": {
+                                "match_id": matchData?.id,
+                                "round_match": matchData?.round_match,
+                                "player_move": player?.id,
+                                "card_list": cardList,
+                                "move_type": "change_deck"
+                            }
+                        })
                     }}
                 >Ok</BasicButton>
             </View>
@@ -142,7 +143,7 @@ function ChangeCardOrder(props: ChangeCardOrderProps) {
         <>
             <Pressable
                 disabled={props.selectedCard === 0}
-                style={{ backgroundColor: props.selectedCard === 0 ? "grey" :"red" }}
+                style={{ backgroundColor: props.selectedCard === 0 ? "grey" : "red" }}
                 onPress={() => {
                     props.onReturn!(move2Left())
                 }}
@@ -151,7 +152,7 @@ function ChangeCardOrder(props: ChangeCardOrderProps) {
             </Pressable>
             <Pressable
                 disabled={props.selectedCard === props.list!.length - 1}
-                style={{ backgroundColor: props.selectedCard === props.list!.length - 1 ? "grey" :"red" }}
+                style={{ backgroundColor: props.selectedCard === props.list!.length - 1 ? "grey" : "red" }}
                 onPress={() => {
                     props.onReturn!(move2Right())
                 }}
