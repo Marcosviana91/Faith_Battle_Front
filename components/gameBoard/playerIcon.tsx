@@ -79,7 +79,6 @@ export default function PlayerIcon(props: Props) {
     }, [])
     useEffect(() => {
         if (userData) {
-            console.log(userData)
             setAvatar(useAvatar({avatar_index:userData.user_data?.avatar!}))
         }
     }, [userData])
