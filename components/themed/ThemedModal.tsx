@@ -7,7 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 type Props = ModalProps & {
     title: string;
     hideCloseButton?: boolean
-    closeModal: () => void;
+    closeModal?: () => void;
 }
 
 export function ThemedModal(props : Props) {
