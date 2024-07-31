@@ -9,15 +9,16 @@ import { CardsContainer } from "@/components/cards/";
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
 
-import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
 import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
 import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
+import { SubCardsContainer } from './subContainer';
 
 type Props = {
     onPress?: () => void
     card: CardProps
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight" 
+    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight"
     target_index?: number;
     target_slug?: string;
 }
@@ -32,7 +33,7 @@ export function CardRetry(props: Props) {
 
     if (player?.deck_try! >= 3) {
         return (
-            <View style={{borderRadius: 8, marginTop: 8 }}>
+            <View style={{ borderRadius: 8, marginTop: 8 }}>
                 <MaterialCommunityIcons name="block-helper" size={80} color="black" />
 
             </View>
@@ -41,7 +42,7 @@ export function CardRetry(props: Props) {
 
     return (
         <Pressable
-            style={{borderRadius: 8, marginTop: 8 }}
+            style={{ borderRadius: 8, marginTop: 8 }}
             onPress={() => {
                 if (player?.card_hand?.includes(props.card)) {
                     player?.card_hand!.map(card => {
@@ -259,7 +260,16 @@ export function ShowCardDefense(props: Props) {
 
     return (
         // Mostrar Cartas na zona de batalha
-        <View style={{ width:"100%"}}>
+        <View style={{ width: "100%" }}>
+            {/* <SubCardsContainer
+                cards={getPlayerData(player?.id!).card_battle_camp}
+                cards_action={
+                    <CardToggleDefense
+                        card={props.card!}
+                        zone={props.zone}
+                        target_index={props.index}
+                        onPress={() => { }} />}
+            /> */}
             < CardsContainer zone="will-fight" cards={getPlayerData(player?.id!).card_battle_camp} size="medium" target_index={props.target_index} />
         </View>
     )
