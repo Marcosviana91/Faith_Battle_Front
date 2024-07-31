@@ -1,7 +1,5 @@
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import { StatusBar } from 'react-native'
+import { Platform } from "react-native";
 
 import HomeScreen from '@/pages/home/index';
 import GamePage from '@/pages/game/index';
@@ -12,14 +10,8 @@ import CardScreen from '@/pages/cards';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-    StatusBar.setHidden(false)
-    StatusBar.setTranslucent(false)
-    StatusBar.setBarStyle("light-content")
-
     return (
-        <NavigationContainer independent>
-            <StatusBar backgroundColor='#000' barStyle='light-content' />
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{headerShown:(Platform.OS !== 'android')}}>
                 <Stack.Screen
                     name="Home"
                     component={HomeScreen}
@@ -29,6 +21,5 @@ export default function App() {
                 <Stack.Screen name="Jogar" component={GamePage} />
                 <Stack.Screen name="Cartas" component={CardScreen} />
             </Stack.Navigator>
-        </NavigationContainer>
     );
 }

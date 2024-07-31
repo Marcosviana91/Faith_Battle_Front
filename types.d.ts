@@ -1,97 +1,52 @@
-declare type UserProps = {
-    id?: number,
-    username?: string,
-    password?: string,
-    created_at?: string,
-    last_login?: string,
-    real_name?: string,
-    email?: string,
-    token?: string,
-}
-
-declare type AuthProps = {
-    username: string,
-    password: string,
-}
-
-declare type TokenAuthProps = {
-    access_token: string,
-    token_type: string,
-}
-
-declare type TokenProps = {
-    exp: string,
-    sub: string,
-    inf: UserProps,
-}
-
-declare type UserStoreProps = {
-    data?: UserProps
+declare type MatchApiProps = {
+    id?: string;
+    start_match?: string;
+    match_type?: string;
+    round_match?: number;
+    player_turn?: number;
+    player_focus_id?: number;
+    can_others_move?: boolean;
+    players_in_match?: PlayersInMatchApiProps[];
+    end_match?: string;
+    fight_camp?: {
+        player_attack_id?: number;
+        attack_cards?: CardProps[];
+        player_defense_id?: number;
+        defense_cards?: CardProps[];
+        fight_stage: number;
+    };
 }
 
 declare type CardProps = {
     slug: string,
-    path: ImageSourcePropType ,
-}
-
-declare type APIResponseProps = {
-    data_type: string,
-    message?: string,
-    user_data?: UserProps,
-    room_data?: RoomApiProps
-    player_data?: PlayersInMatchApiProps
-    room_list?: RoomApiProps[]
-    // player_in_match_data?: any,
-    // card_data?: any,
+    path?: ImageSourcePropType,
+    in_game_id?: string,
+    attack_point?: number,
+    defense_points?: number,
+    wisdom_cost?: number,
+    status?: "ready" | "not-enough" | "used",
+    skill_focus_player_id?: number
 }
 
 
 declare type APIMoveProps = {
-    match_room_id?: number;
-    match_round?: number;
+    match_id?: string;
+    round_match?: number;
     player_move?: number;
     card_id?: number;
     move_type?: string
     player_target?: number
     card_target?: string
-}
-
-declare type RoomApiProps = {
-    id?: number;
-    created_by?: number;
-    // Stage 0: players has connecteds, check decks
-    // Stage 1: Sort cards to all players, retry sort
-    // Stage 2: The game is in curse
-    stage?: number;
-
-    room_name?: string;
-    room_current_players?: number;
-    room_game_type?: string;
-    room_max_players?: number;
-    password?: string;
-    has_password?: boolean;
-
-    start_match?: string;
-    end_match?: string;
-    player_focus?: number;
-
-    players_in_match?: PlayersInMatchApiProps[];
-}
-
-declare type PlayersInMatchApiProps = {
-    id: number;
-    ready?: boolean;
-    deck?: string[]
-    wisdom?: number
-    faith?: number,
-    cards_in_hand?: string[]
-    cards_in_battle_zone?: string[]
-    cards_in_prepare_zone?: string[]
-    cards_in_forgotten_sea?: string[]
+    card_list?: CardProps[]
 }
 
 declare type MatchReducerProps = {
     room_data?: RoomApiProps,
-    player_data?: PlayersInMatchApiProps;
+    match_data?: MatchApiProps,
+    player_data?: PlayersInMatchApiProps,
+    player_match_settings?: {
+        player_view_id?: number,
+        cards_to_fight: CardProps[]
+    },
 }
 

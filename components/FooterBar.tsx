@@ -7,13 +7,13 @@ export default function FooterBar() {
     return (
         <View style={styles.container}>
             <BasicButton onPress={() =>
-                    navigation.navigate('Cartas')
+                    navigation.navigate('Cartas' as never)
                 }>Cartas</BasicButton>
             <BasicButton onPress={() =>
-                    navigation.navigate('Jogar')
+                    navigation.navigate('Jogar' as never)
                 }>Jogar</BasicButton>
             <BasicButton onPress={() =>
-                    navigation.navigate('Profile')
+                    navigation.navigate('Profile' as never)
                 }>Perfil</BasicButton>
         </View>
     )

@@ -1,74 +1,86 @@
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, StyleSheet, Image, Pressable } from "react-native";
 import { globalStyles } from "@/constants/Styles";
+
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+import { ThemedView } from '@/components/themed/ThemedView';
+import { ThemedText } from '@/components/themed/ThemedText';
 
 import GameBoard from "@/components/gameBoard";
 import PlayerIcon from "@/components/gameBoard/playerIcon";
-
-
-import CardsContainer from "@/components/gameBoard/cardsContainer";
+import { CardsContainer } from "@/components/cards/";
+import FightCamp from '@/components/gameBoard/fightCamp';
+import TopBar from '@/components/gameBoard/topBar';
 
 
 export default function GameBoardTable() {
-    // console.log("Dados da Partida: ", props);
-
-    const room = useSelector((state: RootReducer) => state.matchReducer.room_data)
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_focus = room?.player_focus
+    const player_focus = matchData?.player_focus_id
+    const fight_camp = matchData?.fight_camp
 
+    // Aplicar DRY
     function getPlayerData(player_id: number) {
-        const _data = room!.players_in_match!.filter((player) => player.id === player_id)
+        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
         return _data[0]
     }
 
+
     return (
-        <View style={globalStyles.container}>
-            {/* Icones dos jogadores */}
-            <View style={[styles.gameBoardHeader,]}>
-                {room?.players_in_match?.map((player) => (
-                    <PlayerIcon key={player.id} id={player.id} />
-                ))}
-            </View>
-            {/*  */}
-            <View style={[globalStyles.contentContainer, styles.container]}>
-                {player_focus && <View style={[styles.enemyBoard]}>
-                    {/* Verificar ID do jogador focado, não usar mais indice da lista */}
-                    <GameBoard {...getPlayerData(player_focus)} />
-                </View>}
-                <View>
-                    {/* Verificar ID do jogador logado */}
-                    <GameBoard {...getPlayerData(player?.id!)} />
-                </View>
-            </View>
-            {/* Mão do jogador */}
-            <View style={[styles.playerFooter,]}>
-                <ScrollView horizontal>
-                    <CardsContainer size="normal" cards={player!.cards_in_hand} />
-                </ScrollView>
-            </View>
-        </View>
+        <>
+            {!matchData?.end_match &&
+                <ThemedView style={globalStyles.container}>
+                    <TopBar />
+                    {/* Aplicar DRY */}
+                    {/* Icones dos jogadores */}
+                    {!fight_camp &&
+                        <View style={[styles.gameBoardHeader,]}>
+                            {matchData?.players_in_match?.map((player) => (
+                                <View key={player.id} style={{ alignItems: "center" }}>
+                                    <PlayerIcon id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} type='mini' />
+                                    <View style={{ flexDirection: 'row', marginTop: -16 }}>
+                                        <MaterialCommunityIcons name="shield-cross" size={24} color="black" />
+                                        <ThemedText type='defaultSemiBold'>{player.faith_points}</ThemedText>
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+                    }
+                    {/* Fight Camp */}
+                    <FightCamp />
+                    {/* GameBoards */}
+                    <View style={[globalStyles.contentContainer]}>
+                        {/* Enemy board */}
+                        {player_focus !== 0 && player_focus !== player?.id &&
+                            <GameBoard {...getPlayerData(player_focus!)} />
+                        }
+                        {/* Player board */}
+                        <GameBoard {...getPlayerData(player?.id!)} />
+                    </View>
+                    {/* Mão do jogador */}
+                    <View>
+                        <CardsContainer size="small" zone='hand' cards={player!.card_hand} />
+                    </View>
+                </ThemedView>
+            }
+            {matchData?.end_match &&
+                <ThemedView style={{flex:1, alignItems:"center", justifyContent:"center"}}>
+                    <TopBar />
+                    <ThemedText>A partida acabou: {matchData.end_match}</ThemedText>
+                </ThemedView>
+            }
+        </>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#d84b09',
-
-    },
     gameBoardHeader: {
-        backgroundColor: "#00000094",
-        height: 60,
+        height: 80,
         width: '100%',
         flexDirection: "row",
-    },
-    enemyBoard: {
-        transform: [{ rotateZ: '180deg' }]
-    },
-    playerFooter: {
-        backgroundColor: "#46000075",
-        height: 120,
-        paddingHorizontal: 10,
-    },
+        justifyContent: "space-around",
+    }
 })

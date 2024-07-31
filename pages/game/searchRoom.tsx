@@ -1,25 +1,44 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
+import { StyleSheet, View, Text } from 'react-native';
 
-import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
+import { useCreateRoomsMutation } from '@/store/api'
+import { setRoom } from "@/store/reducers/matchReducer";
 
 import SearchRoomList from '@/pages/game/searchRoomList'
 import ToggleButton from '@/components/button/toggle';
 import BasicButton from '@/components/button/basic';
 
-import { globalStyles } from '@/constants/Styles';
+import { ThemedTextInput } from '@/components/themed/ThemedTextInput';
 
+
+const card_list = [
+    { "slug": 'abraao' },
+    { "slug": 'adao' },
+    { "slug": 'daniel' },
+    { "slug": 'davi' },
+    { "slug": 'elias' },
+    { "slug": 'ester' },
+    { "slug": 'eva' },
+    { "slug": 'jaco' },
+    { "slug": "jose-do-egito" },
+    { "slug": "josue" },
+    { "slug": "maria" },
+    { "slug": "moises" },
+    { "slug": "noe" },
+    { "slug": "salomao" },
+    { "slug": "sansao" },
+]
 
 export default function SearchRoom() {
-    const userData = useSelector((state: RootReducer) => state.authReducer.data)
+    const dispatch = useDispatch()
+    const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
+    const [createRoom, { data: createdRoomData }] = useCreateRoomsMutation();
 
-    const WS = useWebSocket(`ws://${URI}/websocket_conn`, { share: true });
 
-    const gameTypesList = ['cooperativo', 'sobrevivência']
+    const gameTypesList = ['survival', 'cooperative']
     // Create new room 'form' values
     const [newRoomName, setNewRoomName] = useState(`Sala de ${userData!.username}`)
     const [newRoomGameType, setNewRoomGameType] = useState('survival')
@@ -28,6 +47,12 @@ export default function SearchRoom() {
 
     const buttons = ['Entrar', 'Criar']
     const [table, setTable] = useState(0)
+
+    useEffect(() => {
+        if (createdRoomData?.room_data) {
+            dispatch(setRoom(createdRoomData.room_data))
+        }
+    }, [createdRoomData])
 
 
     return (
@@ -45,8 +70,8 @@ export default function SearchRoom() {
                     <View style={styles.roomListContainer} >
                         <View style={styles.container}>
                             <Text>Nome da Sala</Text>
-                            <TextInput
-                                style={[globalStyles.textInput, { width: "100%", }]}
+                            <ThemedTextInput
+                                style={{ width: "100%" }}
                                 placeholder='Insira um nome'
                                 value={newRoomName}
                                 onChangeText={setNewRoomName}
@@ -55,14 +80,14 @@ export default function SearchRoom() {
                         <View style={styles.container}>
                             <Text>Estilo de Jogo</Text>
                             <ToggleButton
+                                disabled
                                 values={gameTypesList}
                                 onPress={setNewRoomGameType}
                             />
                         </View>
                         <View style={[styles.container, { flexDirection: 'row', gap: 15 }]}>
                             <Text>Jogadores:</Text>
-                            <TextInput
-                                style={globalStyles.textInput}
+                            <ThemedTextInput
                                 inputMode='numeric'
                                 placeholder='2 - 8'
                                 value={newRoomPlayerQtd}
@@ -71,23 +96,22 @@ export default function SearchRoom() {
                         </View>
                         <View style={[styles.container, { flexDirection: 'row', gap: 15 }]}>
                             <Text>Senha:</Text>
-                            <TextInput style={globalStyles.textInput} placeholder='letras e números apenas'
+                            <ThemedTextInput placeholder='letras e números apenas'
                                 value={newRoomPassword}
                                 onChangeText={setNewRoomPassword}
                             />
                         </View>
                         <BasicButton onPress={() => {
-                            // ToastAndroid.show(`Criando sala...\n\nNome: ${newRoomName}\nEstilo: ${gameTypesList[newRoomGameType]}\nQuantidade: ${newRoomPlayerQtd}\nSenha: ${newRoomPassword === '' ? '[sala aberta]' : newRoomPassword}\n`, ToastAndroid.LONG)
-
-                            WS.sendJsonMessage({
-                                data_type: "create",
-                                room_data: {
-                                    created_by: userData?.id,
-                                    room_name: newRoomName,
-                                    room_max_players: Number(newRoomPlayerQtd),
-                                    room_game_type: newRoomGameType,
-                                    password: newRoomPassword
-                                }
+                            createRoom({
+                                name: newRoomName,
+                                created_by: {
+                                    id: userData?.id,
+                                    available_cards: card_list,
+                                    xp_points: 0
+                                },
+                                match_type: newRoomGameType,
+                                max_players: Number(newRoomPlayerQtd),
+                                password: newRoomPassword
                             })
                         }}>
                             Criar

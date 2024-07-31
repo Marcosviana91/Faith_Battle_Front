@@ -1,47 +1,79 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import useWebSocket from 'react-use-websocket';
 import { useNavigation } from '@react-navigation/native';
 
 import { RootReducer } from '@/store';
-import { logout } from '@/store/reducers/authReducer';
-import { leaveMatch } from '@/store/reducers/matchReducer';
 
 import Home from '@/pages/home/home';
 import Login from '@/pages/home/login';
 
-import {URI} from "@/store/server_urls";
-
+import useWebSocket from 'react-use-websocket';
+import { URI } from "@/store/server_urls";
+import { setRoom, setPlayer, leaveMatch, setMatch } from "@/store/reducers/matchReducer"
 
 export default function HomeScreen() {
-    const userData = useSelector((state: RootReducer) => state.authReducer.data)
-    // const [socketUrl, setSocketUrl] = useState('ws://localhost')
-    // const WS = useWebSocket(socketUrl, {share:true});
     const dispatch = useDispatch()
     const navigation = useNavigation()
+    const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
+    const roomData = useSelector((state: RootReducer) => state.matchReducer.room_data)
+    const [ws_url, setWsUrl] = useState("ws://localhost")
 
-    // useEffect(() => {
-    //     if (userData) {
-    //         setSocketUrl(`wss://${URI}/websocket_conn`)
-    //         WS.sendJsonMessage({
-    //             data_type: 'player_logged_in',
-    //             user_data: userData
-    //         })
-    //     }
-    //     if (!userData) {
-    //         setSocketUrl('ws://localhost')
-    //     }
-    // }, [userData])
-    
-    // useEffect(() => {
-    //     if (WS.readyState == 3 && socketUrl!=='ws://localhost') {
-    //         console.log("Disconnected...")
-    //         // dispatch(logout())
-    //         dispatch(leaveMatch())
-    //         // navigation.navigate('Home' as never)
-    //     }
 
-    // }, [WS.readyState])
+    const WS = useWebSocket(ws_url, {
+        share: true, onOpen: () => {
+            WS.sendJsonMessage(
+                {
+                    "data_type": "create_connection",
+                    "player_data": {
+                        "id": userData?.id,
+                        "token": userData?.token
+                    }
+                }
+            )
+        }
+    });
+
+    useEffect(() => {
+        if (userData) {
+            if (matchData || roomData) {
+                navigation.navigate('Jogar' as never)
+            }
+        }
+    }, [matchData, roomData])
+
+    useEffect(() => {
+        if (userData) {
+            setWsUrl(`ws://${URI}/ws/`)
+        }
+        else {
+            setWsUrl('ws://localhost')
+        }
+    }, [userData])
+
+    useEffect(() => {
+        if (WS.lastJsonMessage) {
+            const data = WS.lastJsonMessage as APIResponseProps
+            console.log('<<<<< RESP: ', data)
+            if (data.data_type === "room_update") {
+                console.log('room_update')
+                dispatch(setRoom(data.room_data!))
+            }
+            else if (data.data_type === "player_update") {
+                console.log('player_update')
+                dispatch(setPlayer(data.player_data!))
+            }
+            else if (data.data_type === "disconnected") {
+                console.log('disconnected')
+                dispatch(leaveMatch())
+            }
+            else if (data.data_type === "match_update") {
+                console.log('match_update')
+                dispatch(setRoom(undefined))
+                dispatch(setMatch({...data.match_data!, player_focus_id: data.match_data?.player_focus_id}))
+            }
+        }
+    }, [WS.lastJsonMessage])
 
     if (userData) {
         return <Home />;

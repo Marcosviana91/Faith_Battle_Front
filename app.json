@@ -2,7 +2,7 @@
   "expo": {
     "name": "Faith_Batlle",
     "slug": "faith-battle",
-    "version": "1.0.0",
+    "version": "pre-alpha-1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/Faith_Batlle.png",
     "scheme": "myapp",
@@ -21,7 +21,9 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.marcosvianadev.faithbattle",
-      "permissions": ["android.permission.INTERNET"]
+      "permissions": [
+        "android.permission.INTERNET"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -29,7 +31,15 @@
       "favicon": "./assets/images/Faith_Batlle.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

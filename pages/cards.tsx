@@ -1,27 +1,42 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import Card from "@/components/cards/index";
+import { ThemedText } from '@/components/themed/ThemedText'
+import { ThemedView } from '@/components/themed/ThemedView'
+import { View, StyleSheet, ScrollView } from "react-native";
+import { Card } from "@/components/cards/";
 
 // import { card_list } from "@/components/cards/index";
 
 const card_list = [
-    'abraao', 'adao', 'daniel',
-    'davi', 'elias', 'ester',
-    'eva', 'jaco', "jose-do-egito",
-    "josue", "maria", "moises",
-    "noe", "salomao", "sansao",
+    { "slug": 'abraao' },
+    { "slug": 'adao' },
+    { "slug": 'daniel' },
+    { "slug": 'davi' },
+    { "slug": 'elias' },
+    { "slug": 'ester' },
+    { "slug": 'eva' },
+    { "slug": 'jaco' },
+    { "slug": "jose-do-egito" },
+    { "slug": "josue" },
+    { "slug": "maria" },
+    { "slug": "moises" },
+    { "slug": "noe" },
+    { "slug": "salomao" },
+    { "slug": "sansao" },
 ]
 
 
 export default function CardScreen() {
 
     return (
-        <ScrollView>
-            <View style={[styles.container,]}>
-                { card_list.map((card_slug, index) => (
-                    <Card key={index} size="small" slug={card_slug}></Card>
-                ))}
-            </View>
-        </ScrollView>
+        <ThemedView style={{ flex: 1 }}>
+            <ScrollView>
+                <ThemedText>Standard Heros:</ThemedText>
+                <View style={[styles.container,]}>
+                    {card_list.map((card_slug, index) => (
+                        <Card key={index} size="medium" card={card_slug} zone='gallery' />
+                    ))}
+                </View>
+            </ScrollView>
+        </ThemedView>
 
     )
 }
