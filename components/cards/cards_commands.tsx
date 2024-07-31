@@ -13,7 +13,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
 import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
 import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
-import { SubCardsContainer } from './subContainer';
+import { DaviToggleAttack } from './cardsComands/davi';
 
 type Props = {
     onPress?: () => void
@@ -223,25 +223,46 @@ export function CardRetreatToPrepare(props: Props) {
     )
 }
 
+
+// Aplicar DRY
+function isCardInList(card_id: string, card_list: CardProps[]) {
+    let card_founded = false;
+    card_list.map(_card => {
+        if (_card.in_game_id == card_id) {
+            card_founded = true;
+        }
+    })
+    return card_founded
+}
+
 export function CardToggleAttack(props: Props) {
     const dispatch = useDispatch()
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight!
 
     if (matchData?.player_turn !== player?.id) {
         return null
     }
 
     return (
-        <Pressable
-            style={{ backgroundColor: "red" }}
-            onPress={() => {
-                dispatch(toggleCardsToFight(props.card))
-                if (props.onPress) { props.onPress() }
-            }}
-        >
-            <MaterialCommunityIcons name="sword" size={80} color="black" />
-        </Pressable>
+        <>
+            {(props.card.slug === 'davi' && !isCardInList(props.card.in_game_id!, cards_to_fight)) ? <>
+                < DaviToggleAttack {...props} />
+            </> :
+                <Pressable
+                    style={{ backgroundColor: "red" }}
+                    onPress={() => {
+                        dispatch(toggleCardsToFight(props.card))
+                        if (props.onPress) { props.onPress() }
+                    }}
+                >
+                    <MaterialCommunityIcons name="sword" size={80} color="black" />
+                </Pressable>
+            }
+        </>
+
+
     )
 }
 

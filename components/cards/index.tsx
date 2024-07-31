@@ -266,6 +266,7 @@ function getCardSource(slug: string | undefined) {
     }
 }
 
+// Aplicar DRY
 function isCardInList(card_id: string, card_list: CardProps[]) {
     let card_founded = false;
     card_list.map(_card => {
@@ -447,7 +448,7 @@ export function Card(props: Props) {
                         {/* Card Commands */}
                         {(player_id == player?.id) && (props.card?.status === "ready") &&
                             <>
-                                {(props.zone === 'battle') &&
+                                {(props.zone === 'battle') && !isCardInList(props.card.in_game_id!, cards_to_fight!) &&
                                     <CardRetreatToPrepare card={props.card!} onPress={() => {
                                         setShowModal(!showModal)
                                     }} />

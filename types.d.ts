@@ -24,7 +24,8 @@ declare type CardProps = {
     attack_point?: number,
     defense_points?: number,
     wisdom_cost?: number,
-    status?: "ready" | "not-enough" | "used"
+    status?: "ready" | "not-enough" | "used",
+    skill_focus_player_id?: number
 }
 
 
