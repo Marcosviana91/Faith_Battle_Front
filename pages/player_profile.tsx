@@ -135,7 +135,7 @@ export default function ProfileScreen() {
                                 navigation.navigate('Home' as never)
                                 // Navegar para Tela de login
                             }}
-                            style={{ width: 48, height: 48, position: "absolute", right: 8, justifyContent: "center", alignItems: "center", borderRadius: 16 }}
+                            style={{ width: 48, height: 48, position: "absolute", right: 8, justifyContent: "center", alignItems: "center", borderRadius: 16, backgroundColor:"red" }}
                         >
                             <MaterialIcons name="logout" size={24} color="black" />
                         </TouchableOpacity>
