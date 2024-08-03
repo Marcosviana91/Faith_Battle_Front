@@ -49,43 +49,43 @@ export function CardsContainer(props: CardsContainerProps) {
 export const card_list: CardProps[] = [
     // Artefatos
     {
-        slug: "",
+        slug: "arca-da-alianca",
         path: require("@/assets/images/Cards/Artefatos/Arca da Aliança.png"),
     },
     {
-        slug: "",
+        slug: "arca-de-noe",
         path: require("@/assets/images/Cards/Artefatos/Arca de Noé.png"),
     },
     {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Botas do Evangélio.png"),
+        slug: "botas-do-evangelho",
+        path: require("@/assets/images/Cards/Artefatos/Botas do Evangélho.png"),
     },
     {
-        slug: "",
+        slug: "cajado-de-moises",
         path: require("@/assets/images/Cards/Artefatos/Cajado de Moisés.png"),
     },
     {
-        slug: "",
+        slug: "capacete-da-salvacao",
         path: require("@/assets/images/Cards/Artefatos/Capacete da Salvação.png"),
     },
     {
-        slug: "",
+        slug: "cinturao-da-verdade",
         path: require("@/assets/images/Cards/Artefatos/Cinturão da Verdade.png"),
     },
     {
-        slug: "",
+        slug: "couraca-da-justica",
         path: require("@/assets/images/Cards/Artefatos/Couraça da Justiça.png"),
     },
     {
-        slug: "",
+        slug: "escudo-da-fe",
         path: require("@/assets/images/Cards/Artefatos/Escudo da Fé.png"),
     },
     {
-        slug: "",
+        slug: "espada-do-espirito",
         path: require("@/assets/images/Cards/Artefatos/Espada do Espírito.png"),
     },
     {
-        slug: "",
+        slug: "os-10-mandamentos",
         path: require("@/assets/images/Cards/Artefatos/Os 10 Mandamentos.png"),
     },
     // Heróis
@@ -151,77 +151,77 @@ export const card_list: CardProps[] = [
     },
     // Lendárias
     {
-        slug: "",
+        slug: "davi-lendario",
         path: require("@/assets/images/Cards/Lendárias/Davi.png"),
     },
     {
-        slug: "",
+        slug: "josue-lendario",
         path: require("@/assets/images/Cards/Lendárias/Josué.png"),
     },
     {
-        slug: "",
+        slug: "moises-lendario",
         path: require("@/assets/images/Cards/Lendárias/Moisés.png"),
     },
     // Milagres
     {
-        slug: "",
+        slug: "cordeiro-de-deus",
         path: require("@/assets/images/Cards/Milagres/Cordeiro de Deus.png"),
     },
     {
-        slug: "",
+        slug: "diluvio",
         path: require("@/assets/images/Cards/Milagres/Dilúvio.png"),
     },
     {
-        slug: "",
+        slug: "fogo-do-ceu",
         path: require("@/assets/images/Cards/Milagres/Fogo do Céu.png"),
     },
     {
-        slug: "",
+        slug: "forca-de-sansao",
         path: require("@/assets/images/Cards/Milagres/Força de Sansão.png"),
     },
     {
-        slug: "",
+        slug: "liberacao-celestial",
         path: require("@/assets/images/Cards/Milagres/Liberação Celestial.png"),
     },
     {
-        slug: "",
+        slug: "no-ceu-tem-pao",
         path: require("@/assets/images/Cards/Milagres/No Céu Tem Pão.png"),
     },
     {
-        slug: "",
+        slug: "passagem-segura",
         path: require("@/assets/images/Cards/Milagres/Passagem Segura.png"),
     },
     {
-        slug: "",
+        slug: "protecao-divina",
         path: require("@/assets/images/Cards/Milagres/Proteção Divina.png"),
     },
     {
-        slug: "",
+        slug: "ressureicao",
         path: require("@/assets/images/Cards/Milagres/Ressurreição.png"),
     },
     {
-        slug: "",
+        slug: "restauracao-da-fe",
         path: require("@/assets/images/Cards/Milagres/Restauração da Fé.png"),
     },
     {
-        slug: "",
+        slug: "sabedoria-de-salomao",
         path: require("@/assets/images/Cards/Milagres/Sabedoria de Salomão.png"),
     },
     {
-        slug: "",
+        slug: "sarca-ardente",
         path: require("@/assets/images/Cards/Milagres/Sarça Ardente.png"),
     },
     // Pecados
     {
-        slug: "",
+        slug: "fruto-proibido",
         path: require("@/assets/images/Cards/Pecados/Fruto Proibido.png"),
     },
     {
-        slug: "",
+        slug: "idolatria",
         path: require("@/assets/images/Cards/Pecados/Idolatria.png"),
     },
     {
-        slug: "",
+        slug: "traicao",
         path: require("@/assets/images/Cards/Pecados/Traição.png"),
     },
     // Sabedoria
