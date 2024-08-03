@@ -52,7 +52,7 @@ const card_list: CardProps[] = [
     },
     {
         slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Botas do Evangélio.png"),
+        path: require("@/assets/images/Cards/Artefatos/Botas do Evangélho.png"),
     },
     {
         slug: "",
