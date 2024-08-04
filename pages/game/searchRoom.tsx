@@ -14,24 +14,6 @@ import BasicButton from '@/components/button/basic';
 import { ThemedTextInput } from '@/components/themed/ThemedTextInput';
 
 
-const card_list = [
-    { "slug": 'abraao' },
-    { "slug": 'adao' },
-    { "slug": 'daniel' },
-    { "slug": 'davi' },
-    { "slug": 'elias' },
-    { "slug": 'ester' },
-    { "slug": 'eva' },
-    { "slug": 'jaco' },
-    { "slug": "jose-do-egito" },
-    { "slug": "josue" },
-    { "slug": "maria" },
-    { "slug": "moises" },
-    { "slug": "noe" },
-    { "slug": "salomao" },
-    { "slug": "sansao" },
-]
-
 export default function SearchRoom() {
     const dispatch = useDispatch()
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
@@ -106,7 +88,7 @@ export default function SearchRoom() {
                                 name: newRoomName,
                                 created_by: {
                                     id: userData?.id,
-                                    available_cards: card_list,
+                                    available_cards: userData?.available_cards,
                                     xp_points: 0
                                 },
                                 match_type: newRoomGameType,

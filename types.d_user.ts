@@ -8,6 +8,8 @@ declare type UserProps = {
     // email?: string,
     avatar?: number,
     token?: string,
+    xp_points?: number;
+    available_cards?: CardProps[];
 }
 
 declare type UserStoreProps = {

@@ -12,23 +12,6 @@ import { ThemedText } from '@/components/themed/ThemedText';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const card_list = [
-    {"slug":'abraao'},
-    {"slug":'adao'},
-    {"slug":'daniel'},
-    {"slug":'davi'},
-    {"slug":'elias'},
-    {"slug":'ester'},
-    {"slug":'eva'},
-    {"slug":'jaco'},
-    {"slug":"jose-do-egito"},
-    {"slug":"josue"},
-    {"slug":"maria"},
-    {"slug":"moises"},
-    {"slug":"noe"},
-    {"slug":"salomao"},
-    {"slug":"sansao"},
-]
 
 type ModalProps = {
     onClose: () => void;
@@ -95,7 +78,7 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
                                         connected_players: [
                                             {
                                                 id: userData?.id,
-                                                available_cards: card_list,
+                                                available_cards: userData?.available_cards,
                                                 xp_points: 200
                                             }
                                         ]
