@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 import { setPlayer, setCardsToFight, toggleCardsToFight } from '@/store/reducers/matchReducer';
+import {  isCardInList } from '@/hooks/useCards';
 // Importação circular: CardsContainer
 import { CardsContainer } from "@/components/cards/";
 
@@ -223,17 +224,6 @@ export function CardRetreatToPrepare(props: Props) {
     )
 }
 
-
-// Aplicar DRY
-function isCardInList(card_id: string, card_list: CardProps[]) {
-    let card_founded = false;
-    card_list.map(_card => {
-        if (_card.in_game_id == card_id) {
-            card_founded = true;
-        }
-    })
-    return card_founded
-}
 
 export function CardToggleAttack(props: Props) {
     const dispatch = useDispatch()

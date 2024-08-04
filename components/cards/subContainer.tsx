@@ -5,7 +5,7 @@ import { ThemedText } from '../themed/ThemedText';
 
 import { useSelector } from 'react-redux';
 import { RootReducer } from '@/store';
-import { useCards } from '@/hooks/useCards';
+import { useCards, isCardInList } from '@/hooks/useCards';
 
 type CardsContainerProps = {
     cards?: CardProps[];
@@ -47,16 +47,6 @@ type Props = {
     // target_slug?: string;
     card_actions?: React.ReactNode;
     get_selected_card?: (card_index: number) => void;
-}
-
-function isCardInList(card_id: string, card_list: CardProps[]) {
-    let card_founded = false;
-    card_list.map(_card => {
-        if (_card.in_game_id == card_id) {
-            card_founded = true;
-        }
-    })
-    return card_founded
 }
 
 function SubCard(props: Props) {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Image, StyleSheet, Modal, Pressable, useWindowDimensions, ScrollView } from "react-native";
 import { ThemedView } from '../themed/ThemedView';
 import { ThemedText } from '../themed/ThemedText';
-import { useCards } from '@/hooks/useCards';
+import { useCards, isCardInList } from '@/hooks/useCards';
 
 import { CardRetry, CardMoveToPrepare, CardMoveToBattle, CardToggleAttack, ShowCardDefense, CardToggleDefense, CardRetreatToPrepare } from "@/components/cards/cards_commands";
 
@@ -56,17 +56,6 @@ type Props = {
     target_slug?: string;
 }
 
-
-// Aplicar DRY
-function isCardInList(card_id: string, card_list: CardProps[]) {
-    let card_founded = false;
-    card_list.map(_card => {
-        if (_card.in_game_id == card_id) {
-            card_founded = true;
-        }
-    })
-    return card_founded
-}
 
 export function Card(props: Props) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
