@@ -34,7 +34,7 @@ const card_miracle_list = [
     { "slug": 'passagem-segura' },
     { "slug": 'protecao-divina' },
     { "slug": 'ressureicao' },
-    { "slug": 'restauracao-da-fe' },
+    { "slug": 'restauracao-de-fe' },
     { "slug": 'sabedoria-de-salomao' },
     { "slug": 'sarca-ardente' },
 ]
