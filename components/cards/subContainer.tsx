@@ -5,6 +5,7 @@ import { ThemedText } from '../themed/ThemedText';
 
 import { useSelector } from 'react-redux';
 import { RootReducer } from '@/store';
+import { useCards } from '@/hooks/useCards';
 
 type CardsContainerProps = {
     cards?: CardProps[];
@@ -39,203 +40,6 @@ export function SubCardsContainer(props: CardsContainerProps) {
     )
 }
 
-// CARDS
-const card_list: CardProps[] = [
-    // Artefatos
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Arca da Aliança.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Arca de Noé.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Botas do Evangélho.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Cajado de Moisés.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Capacete da Salvação.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Cinturão da Verdade.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Couraça da Justiça.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Escudo da Fé.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Espada do Espírito.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Artefatos/Os 10 Mandamentos.png"),
-    },
-    // Heróis
-    {
-        slug: "abraao",
-        path: require("@/assets/images/Cards/Heróis/Abraão.png"),
-    },
-    {
-        slug: "adao",
-        path: require("@/assets/images/Cards/Heróis/Adão.png"),
-    },
-    {
-        slug: "daniel",
-        path: require("@/assets/images/Cards/Heróis/Daniel.png"),
-    },
-    {
-        slug: "davi",
-        path: require("@/assets/images/Cards/Heróis/Davi.png"),
-    },
-    {
-        slug: "elias",
-        path: require("@/assets/images/Cards/Heróis/Elias.png"),
-    },
-    {
-        slug: "ester",
-        path: require("@/assets/images/Cards/Heróis/Ester.png"),
-    },
-    {
-        slug: "eva",
-        path: require("@/assets/images/Cards/Heróis/Eva.png"),
-    },
-    {
-        slug: "jaco",
-        path: require("@/assets/images/Cards/Heróis/Jacó.png"),
-    },
-    {
-        slug: "jose-do-egito",
-        path: require("@/assets/images/Cards/Heróis/José do Egito.png"),
-    },
-    {
-        slug: "josue",
-        path: require("@/assets/images/Cards/Heróis/Josué.png"),
-    },
-    {
-        slug: "maria",
-        path: require("@/assets/images/Cards/Heróis/MAria.png"),
-    },
-    {
-        slug: "moises",
-        path: require("@/assets/images/Cards/Heróis/Moisés.png"),
-    },
-    {
-        slug: "noe",
-        path: require("@/assets/images/Cards/Heróis/Noé.png"),
-    },
-    {
-        slug: "salomao",
-        path: require("@/assets/images/Cards/Heróis/Salomão.png"),
-    },
-    {
-        slug: "sansao",
-        path: require("@/assets/images/Cards/Heróis/Sansão.png"),
-    },
-    // Lendárias
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Lendárias/Davi.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Lendárias/Josué.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Lendárias/Moisés.png"),
-    },
-    // Milagres
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Cordeiro de Deus.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Dilúvio.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Fogo do Céu.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Força de Sansão.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Liberação Celestial.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/No Céu Tem Pão.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Passagem Segura.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Proteção Divina.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Ressurreição.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Restauração da Fé.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Sabedoria de Salomão.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Milagres/Sarça Ardente.png"),
-    },
-    // Pecados
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Pecados/Fruto Proibido.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Pecados/Idolatria.png"),
-    },
-    {
-        slug: "",
-        path: require("@/assets/images/Cards/Pecados/Traição.png"),
-    },
-    // Sabedoria
-    {
-        slug: "wisdom_card_0",
-        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_0.png")
-    },
-    {
-        slug: "wisdom_card_1",
-        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_0.png")
-    },
-    {
-        slug: "wisdom_card_2",
-        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_0.png")
-    },
-]
-
-var default_card = require('@/assets/images/Cards/Card.png')
-var not_defense = require('@/assets/images/Cards/not-defense.png')
-
 
 type Props = {
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
@@ -243,20 +47,6 @@ type Props = {
     // target_slug?: string;
     card_actions?: React.ReactNode;
     get_selected_card?: (card_index: number) => void;
-}
-
-function getCardSource(slug: string | undefined) {
-    if (!slug) {
-        return default_card
-    }
-    if (slug === "not-defense") {
-        return not_defense
-    }
-    for (const card of card_list) {
-        if (card.slug === slug) {
-            return card.path
-        }
-    }
 }
 
 function isCardInList(card_id: string, card_list: CardProps[]) {
@@ -337,7 +127,7 @@ function SubCard(props: Props) {
                     <Image
                         resizeMode="stretch"
                         style={[cardSize, borderColor]}
-                        source={getCardSource(props.card?.slug)}
+                        source={useCards({card_slug:props.card?.slug})}
                     />
                 </Pressable>
             </View>
@@ -359,7 +149,7 @@ function SubCard(props: Props) {
                             <Image
                                 resizeMode="stretch"
                                 style={[styles.image, { width: "100%", height: "100%" }]}
-                                source={getCardSource(props.card?.slug)}
+                                source={useCards({card_slug:props.card?.slug})}
                             />
                         </Pressable>
                     </View>
