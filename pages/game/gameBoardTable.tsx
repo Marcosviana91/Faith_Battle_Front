@@ -14,6 +14,7 @@ import PlayerIcon from "@/components/gameBoard/playerIcon";
 import { CardsContainer } from "@/components/cards/";
 import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
+import { getPlayerData } from '@/hooks/usePlayerData';
 
 
 export default function GameBoardTable() {
@@ -21,12 +22,6 @@ export default function GameBoardTable() {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const player_focus = matchData?.player_focus_id
     const fight_camp = matchData?.fight_camp
-
-    // Aplicar DRY
-    function getPlayerData(player_id: number) {
-        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
-        return _data[0]
-    }
 
 
     return (

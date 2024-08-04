@@ -16,7 +16,7 @@ import { useLoginMutation, useNewUserMutation, useGetUserDataMutation } from '@/
 import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
 import { useKeyboard } from "@/hooks/useKeyboard";
-import { useAvatar, AVATAR } from '@/hooks/useAvatar';
+import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
 
 export default function LoginScreen() {
     const dispatch = useDispatch();

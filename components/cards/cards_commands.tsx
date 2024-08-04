@@ -15,6 +15,7 @@ import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias
 import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
 import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
 import { DaviToggleAttack } from './cardsComands/davi';
+import { getPlayerData } from '@/hooks/usePlayerData';
 
 type Props = {
     onPress?: () => void
@@ -262,11 +263,6 @@ export function ShowCardDefense(props: Props) {
 
     if (matchData?.fight_camp?.player_defense_id !== player?.id) {
         return null
-    }
-    // Aplicar DRY
-    function getPlayerData(player_id: number) {
-        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
-        return _data[0]
     }
 
     return (

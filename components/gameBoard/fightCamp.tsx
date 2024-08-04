@@ -29,12 +29,6 @@ export default function FightCamp() {
 
     const [showModal, setShowModal] = useState(true)
 
-    // Aplicar DRY
-    function getPlayerData(player_id: number) {
-        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
-        return _data[0]
-    }
-
     useEffect(() => {
         if (fight_camp) {
             if (fight_camp!.fight_stage === 0 && fight_camp.player_defense_id === player?.id) {

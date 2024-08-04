@@ -11,7 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useGetUserDataMutation } from '@/store/api'
 import { globalStyles } from "@/constants/Styles";
-import { useAvatar } from "@/hooks/useAvatar";
+import { useAvatar } from "@/hooks/usePlayerData";
 
 type Props = {
     id: number

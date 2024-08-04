@@ -10,7 +10,7 @@ import { View, TouchableOpacity, Modal, Image, Pressable, ScrollView } from 'rea
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { useAvatar, AVATAR } from '@/hooks/useAvatar';
+import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
 
 import { ThemedView } from "@/components/themed/ThemedView";
 import { ThemedText } from "@/components/themed/ThemedText";

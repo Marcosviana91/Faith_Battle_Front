@@ -12,6 +12,7 @@ import { ThemedText } from '@/components/themed/ThemedText';
 import { SubCardsContainer } from '@/components/cards/subContainer';
 import useWebSocket from 'react-use-websocket';
 import { URI } from '@/store/server_urls';
+import { getPlayerData } from '@/hooks/usePlayerData';
 
 export function OnInvoke(props: { in_game_id: string }) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
@@ -20,12 +21,6 @@ export function OnInvoke(props: { in_game_id: string }) {
     const [selectedCard, setSelectedCard] = useState<number>()
 
     const cardList = getPlayerData(player_focus!).card_battle_camp
-
-    // Aplicar DRY
-    function getPlayerData(player_id: number) {
-        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
-        return _data[0]
-    }
 
     console.log("Invocou " + props.in_game_id)
     useEffect(() => {
