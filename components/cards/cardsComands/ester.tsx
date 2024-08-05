@@ -65,6 +65,7 @@ export function OnInvoke(props: { in_game_id: string }) {
             />
             <View style={{ width: "50%", height: 50, margin: 16 }}>
                 <BasicButton
+                height={50}
                     onPress={() => {
                         console.log("Enviar novo deck");
                         WS.sendJsonMessage({
