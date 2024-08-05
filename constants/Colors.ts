@@ -9,6 +9,7 @@ const tintColorDark = '#0a7ea4';
 export const Colors = {
   light: {
     text: '#000',
+    button_background_disabled: '#ccc',
     button_txtInput: "#00CDFD",
     background: '#9BA1A6',
     border: '#11181C',
@@ -19,6 +20,7 @@ export const Colors = {
   },
   dark: {
     text: '#687076',
+    button_background_disabled: '#333',
     button_txtInput: "#27419B",
     background: '#11181C',
     border: '#9BA1A6',

@@ -83,19 +83,21 @@ export default function SearchRoom() {
                                 onChangeText={setNewRoomPassword}
                             />
                         </View>
-                        <BasicButton onPress={() => {
-                            createRoom({
-                                name: newRoomName,
-                                created_by: {
-                                    id: userData?.id,
-                                    available_cards: userData?.available_cards,
-                                    xp_points: 0
-                                },
-                                match_type: newRoomGameType,
-                                max_players: Number(newRoomPlayerQtd),
-                                password: newRoomPassword
-                            })
-                        }}>
+                        <BasicButton
+                            height={50}
+                            onPress={() => {
+                                createRoom({
+                                    name: newRoomName,
+                                    created_by: {
+                                        id: userData?.id,
+                                        available_cards: userData?.available_cards,
+                                        xp_points: 0
+                                    },
+                                    match_type: newRoomGameType,
+                                    max_players: Number(newRoomPlayerQtd),
+                                    password: newRoomPassword
+                                })
+                            }}>
                             Criar
                         </BasicButton>
                     </View>

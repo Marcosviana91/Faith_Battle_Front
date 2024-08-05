@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from "react";
 
@@ -8,15 +8,15 @@ type Props = {
     disabled?: boolean;
     lightColor?: string;
     darkColor?: string;
+    height?: number;
 }
 
 export default function BasicButton(props: Props) {
     const backgroundColor = useThemeColor({ light: props.lightColor, dark: props.darkColor }, 'button_txtInput');
-    const backgroundColorDisabled = useThemeColor({ light: props.lightColor, dark: props.darkColor }, 'text');
+    const backgroundColorDisabled = useThemeColor({ light: props.lightColor, dark: props.darkColor }, 'button_background_disabled');
     const styles = StyleSheet.create({
         button: {
             backgroundColor: props.disabled ? backgroundColorDisabled :backgroundColor,
-            height: 50,
             // minWidth: 100,
             flex: 1,
             paddingHorizontal: 10,
@@ -29,9 +29,11 @@ export default function BasicButton(props: Props) {
     });
 
     return (
-        <TouchableOpacity disabled={props.disabled} style={styles.button} onPress={props.onPress}>
-            <Text style={{ fontWeight: '700', color: 'black', textAlign:"center" }}>{props.children}</Text>
-        </TouchableOpacity>
+        <View style={{height: props.height, minWidth: 100}}>
+            <TouchableOpacity disabled={props.disabled} style={styles.button} onPress={props.onPress}>
+                <Text style={{ fontWeight: '700', color: 'black', textAlign:"center" }}>{props.children}</Text>
+            </TouchableOpacity>
+        </View>
     )
 }
 
