@@ -112,7 +112,6 @@ export function PlayerIcon(props: Props) {
             <Pressable onPress={
                 () => {
                     if (playerData?.id !== props.id) {
-                        console.log("TROCAR ", props.id)
                         dispatch(setPlayerFocus(props.id))
                     }
                 }

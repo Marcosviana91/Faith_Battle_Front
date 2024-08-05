@@ -18,8 +18,11 @@ import { usePlayerData } from '@/hooks/usePlayerData';
 export default function GameBoardTable() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_focus = matchData?.player_focus_id
+    const player_focus_id = matchData?.player_focus_id
     const fight_camp = matchData?.fight_camp
+
+    const player_data = usePlayerData(player?.id!)
+    const player_focus_data = usePlayerData(player_focus_id!)
 
 
     return (
@@ -37,11 +40,11 @@ export default function GameBoardTable() {
                     {/* GameBoards */}
                     <View style={[globalStyles.contentContainer]}>
                         {/* Enemy board */}
-                        {player_focus !== 0 && player_focus !== player?.id &&
-                            <GameBoard {...usePlayerData(player_focus!)} />
+                        {player_focus_id !== 0 && player_focus_id !== player?.id &&
+                            <GameBoard {...player_focus_data} />
                         }
                         {/* Player board */}
-                        <GameBoard {...usePlayerData(player?.id!)} />
+                        <GameBoard {...player_data} />
                     </View>
                     {/* Mão do jogador */}
                     <View>
