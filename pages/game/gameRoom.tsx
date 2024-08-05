@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, Pressable, Modal, ScrollView } from "react-native";
+import { View, StyleSheet, Pressable, ScrollView } from "react-native";
 
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
@@ -16,6 +16,7 @@ import { URI } from "@/store/server_urls";
 
 import { CardsContainer } from "@/components/cards/";
 import { PlayerIcon } from "@/components/player_user/playerIcon";
+import { ThemedModal } from "@/components/themed/ThemedModal";
 
 
 
@@ -75,22 +76,21 @@ export default function GameRoom() {
                 </View>
             )}
             {/* Slots */}
-            <View style={{ flex: 1, padding:8,  }}>
+            <View style={{ flex: 1, padding: 8, }}>
                 <ScrollView>
-                    <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8,justifyContent:'space-evenly' }}>
+                    <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-evenly' }}>
                         {room.connected_players?.map(_player => (
                             <PlayerIcon type="normal" key={_player.id} id={_player.id!} isReady={_player.ready} />
                         ))}
                         {open_player_slot.map(player => { return player })}
-
                     </View>
-
                 </ScrollView>
 
             </View>
             {/* Botão de ficar pronto */}
-            {room.room_stage === 0 && !player?.ready! && (
+            {room.room_stage === 0 && (
                 <BasicButton
+                    height={50}
                     onPress={() => {
                         WS.sendJsonMessage({
                             data_type: 'ready',
@@ -107,64 +107,73 @@ export default function GameRoom() {
                 </BasicButton>
             )}
 
-            {player && <Modal
+            {player && <ThemedModal
                 visible={room.room_stage == 1 && !player?.ready}
                 transparent
                 presentationStyle='overFullScreen'
+                hideCloseButton
             >
-                <View style={{ flex: 1, backgroundColor: '#000000df', justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ backgroundColor: '#fff', width: '90%', padding: 16, borderRadius: 8, gap: 16 }}>
-                        <View style={{ flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
-                            {player.card_retry?.length! > 0 &&
-                                <CardsContainer
-                                    cards={player.card_retry}
-                                    zone="retry"
-                                    size="small"
-                                />}
+
+                <View style={{ flexWrap: 'nowrap', gap: 8, justifyContent: 'center', minHeight: 200, width: '100%' }}>
+                    <View style={{ borderColor: 'red', borderWidth: 1, height: 100, borderRadius: 8, alignItems: 'center', justifyContent: 'center' }}>
+                        {player.card_retry?.length! < 1 ?
+                            <ThemedText style={{ lineHeight: 60, fontSize: 32 }}>Cartas para trocar</ThemedText> :
+                            <CardsContainer
+                                cards={player.card_retry}
+                                zone="retry"
+                                size="small"
+                            />
+                        }
+                    </View>
+                    <View style={{ borderColor: 'blue', borderWidth: 1, height: 100, borderRadius: 8, alignItems: 'center' }}>
+                        {player!.card_hand!.length < 1 ?
+                            <ThemedText style={{ lineHeight: 60, fontSize: 32 }}>Sem cartas na mão</ThemedText> :
                             <CardsContainer
                                 cards={player!.card_hand}
                                 zone="select"
                                 size="small"
                             />
-                        </View>
-                        <View style={{ flexDirection: 'row', gap: 8, borderTopWidth: 1, paddingTop: 16 }}>
-                            <BasicButton
-                                disabled={player.card_retry?.length! > 0}
-                                onPress={() => {
-                                    WS.sendJsonMessage({
-                                        data_type: 'ready',
-                                        user_data: {
-                                            id: userData.id,
-                                        },
-                                        room_data: {
-                                            id: room.id,
-                                        }
-                                    })
-                                }}
-                            >
-                                OK
-                            </BasicButton>
-                            <BasicButton
-                                disabled={!(player.card_retry?.length! > 0)}
-                                onPress={() => {
-                                    WS.sendJsonMessage({
-                                        data_type: 'retry_cards',
-                                        user_data: {
-                                            id: userData.id,
-                                        },
-                                        room_data: {
-                                            id: room.id,
-                                        },
-                                        retry_cards: player.card_retry
-                                    })
-                                }}
-                            >
-                                Trocar Cartas
-                            </BasicButton>
-                        </View>
+                        }
                     </View>
                 </View>
-            </Modal>}
+                <View style={{ flexDirection: 'row', gap: 8, paddingTop: 24 }}>
+                    <BasicButton
+                        height={50}
+                        disabled={player.card_retry?.length! > 0}
+                        onPress={() => {
+                            WS.sendJsonMessage({
+                                data_type: 'ready',
+                                user_data: {
+                                    id: userData.id,
+                                },
+                                room_data: {
+                                    id: room.id,
+                                }
+                            })
+                        }}
+                    >
+                        OK
+                    </BasicButton>
+                    <BasicButton
+                        height={50}
+                        disabled={!(player.card_retry?.length! > 0)}
+                        onPress={() => {
+                            WS.sendJsonMessage({
+                                data_type: 'retry_cards',
+                                user_data: {
+                                    id: userData.id,
+                                },
+                                room_data: {
+                                    id: room.id,
+                                },
+                                retry_cards: player.card_retry
+                            })
+                        }}
+                    >
+                        Trocar Cartas
+                    </BasicButton>
+                </View>
+            </ThemedModal>}
         </ThemedView>
     )
 }
