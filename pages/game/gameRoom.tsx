@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, Pressable, Modal } from "react-native";
+import { View, StyleSheet, Pressable, Modal, ScrollView } from "react-native";
 
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
@@ -14,8 +14,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
 
-import {CardsContainer} from "@/components/cards/";
-import PlayerIcon from "@/components/gameBoard/playerIcon";
+import { CardsContainer } from "@/components/cards/";
+import { PlayerIcon } from "@/components/player_user/playerIcon";
 
 
 
@@ -75,31 +75,36 @@ export default function GameRoom() {
                 </View>
             )}
             {/* Slots */}
-            <View style={[styles.slots, { backgroundColor: '#ffffff53' }]}>
-                {room.connected_players?.map(_player => (
-                    <PlayerIcon type="normal" key={_player.id} id={_player.id!} isReady={_player.ready} />
-                ))}
-                {open_player_slot.map(player => { return player })}
+            <View style={{ flex: 1, padding:8,  }}>
+                <ScrollView>
+                    <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8,justifyContent:'space-evenly' }}>
+                        {room.connected_players?.map(_player => (
+                            <PlayerIcon type="normal" key={_player.id} id={_player.id!} isReady={_player.ready} />
+                        ))}
+                        {open_player_slot.map(player => { return player })}
+
+                    </View>
+
+                </ScrollView>
+
             </View>
             {/* Botão de ficar pronto */}
-            {room.room_stage === 0 && (
-                <View style={{ height: 100, width: '100%', backgroundColor: '#ffffff53' }}>
-                    <BasicButton
-                        onPress={() => {
-                            WS.sendJsonMessage({
-                                data_type: 'ready',
-                                user_data: {
-                                    id: userData.id,
-                                },
-                                room_data: {
-                                    id: room.id,
-                                }
-                            })
-                        }}
-                    >
-                        Ficar Pronto
-                    </BasicButton>
-                </View>
+            {room.room_stage === 0 && !player?.ready! && (
+                <BasicButton
+                    onPress={() => {
+                        WS.sendJsonMessage({
+                            data_type: 'ready',
+                            user_data: {
+                                id: userData.id,
+                            },
+                            room_data: {
+                                id: room.id,
+                            }
+                        })
+                    }}
+                >
+                    Ficar Pronto
+                </BasicButton>
             )}
 
             {player && <Modal
@@ -163,15 +168,3 @@ export default function GameRoom() {
         </ThemedView>
     )
 }
-
-const styles = StyleSheet.create({
-    slots: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        alignItems: "center",
-        flexWrap: 'wrap',
-        gap: 10,
-        padding: 12,
-    }
-})
