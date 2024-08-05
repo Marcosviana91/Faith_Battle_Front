@@ -15,7 +15,7 @@ import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias
 import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
 import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
 import { DaviToggleAttack } from './cardsComands/davi';
-import { getPlayerData } from '@/hooks/usePlayerData';
+import { usePlayerData } from '@/hooks/usePlayerData';
 
 type Props = {
     onPress?: () => void
@@ -269,7 +269,7 @@ export function ShowCardDefense(props: Props) {
         // Mostrar Cartas na zona de batalha
         <View style={{ width: "100%" }}>
             {/* <SubCardsContainer
-                cards={getPlayerData(player?.id!).card_battle_camp}
+                cards={usePlayerData(player?.id!).card_battle_camp}
                 cards_action={
                     <CardToggleDefense
                         card={props.card!}
@@ -277,7 +277,7 @@ export function ShowCardDefense(props: Props) {
                         target_index={props.index}
                         onPress={() => { }} />}
             /> */}
-            < CardsContainer zone="will-fight" cards={getPlayerData(player?.id!).card_battle_camp} size="medium" target_index={props.target_index} />
+            < CardsContainer zone="will-fight" cards={usePlayerData(player?.id!).card_battle_camp} size="medium" target_index={props.target_index} />
         </View>
     )
 }

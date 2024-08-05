@@ -50,7 +50,7 @@ export function useAvatar(
     return AVATAR[props.avatar_index].path
 }
 
-export function getPlayerData(player_id: number) {
+export function usePlayerData(player_id: number) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     
     const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)

@@ -12,7 +12,7 @@ import { IconsContainer } from "@/components/player_user/playerIcon";
 import { CardsContainer } from "@/components/cards/";
 import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
-import { getPlayerData } from '@/hooks/usePlayerData';
+import { usePlayerData } from '@/hooks/usePlayerData';
 
 
 export default function GameBoardTable() {
@@ -38,10 +38,10 @@ export default function GameBoardTable() {
                     <View style={[globalStyles.contentContainer]}>
                         {/* Enemy board */}
                         {player_focus !== 0 && player_focus !== player?.id &&
-                            <GameBoard {...getPlayerData(player_focus!)} />
+                            <GameBoard {...usePlayerData(player_focus!)} />
                         }
                         {/* Player board */}
-                        <GameBoard {...getPlayerData(player?.id!)} />
+                        <GameBoard {...usePlayerData(player?.id!)} />
                     </View>
                     {/* Mão do jogador */}
                     <View>
