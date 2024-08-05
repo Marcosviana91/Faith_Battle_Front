@@ -20,6 +20,7 @@ declare type MatchApiProps = {
 declare type CardProps = {
     slug: string,
     path?: ImageSourcePropType,
+    card_type?: string,
     in_game_id?: string,
     attack_point?: number,
     defense_points?: number,
@@ -27,7 +28,6 @@ declare type CardProps = {
     status?: "ready" | "not-enough" | "used",
     skill_focus_player_id?: number
 }
-
 
 declare type APIMoveProps = {
     match_id?: string;
