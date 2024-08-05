@@ -12,7 +12,7 @@ import { URI } from "@/store/server_urls";
 import { ThemedModal } from '@/components/themed/ThemedModal';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
-import PlayerIcon from "@/components/gameBoard/playerIcon";
+import { IconsContainer} from "@/components/player_user/playerIcon";
 import {CardsContainer} from "@/components/cards/";
 import BasicButton from '@/components/button/basic';
 import { clearCardsToFight, setCardsToFight } from '@/store/reducers/matchReducer';
@@ -72,11 +72,7 @@ export default function FightCamp() {
                         visible={showModal}
                     >
                         {/* Header */}
-                        <View style={{ flexDirection: 'row', height: 35 }}>
-                            <PlayerIcon id={fight_camp.player_attack_id!} size={30} type='mini' />
-                            <MaterialCommunityIcons style={{}} size={30} name="sword-cross" />
-                            <PlayerIcon id={fight_camp.player_defense_id!} size={30} type='mini' />
-                        </View>
+                        <IconsContainer />
                         {/* Botão Lutar */}
                         {(matchData?.player_turn === player?.id) && fight_camp && fight_camp.fight_stage == 1 &&
                             <View style={{height:50, width:100}}>

@@ -1,16 +1,14 @@
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { View, StyleSheet, Image, Pressable } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { globalStyles } from "@/constants/Styles";
-
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
 
 import GameBoard from "@/components/gameBoard";
-import PlayerIcon from "@/components/gameBoard/playerIcon";
+import { IconsContainer } from "@/components/player_user/playerIcon";
 import { CardsContainer } from "@/components/cards/";
 import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
@@ -32,16 +30,8 @@ export default function GameBoardTable() {
                     {/* Aplicar DRY */}
                     {/* Icones dos jogadores */}
                     {!fight_camp &&
-                        <View style={[styles.gameBoardHeader,]}>
-                            {matchData?.players_in_match?.map((player) => (
-                                <View key={player.id} style={{ alignItems: "center" }}>
-                                    <PlayerIcon id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} type='mini' />
-                                    <View style={{ flexDirection: 'row', marginTop: -16 }}>
-                                        <MaterialCommunityIcons name="shield-cross" size={24} color="black" />
-                                        <ThemedText type='defaultSemiBold'>{player.faith_points}</ThemedText>
-                                    </View>
-                                </View>
-                            ))}
+                        <View>
+                            <IconsContainer player_id={player?.id} matchData={matchData} />
                         </View>
                     }
                     {/* Fight Camp */}
@@ -62,7 +52,7 @@ export default function GameBoardTable() {
                 </ThemedView>
             }
             {matchData?.end_match &&
-                <ThemedView style={{flex:1, alignItems:"center", justifyContent:"center"}}>
+                <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                     <TopBar />
                     <ThemedText>A partida acabou: {matchData.end_match}</ThemedText>
                 </ThemedView>

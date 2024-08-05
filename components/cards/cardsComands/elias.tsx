@@ -7,7 +7,7 @@ import { RootReducer } from '@/store';
 import { ThemedModal } from '@/components/themed/ThemedModal';
 
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
-import PlayerIcon from '@/components/gameBoard/playerIcon';
+import {IconsContainer} from '@/components/player_user/playerIcon';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { SubCardsContainer } from '@/components/cards/subContainer';
 import useWebSocket from 'react-use-websocket';
@@ -31,30 +31,7 @@ export function OnInvoke(props: { in_game_id: string }) {
 
     return (
         <ThemedModal title='Escolha um oponente e um uma carta.' hideCloseButton closeModal={() => { }} >
-            {/* Aplicar DRY */}
-            {/* Perguntar se deve exibir a SI mesmo */}
-            {/* Icones dos jogadores */}
-            <View style={{
-                height: 80,
-                width: '100%',
-                flexDirection: "row",
-                justifyContent: "space-around",
-            }}>
-                {matchData?.players_in_match?.map((_player) => {
-                    if (_player.id === player?.id) {
-                        return null
-                    }
-                    return (
-                        <View key={_player.id} style={{ alignItems: "center" }}>
-                            <PlayerIcon id={_player.id} isCurrent={(_player.id == matchData.player_turn)} isTarget={(_player.id == matchData.player_focus_id)} type='mini' />
-                            <View style={{ flexDirection: 'row', marginTop: -16 }}>
-                                <MaterialCommunityIcons name="shield-cross" size={24} color="black" />
-                                <ThemedText type='defaultSemiBold'>{_player.faith_points}</ThemedText>
-                            </View>
-                        </View>
-                    )
-                })}
-            </View>
+            <IconsContainer />
             {/* Cartas no campo de batalha */}
             <SubCardsContainer
                 cards={cardList}
