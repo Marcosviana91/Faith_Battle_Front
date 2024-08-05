@@ -83,6 +83,7 @@ function ChooseCard(props: ChangeCardOrderProps) {
         <>
             <View style={{ width: "50%", height: 50, margin: 16 }}>
                 <BasicButton
+                height={50}
                     onPress={() => {
                         console.log("Enviar novo deck");
                         console.log([props.list![props.selectedCard!]]);
