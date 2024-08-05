@@ -30,9 +30,7 @@ export default function GameBoardTable() {
                     {/* Aplicar DRY */}
                     {/* Icones dos jogadores */}
                     {!fight_camp &&
-                        <View>
                             <IconsContainer player_id={player?.id} matchData={matchData} />
-                        </View>
                     }
                     {/* Fight Camp */}
                     <FightCamp />
