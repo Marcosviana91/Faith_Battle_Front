@@ -149,7 +149,7 @@ const CARD_LIST: CardProps[] = [
         path: require("@/assets/images/Cards/Milagres/Proteção Divina.png"),
     },
     {
-        slug: "ressureicao",
+        slug: "ressurreicao",
         path: require("@/assets/images/Cards/Milagres/Ressurreição.png"),
     },
     {
