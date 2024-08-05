@@ -12,8 +12,8 @@ import { URI } from "@/store/server_urls";
 import { ThemedModal } from '@/components/themed/ThemedModal';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
-import { IconsContainer} from "@/components/player_user/playerIcon";
-import {CardsContainer} from "@/components/cards/";
+import { ShowFightersIconsContainer } from "@/components/player_user/playerIcon";
+import { CardsContainer } from "@/components/cards/";
 import BasicButton from '@/components/button/basic';
 import { clearCardsToFight, setCardsToFight } from '@/store/reducers/matchReducer';
 
@@ -72,10 +72,10 @@ export default function FightCamp() {
                         visible={showModal}
                     >
                         {/* Header */}
-                        <IconsContainer />
+                            <ShowFightersIconsContainer matchData={matchData} />
                         {/* Botão Lutar */}
                         {(matchData?.player_turn === player?.id) && fight_camp && fight_camp.fight_stage == 1 &&
-                            <View style={{height:50, width:100}}>
+                            <View style={{ height: 50, width: 100 }}>
                                 <BasicButton
                                     onPress={() => {
                                         console.log("Lutar")
@@ -103,7 +103,7 @@ export default function FightCamp() {
                         }
                         {/* Botão de realizar defesa */}
                         {fight_camp && fight_camp.fight_stage === 0 && fight_camp.player_defense_id == player?.id &&
-                            <View style={{height:50, width:100}}>
+                            <View style={{ height: 50, width: 100 }}>
                                 <BasicButton
                                     onPress={() => {
                                         console.log("Defender")
@@ -132,7 +132,7 @@ export default function FightCamp() {
                                 </BasicButton>
                             </View>
                         }
-                        <View style={{width:"100%"}}>
+                        <View style={{ width: "100%" }}>
                             {fight_camp.fight_stage === 0
                                 ? <CardsContainer size="small" zone="fighting" cards={fight_camp.attack_cards} />
                                 : <CardsContainer size="small" zone="gallery" cards={fight_camp.attack_cards} />

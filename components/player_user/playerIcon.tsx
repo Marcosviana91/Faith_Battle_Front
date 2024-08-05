@@ -36,6 +36,7 @@ export function PlayerIcon(props: Props) {
     var border_color = 'gray'
     if (props.isTarget) { border_color = "red" }
     if (props.isCurrent) { border_color = "green" }
+    if (props.isCurrent && props.isTarget) { border_color = "orange" }
 
     const styles = StyleSheet.create({
         playerIconMini: {
@@ -108,7 +109,7 @@ export function PlayerIcon(props: Props) {
     }
 
     return (
-        <View style={globalStyles.container}>
+        <View style={{flex:1, alignItems:'center'}}>
             <Pressable onPress={
                 () => {
                     if (playerData?.id !== props.id) {
@@ -159,12 +160,11 @@ export function IconsContainer(props: ContainerProps) {
         }}>
             <View>
                 <Pressable
-                    onPress={() => setShowPlayers(!showPlayers)}
+                    onPress={() => { setShowPlayers(!showPlayers) }}
                 >
                     <FontAwesome5 name={showPlayers ? "users-slash" : "users"} size={32} color="black" />
                 </Pressable>
             </View>
-            {/* <MaterialCommunityIcons style={{}} size={30} name="sword-cross" /> */}
             {showPlayers &&
                 <ThemedView style={{ width: windowWidth * 0.8 }}>
                     <ScrollView horizontal contentContainerStyle={{
@@ -193,9 +193,49 @@ export function IconsContainer(props: ContainerProps) {
                             )
                         })}
                     </ScrollView>
-
                 </ThemedView>
             }
         </View>
+    )
+}
+
+export function ShowFightersIconsContainer(props: ContainerProps) {
+    return (
+        <View style={{ flexDirection: "row", alignItems: 'center', marginBottom: 12, width: '100%', paddingHorizontal:24 }}>
+            <PlayerIcon id={props.matchData?.fight_camp?.player_attack_id!} type='mini' />
+            <MaterialCommunityIcons style={{}} size={30} name="sword-cross" />
+            <PlayerIcon id={props.matchData?.fight_camp?.player_defense_id!} type='mini' />
+        </View>
+    )
+}
+
+export function SelectEnemyIconsContainer(props: ContainerProps) {
+    return (
+        <ScrollView horizontal contentContainerStyle={{
+            flex: 1,
+            flexDirection: "row",
+            columnGap: 16,
+            paddingHorizontal: 8,
+        }}>
+            {props.matchData?.players_in_match?.map((_player) => {
+                if (_player.id === props.player_id) {
+                    return null
+                }
+                return (
+                    <View key={_player.id} style={{
+                        height: 100
+                    }}>
+                        <PlayerIcon id={_player.id} isCurrent={(_player.id == props.matchData!.player_turn)} isTarget={(_player.id == props.matchData!.player_focus_id)} type='mini' />
+                        <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
+                            <ThemedText>
+                                <MaterialCommunityIcons name="shield-cross" size={24} />
+
+                            </ThemedText>
+                            <ThemedText type='defaultSemiBold'>{_player.faith_points}</ThemedText>
+                        </ThemedView>
+                    </View>
+                )
+            })}
+        </ScrollView>
     )
 }

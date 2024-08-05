@@ -1,5 +1,5 @@
 import BasicButton from "@/components/button/basic"
-import { IconsContainer } from "@/components/player_user/playerIcon"
+import { SelectEnemyIconsContainer } from "@/components/player_user/playerIcon"
 import { ThemedModal } from "@/components/themed/ThemedModal"
 import { ThemedText } from "@/components/themed/ThemedText"
 import { RootReducer } from "@/store"
@@ -40,7 +40,9 @@ export function DaviToggleAttack(props: Props) {
                 <MaterialCommunityIcons name="sword" size={80} color="black" />
             </Pressable>
             <ThemedModal visible={showModal} title='Escolha um oponente' hideCloseButton>
-                <IconsContainer />
+                <View>
+                    <SelectEnemyIconsContainer matchData={matchData}/>
+                </View>
                 <View style={{ height: 50, width: 100 }}>
                     <BasicButton
                         disabled={matchData?.player_focus_id === player?.id}
