@@ -111,10 +111,10 @@ export function PlayerIcon(props: Props) {
         <View style={globalStyles.container}>
             <Pressable onPress={
                 () => {
-                    console.log("TOCAR ", props.id)
-                    // if (playerData?.id !== props.id) {
-                    //     dispatch(setPlayerFocus(props.id))
-                    // }
+                    if (playerData?.id !== props.id) {
+                        console.log("TROCAR ", props.id)
+                        dispatch(setPlayerFocus(props.id))
+                    }
                 }
             }>
                 <View
@@ -148,13 +148,15 @@ type ContainerProps = {
 }
 export function IconsContainer(props: ContainerProps) {
     const [showPlayers, setShowPlayers] = useState(true)
+    const { width: windowWidth, height: windowHeight } = useScreenSizes();
     return (
         <View style={{
             flexDirection: "row",
-            justifyContent: "space-around",
+            justifyContent: "space-between",
             margin: 8,
             position: "absolute",
-            zIndex: 1
+            top: 40,
+            zIndex: 1,
         }}>
             <View>
                 <Pressable
@@ -165,34 +167,32 @@ export function IconsContainer(props: ContainerProps) {
             </View>
             {/* <MaterialCommunityIcons style={{}} size={30} name="sword-cross" /> */}
             {showPlayers &&
-                <ThemedView style={{width:useScreenSizes().width*0.7}}>
-                    <ScrollView horizontal>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: "row",
-                            justifyContent: "space-around",
-                            zIndex: -1,
-                        }}>
-                            {props.matchData?.players_in_match?.map((_player) => {
-                                if (props.hideCurrentPlayer && _player.id === props.player_id) {
-                                    return null
-                                }
-                                return (
-                                    <View key={_player.id} style={{
-                                        height: 100
-                                    }}>
-                                        <PlayerIcon id={_player.id} isCurrent={(_player.id == props.matchData!.player_turn)} isTarget={(_player.id == props.matchData!.player_focus_id)} type='mini' />
-                                        <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
-                                            <ThemedText>
-                                                <MaterialCommunityIcons name="shield-cross" size={24} />
+                <ThemedView style={{ width: windowWidth * 0.8 }}>
+                    <ScrollView horizontal contentContainerStyle={{
+                        flex: 1,
+                        flexDirection: "row",
+                        columnGap: 16,
+                        paddingHorizontal: 8,
+                    }}>
+                        {props.matchData?.players_in_match?.map((_player) => {
+                            if (props.hideCurrentPlayer && _player.id === props.player_id) {
+                                return null
+                            }
+                            return (
+                                <View key={_player.id} style={{
+                                    height: 100
+                                }}>
+                                    <PlayerIcon id={_player.id} isCurrent={(_player.id == props.matchData!.player_turn)} isTarget={(_player.id == props.matchData!.player_focus_id)} type='mini' />
+                                    <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
+                                        <ThemedText>
+                                            <MaterialCommunityIcons name="shield-cross" size={24} />
 
-                                            </ThemedText>
-                                            <ThemedText type='defaultSemiBold'>{_player.faith_points}</ThemedText>
-                                        </ThemedView>
-                                    </View>
-                                )
-                            })}
-                        </View>
+                                        </ThemedText>
+                                        <ThemedText type='defaultSemiBold'>{_player.faith_points}</ThemedText>
+                                    </ThemedView>
+                                </View>
+                            )
+                        })}
                     </ScrollView>
 
                 </ThemedView>
