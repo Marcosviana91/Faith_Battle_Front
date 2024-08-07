@@ -3,6 +3,7 @@ import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 type Props = ModalProps & {
     title?: string;
@@ -11,9 +12,10 @@ type Props = ModalProps & {
 }
 
 export function ThemedModal(props : Props) {
+    const {width} = useScreenSizes();
     return (
         <Modal transparent visible={props.visible}>
-            <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: "center" }} lightColor='#ffffffef' darkColor='#000000ef'>
+            <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: "center", maxWidth:width }} lightColor='#ffffffef' darkColor='#000000ef'>
                 <ThemedView style={{ width: "90%", minHeight: "25%", maxHeight:'100%', borderWidth: 1, borderRadius: 8, padding: 8, justifyContent: "space-between", alignItems: "center" }}>
                     {/* Header */}
                     <View style={{ height: 30, width: "100%", flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", marginBottom: 12 }}>
