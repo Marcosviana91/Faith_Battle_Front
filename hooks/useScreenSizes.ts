@@ -4,6 +4,6 @@ export function useScreenSizes() {
     const {height} = useWindowDimensions()
     return {
         height: height,
-        width: height*9/16
+        width: height*3/4
     }
 }
