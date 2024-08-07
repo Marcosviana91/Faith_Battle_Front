@@ -13,6 +13,7 @@ import { CardsContainer } from "@/components/cards/";
 import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
 import { usePlayerData } from '@/hooks/usePlayerData';
+import HandContainer from '@/components/cards/containers/HandContainer';
 
 
 export default function GameBoardTable() {
@@ -48,7 +49,7 @@ export default function GameBoardTable() {
                     </View>
                     {/* Mão do jogador */}
                     <View>
-                        <CardsContainer size="small" zone='hand' cards={player!.card_hand} />
+                        <HandContainer />
                     </View>
                 </ThemedView>
             }
