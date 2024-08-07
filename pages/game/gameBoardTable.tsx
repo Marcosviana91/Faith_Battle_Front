@@ -9,7 +9,6 @@ import { ThemedText } from '@/components/themed/ThemedText';
 
 import GameBoard from "@/components/gameBoard";
 import { IconsContainer } from "@/components/player_user/playerIcon";
-import { CardsContainer } from "@/components/cards/";
 import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
 import { usePlayerData } from '@/hooks/usePlayerData';
