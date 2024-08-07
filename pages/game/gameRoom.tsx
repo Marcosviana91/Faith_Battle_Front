@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { View, StyleSheet, Pressable, ScrollView } from "react-native";
 
 import { useSelector } from 'react-redux'
@@ -14,9 +13,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useWebSocket from 'react-use-websocket';
 import { URI } from "@/store/server_urls";
 
-import { CardsContainer } from "@/components/cards/";
 import { PlayerIcon } from "@/components/player_user/playerIcon";
 import { ThemedModal } from "@/components/themed/ThemedModal";
+import RetryContainer from "@/components/cards/containers/RetryContainer";
 
 
 
@@ -113,28 +112,8 @@ export default function GameRoom() {
                 presentationStyle='overFullScreen'
                 hideCloseButton
             >
-
                 <View style={{ flexWrap: 'nowrap', gap: 8, justifyContent: 'center', minHeight: 200, width: '100%' }}>
-                    <View style={{ borderColor: 'red', borderWidth: 1, height: 100, borderRadius: 8, alignItems: 'center', justifyContent: 'center' }}>
-                        {player.card_retry?.length! < 1 ?
-                            <ThemedText style={{ lineHeight: 60, fontSize: 32 }}>Cartas para trocar</ThemedText> :
-                            <CardsContainer
-                                cards={player.card_retry}
-                                zone="retry"
-                                size="small"
-                            />
-                        }
-                    </View>
-                    <View style={{ borderColor: 'blue', borderWidth: 1, height: 100, borderRadius: 8, alignItems: 'center' }}>
-                        {player!.card_hand!.length < 1 ?
-                            <ThemedText style={{ lineHeight: 60, fontSize: 32 }}>Sem cartas na mão</ThemedText> :
-                            <CardsContainer
-                                cards={player!.card_hand}
-                                zone="select"
-                                size="small"
-                            />
-                        }
-                    </View>
+                    <RetryContainer />
                 </View>
                 <View style={{ flexDirection: 'row', gap: 8, paddingTop: 24 }}>
                     <BasicButton
