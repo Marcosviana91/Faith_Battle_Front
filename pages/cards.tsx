@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Card } from "@/components/cards/";
+import { SimpleCard } from "@/components/cards/containers/DefaultContainer";
 import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -33,7 +33,7 @@ const card_miracle_list = [
     { "slug": 'no-ceu-tem-pao' },
     { "slug": 'passagem-segura' },
     { "slug": 'protecao-divina' },
-    { "slug": 'ressureicao' },
+    { "slug": 'ressurreicao' },
     { "slug": 'restauracao-de-fe' },
     { "slug": 'sabedoria-de-salomao' },
     { "slug": 'sarca-ardente' },
@@ -106,7 +106,7 @@ export default function CardScreen() {
                         <ScrollView>
                             <View style={[styles.container, {backgroundColor:card_list.color}]}>
                                 {card_list.list.map((card_slug, index) => (
-                                    <Card key={index} size="medium" card={card_slug} zone='gallery' />
+                                    <SimpleCard key={index} size="medium" card={card_slug} />
                                 ))}
                             </View>
                         </ScrollView>
