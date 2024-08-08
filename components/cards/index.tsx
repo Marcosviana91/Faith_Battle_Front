@@ -17,7 +17,7 @@ type CardsContainerProps = {
     target_slug?: string;
 }
 
-export function CardsContainer(props: CardsContainerProps) {
+function CardsContainer(props: CardsContainerProps) {
     const styles = StyleSheet.create({
         cardsContainer: {
             // backgroundColor: "#000000cc",
@@ -59,7 +59,7 @@ type Props = {
 }
 
 
-export function Card(props: Props) {
+function Card(props: Props) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const fight_camp = useSelector((state: RootReducer) => state.matchReducer.match_data)?.fight_camp
     const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight
