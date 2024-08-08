@@ -11,8 +11,8 @@ import { useSelector } from "react-redux";
 type DefaultContainerProps = {
     cards: CardProps[],
     card_size?: "normal" | "medium" | "small" | "minimum";
-    card_action_function: (props: { card: CardProps }) => void;
-    card_action_component: React.ReactNode;
+    card_action_function: (props: { card: CardProps, action_index: number }) => void;
+    card_action_component: React.ReactNode[];
     get_selected_card?: (card: CardProps) => void;
 
 }
@@ -42,21 +42,25 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                     ))}
                 </ScrollView>
             </View>
-            { selectedCard  && (
+            {selectedCard && (
                 <Modal visible={showModal} transparent animationType='fade' >
                     <ThemedView
                         style={{ flex: 1, maxWidth: windowWidth }}
                     >
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                             {/* Card Commands */}
-                            <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
-                                <Pressable
-                                    onPress={() => {
-                                        props.card_action_function({ card: selectedCard })
-                                        setShowModal(false)
-                                    }}>
-                                    {props.card_action_component}
-                                </Pressable>
+                            <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                {props.card_action_component.map((component, _index) => (
+                                    <Pressable
+                                        key={_index}
+                                        style={{ marginBottom: 24 }}
+                                        onPress={() => {
+                                            props.card_action_function({ card: selectedCard, action_index: _index })
+                                            setShowModal(false)
+                                        }}>
+                                        {component}
+                                    </Pressable>
+                                ))}
                             </View>
                             {/* A carta em si */}
                             <Pressable
@@ -69,7 +73,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     style={[{ width: "100%", height: "100%" }]}
                                     source={useCards({ card_slug: selectedCard.slug })}
                                 />
-            
+
                                 {/* {props.card?.in_game_id &&
                                 <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
                                     <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card?.attack_point}</ThemedText>
@@ -94,7 +98,6 @@ type SimpleCardProps = {
     size?: "normal" | "medium" | "small" | "minimum";
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
 }
-
 
 export function SimpleCard(props: SimpleCardProps) {
     const { width: windowWidth } = useScreenSizes();
