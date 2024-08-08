@@ -11,16 +11,16 @@ import { useSelector } from "react-redux";
 type DefaultContainerProps = {
     cards: CardProps[],
     card_size?: "normal" | "medium" | "small" | "minimum";
-    card_action_function: (props: { card_slug: string }) => void;
+    card_action_function: (props: { card: CardProps }) => void;
     card_action_component: React.ReactNode;
-    get_selected_card?: (card_index: number) => void;
+    get_selected_card?: (card: CardProps) => void;
 
 }
 
 export default function DefaultContainer(props: DefaultContainerProps) {
     const { width: windowWidth } = useScreenSizes();
     const [showModal, setShowModal] = useState(false)
-    const [selectedCardIndex, setSelectedCardIndex] = useState<number>()
+    const [selectedCard, setSelectedCard] = useState<CardProps>()
 
     return (
         <>
@@ -30,8 +30,11 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                         <Pressable
                             key={_index}
                             onPress={() => {
-                                setSelectedCardIndex(_index)
+                                setSelectedCard(card)
                                 setShowModal(true)
+                                if (props.get_selected_card) {
+                                    props.get_selected_card(card)
+                                }
                             }}
                         >
                             <Card size={props.card_size} card={card} />
@@ -39,7 +42,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                     ))}
                 </ScrollView>
             </View>
-            {typeof selectedCardIndex !== 'undefined' && selectedCardIndex >= 0 && (
+            { selectedCard  && (
                 <Modal visible={showModal} transparent animationType='fade' >
                     <ThemedView
                         style={{ flex: 1, maxWidth: windowWidth }}
@@ -49,12 +52,13 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                             <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
                                 <Pressable
                                     onPress={() => {
-                                        // props.card_action_function({ card_slug: props.card?.slug! })
+                                        props.card_action_function({ card: selectedCard })
                                         setShowModal(false)
                                     }}>
                                     {props.card_action_component}
                                 </Pressable>
                             </View>
+                            {/* A carta em si */}
                             <Pressable
                                 onPress={() => {
                                     setShowModal(false)
@@ -63,8 +67,9 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                 <Image
                                     resizeMode="stretch"
                                     style={[{ width: "100%", height: "100%" }]}
-                                    source={useCards({ card_slug: props.cards[selectedCardIndex!].slug })}
+                                    source={useCards({ card_slug: selectedCard.slug })}
                                 />
+            
                                 {/* {props.card?.in_game_id &&
                                 <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
                                     <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card?.attack_point}</ThemedText>
@@ -80,7 +85,6 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                     </ThemedView>
                 </Modal>
             )}
-
         </>
     )
 }

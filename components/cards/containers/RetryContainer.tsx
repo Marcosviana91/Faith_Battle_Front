@@ -1,22 +1,27 @@
-import { ThemedText } from "@/components/themed/ThemedText"
-import { RootReducer } from "@/store"
-import { Pressable, View, Text } from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import DefaultContainer from "./DefaultContainer"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { useState } from "react"
-import { isSlugInCardList } from "@/hooks/useCards"
+import { useDispatch, useSelector } from "react-redux"
+import { Pressable, View, Text } from "react-native"
+
+import { RootReducer } from "@/store"
 import { setPlayer } from "@/store/reducers/matchReducer"
+
+import { isSlugInCardList } from "@/hooks/useCards"
+
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+
+import DefaultContainer from "./DefaultContainer"
+
+import { ThemedText } from "@/components/themed/ThemedText"
 import { ThemedView } from "@/components/themed/ThemedView"
 
 export default function RetryContainer() {
     const dispatch = useDispatch()
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
-    const [actualCardSlug, setActualCardSlug] = useState('TESTE')
+    const [selectedCard, setSelectedCard] = useState<CardProps>()
 
-    function actionFunction(props: { card_slug: string; }) {
+    function actionFunction(props: { card: CardProps; }) {
         if (player.deck_try! < 3) {
-            const altered_card_list = useCardRetryFunction({ card_slug: props.card_slug, player_card_hand: player.card_hand!, player_card_retry: player.card_retry! })
+            const altered_card_list = useCardRetryFunction({ card: props.card, player_card_hand: player.card_hand!, player_card_retry: player.card_retry! })
             dispatch(setPlayer({
                 ...player!, card_retry: altered_card_list.card_retry, card_hand: altered_card_list.card_hand
             }))
@@ -31,11 +36,10 @@ export default function RetryContainer() {
                     <DefaultContainer
                         card_size="medium"
                         cards={player.card_retry!}
-                        card_action_component={<CardRetry card_slug={actualCardSlug} />}
+                        card_action_component={<CardRetry card={selectedCard!} />}
                         card_action_function={actionFunction}
-                        get_selected_card={(card_index) => {
-                            const card_slug = player!.card_retry![card_index].slug
-                            setActualCardSlug(card_slug)
+                        get_selected_card={(card) => {
+                            setSelectedCard(card)
                         }}
                     />
                 }
@@ -46,11 +50,10 @@ export default function RetryContainer() {
                     <DefaultContainer
                         card_size="medium"
                         cards={player!.card_hand!}
-                        card_action_component={<CardRetry card_slug={actualCardSlug} />}
+                        card_action_component={<CardRetry card={selectedCard!} />}
                         card_action_function={actionFunction}
-                        get_selected_card={(card_index) => {
-                            const card_slug = player!.card_hand![card_index].slug
-                            setActualCardSlug(card_slug)
+                        get_selected_card={(card) => {
+                            setSelectedCard(card)
                         }}
                     />
                 }
@@ -58,10 +61,9 @@ export default function RetryContainer() {
         </View>
     )
 }
+function CardRetry(props: { card: CardProps }) {
 
-function CardRetry(props: { card_slug?: string }) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-
 
     if (player?.deck_try! >= 3) {
         return (
@@ -70,29 +72,28 @@ function CardRetry(props: { card_slug?: string }) {
             </View>
         )
     }
-
     return (
         <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto", marginVertical: 24 }}>
 
             <ThemedText style={{ lineHeight: 80 }}>
-                {isSlugInCardList(props.card_slug, player?.card_hand) && <MaterialCommunityIcons name="reload-alert" size={80} />}
-                {isSlugInCardList(props.card_slug, player?.card_retry) && <MaterialCommunityIcons name="reload" size={80} />}
+                {isSlugInCardList(props.card.slug, player?.card_hand) && <MaterialCommunityIcons name="reload-alert" size={80} />}
+                {isSlugInCardList(props.card.slug, player?.card_retry) && <MaterialCommunityIcons name="reload" size={80} />}
             </ThemedText>
         </ThemedView>
     )
 }
 
 function useCardRetryFunction(props: {
-    card_slug: string,
+    card: CardProps,
     player_card_retry: CardProps[],
     player_card_hand: CardProps[]
 }) {
     var hand_cards: CardProps[] = []
     var retry_cards: CardProps[] = []
 
-    if (isSlugInCardList(props.card_slug, props.player_card_hand)) {
+    if (isSlugInCardList(props.card.slug, props.player_card_hand)) {
         props.player_card_hand.map(card => {
-            if (card.slug == props.card_slug) {
+            if (card.slug == props.card.slug) {
                 retry_cards = props.player_card_retry ? [...props.player_card_retry, card] : [card]
             } else {
                 hand_cards = [...hand_cards, card]
@@ -100,9 +101,9 @@ function useCardRetryFunction(props: {
         })
 
     }
-    else if (isSlugInCardList(props.card_slug, props.player_card_retry)) {
+    else if (isSlugInCardList(props.card.slug, props.player_card_retry)) {
         props.player_card_retry.map(card => {
-            if (card.slug == props.card_slug) {
+            if (card.slug == props.card.slug) {
                 hand_cards = [...props.player_card_hand, card]
             } else {
                 retry_cards = [...retry_cards, card]
