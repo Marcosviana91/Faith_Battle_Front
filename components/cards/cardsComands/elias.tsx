@@ -7,8 +7,7 @@ import { RootReducer } from '@/store';
 import { ThemedModal } from '@/components/themed/ThemedModal';
 
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
-import {IconsContainer} from '@/components/player_user/playerIcon';
-import { ThemedText } from '@/components/themed/ThemedText';
+import {SelectEnemyIconsContainer} from '@/components/player_user/playerIcon';
 import { SubCardsContainer } from '@/components/cards/subContainer';
 import useWebSocket from 'react-use-websocket';
 import { URI } from '@/store/server_urls';
@@ -31,7 +30,7 @@ export function OnInvoke(props: { in_game_id: string }) {
 
     return (
         <ThemedModal title='Escolha um oponente e um uma carta.' hideCloseButton closeModal={() => { }} >
-            <IconsContainer />
+            <SelectEnemyIconsContainer matchData={matchData} hideCurrentPlayer player_id={player?.id} />
             {/* Cartas no campo de batalha */}
             <SubCardsContainer
                 cards={cardList}
