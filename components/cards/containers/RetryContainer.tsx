@@ -76,9 +76,7 @@ export default function RetryContainer() {
                     <DefaultContainer
                         card_size="medium"
                         cards={player!.card_hand!}
-                        card_action_component={[<CardRetry card={selectedCard!} />, <View style={{ borderRadius: 8, marginTop: 8 }}>
-                            <MaterialCommunityIcons name="block-helper" size={80} color="black" />
-                        </View>]}
+                        card_action_component={[<CardRetry card={selectedCard!} />]}
                         card_action_function={actionFunction}
                         get_selected_card={(card) => {
                             setSelectedCard(card)
