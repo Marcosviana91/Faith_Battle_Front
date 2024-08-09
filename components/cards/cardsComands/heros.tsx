@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import { Pressable, View, Text } from "react-native"
 
@@ -20,6 +20,8 @@ import { WebSocketHook } from "react-use-websocket/dist/lib/types";
 type OnInvokeProps = {
     card: CardProps
 }
+const CARDS_ONINVOKE_LIST = ['elias', 'ester', 'maria']
+var render = <></>
 
 export function OnInvoke(props: OnInvokeProps) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
@@ -27,9 +29,13 @@ export function OnInvoke(props: OnInvokeProps) {
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
     const [isCustomInvoke, setCustomInvoke] = useState(false)
 
-    const CARDS_ONINVOKE_LIST = ['elias', 'ester', 'maria']
-    var render = <></>
+    useEffect(() => {
+        if (CARDS_ONINVOKE_LIST.find((nome) => nome == props.card.slug)) {
+            console.log("Chamar OnInvoke de " + props.card.slug)
+            setCustomInvoke(true)
+        }
 
+    },[])
 
     switch (CARDS_ONINVOKE_LIST.find((nome) => nome == props.card.slug)) {
         case 'elias':
@@ -63,26 +69,25 @@ export function OnInvoke(props: OnInvokeProps) {
 }
 
 export function OnInvokeDefaultAction(props: { card: CardProps, matchData: MatchApiProps, player: PlayersInMatchApiProps, web_socket: WebSocketHook<unknown, MessageEvent<any> | null> }) {
+    if (CARDS_ONINVOKE_LIST.find((nome) => nome == props.card.slug)) {
+        return
+    }
     console.log("CHAMANDO OnInvokeDefaultAction")
+    props.web_socket.sendJsonMessage({
+        "data_type": "match_move",
+        "user_data": {
+            "id": props.player?.id
+        },
+        "room_data": {
+            "id": props.matchData?.id
+        },
+        "match_move": {
+            "match_id": props.matchData?.id,
+            "round_match": props.matchData?.round_match,
+            "player_move": props.player?.id,
+            "card_id": props.card.in_game_id,
+            "move_type": "move_to_prepare"
+        }
+    })
 
-    // if (CARDS_ONINVOKE_LIST.find((nome) => nome == props.card.slug)) {
-    //     // setCustomInvoke(true)
-    // } else {
-        props.web_socket.sendJsonMessage({
-            "data_type": "match_move",
-            "user_data": {
-                "id": props.player?.id
-            },
-            "room_data": {
-                "id": props.matchData?.id
-            },
-            "match_move": {
-                "match_id": props.matchData?.id,
-                "round_match": props.matchData?.round_match,
-                "player_move": props.player?.id,
-                "card_id": props.card.in_game_id,
-                "move_type": "move_to_prepare"
-            }
-        })
-    // }
 }
