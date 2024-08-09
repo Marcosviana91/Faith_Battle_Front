@@ -210,6 +210,7 @@ export function ShowFightersIconsContainer(props: ContainerProps) {
 }
 
 export function SelectEnemyIconsContainer(props: ContainerProps) {
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     return (
         <ScrollView horizontal contentContainerStyle={{
             flex: 1,
@@ -218,7 +219,7 @@ export function SelectEnemyIconsContainer(props: ContainerProps) {
             paddingHorizontal: 8,
         }}>
             {props.matchData?.players_in_match?.map((_player) => {
-                if (_player.id === props.player_id) {
+                if (_player.id === player?.id) {
                     return null
                 }
                 return (
