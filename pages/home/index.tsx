@@ -21,7 +21,15 @@ export default function HomeScreen() {
 
 
     const WS = useWebSocket(ws_url, {
-        share: true, onOpen: () => {
+        share: true,
+        onOpen: () => {
+            console.log({
+                "data_type": "create_connection",
+                "player_data": {
+                    "id": userData?.id,
+                    "token": userData?.token
+                }
+            })
             WS.sendJsonMessage(
                 {
                     "data_type": "create_connection",
@@ -31,7 +39,10 @@ export default function HomeScreen() {
                     }
                 }
             )
-        }
+        },
+        shouldReconnect: () => Boolean(userData?.token),
+        reconnectInterval: 50,
+        retryOnError: true,
     });
 
     useEffect(() => {
@@ -70,7 +81,7 @@ export default function HomeScreen() {
             else if (data.data_type === "match_update") {
                 console.log('match_update')
                 dispatch(setRoom(undefined))
-                dispatch(setMatch({...data.match_data!, player_focus_id: data.match_data?.player_focus_id}))
+                dispatch(setMatch({ ...data.match_data!, player_focus_id: data.match_data?.player_focus_id }))
             }
         }
     }, [WS.lastJsonMessage])
