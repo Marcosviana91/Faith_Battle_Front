@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native';
 
@@ -7,9 +7,9 @@ import { RootReducer } from '@/store';
 import Home from '@/pages/home/home';
 import Login from '@/pages/home/login';
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
-import { setRoom, setPlayer, leaveMatch, setMatch } from "@/store/reducers/matchReducer"
+import useAppWebSocket from '@/hooks/useAppWebSocket';
+
+import { setRoom, setPlayer, leaveMatch, setMatch, setCurrentSkill } from "@/store/reducers/matchReducer"
 
 export default function HomeScreen() {
     const dispatch = useDispatch()
@@ -17,33 +17,9 @@ export default function HomeScreen() {
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const roomData = useSelector((state: RootReducer) => state.matchReducer.room_data)
-    const [ws_url, setWsUrl] = useState("ws://localhost")
 
 
-    const WS = useWebSocket(ws_url, {
-        share: true,
-        onOpen: () => {
-            console.log({
-                "data_type": "create_connection",
-                "player_data": {
-                    "id": userData?.id,
-                    "token": userData?.token
-                }
-            })
-            WS.sendJsonMessage(
-                {
-                    "data_type": "create_connection",
-                    "player_data": {
-                        "id": userData?.id,
-                        "token": userData?.token
-                    }
-                }
-            )
-        },
-        shouldReconnect: () => Boolean(userData?.token),
-        reconnectInterval: 50,
-        retryOnError: true,
-    });
+    const WS = useAppWebSocket()
 
     useEffect(() => {
         if (userData) {
@@ -53,14 +29,6 @@ export default function HomeScreen() {
         }
     }, [matchData, roomData])
 
-    useEffect(() => {
-        if (userData) {
-            setWsUrl(`ws://${URI}/ws/`)
-        }
-        else {
-            setWsUrl('ws://localhost')
-        }
-    }, [userData])
 
     useEffect(() => {
         if (WS.lastJsonMessage) {
@@ -82,6 +50,11 @@ export default function HomeScreen() {
                 console.log('match_update')
                 dispatch(setRoom(undefined))
                 dispatch(setMatch({ ...data.match_data!, player_focus_id: data.match_data?.player_focus_id }))
+            }
+            else if (data.data_type === "card_skill") {
+                console.log('card_skill')
+                dispatch(setCurrentSkill(data.card_data!))
+
             }
         }
     }, [WS.lastJsonMessage])

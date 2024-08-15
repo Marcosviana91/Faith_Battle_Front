@@ -4,14 +4,13 @@ import { RootReducer } from "@/store";
 import { View, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
-import { useEffect } from "react";
+import useAppWebSocket from '@/hooks/useAppWebSocket';
+
 
 
 export function ConnectionStatus() {
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+    const WS = useAppWebSocket();
 
     const connectionStatusColor = [
         '#030',
@@ -21,9 +20,6 @@ export function ConnectionStatus() {
         '#777',
     ]
 
-    useEffect(()=>{
-        console.log(WS.readyState)
-    },[WS.readyState])
 
     const style = StyleSheet.create({
         point: {
@@ -31,6 +27,8 @@ export function ConnectionStatus() {
             height: 10,
             borderRadius: 5,
             position: "absolute",
+            top: 10,
+            right: 10,
             zIndex: 999,
             backgroundColor: connectionStatusColor[WS.readyState]
         },
@@ -43,7 +41,7 @@ export function ConnectionStatus() {
 
     if (userData) {
         return (
-            <View style={[style.point, WS.readyState==3&&style.not_connected]} />
+            <View style={[style.point, WS.readyState == 3 && style.not_connected]} />
         )
     }
 }
