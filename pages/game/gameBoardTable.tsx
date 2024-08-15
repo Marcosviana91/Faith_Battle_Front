@@ -13,17 +13,35 @@ import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
 import { usePlayerData } from '@/hooks/usePlayerData';
 import HandContainer from '@/components/cards/containers/HandContainer';
+import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
+import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
+import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
 
 
 export default function GameBoardTable() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const card_skill = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)
     const player_focus_id = matchData?.player_focus_id
     const fight_camp = matchData?.fight_camp
 
     const player_data = usePlayerData(player?.id!)
     const player_focus_data = usePlayerData(player_focus_id!)
 
+    function OnInvoke(props: {slug:string}) {
+        switch (props.slug) {
+            case 'ester':
+                return <EsterOnInvoke />
+            case 'maria':
+                return <MariaOnInvoke />
+        
+            case 'elias':
+                return <EliasOnInvoke />
+        
+            default:
+                break;
+        }
+    }
 
     return (
         <>
@@ -33,7 +51,7 @@ export default function GameBoardTable() {
                     {/* Aplicar DRY */}
                     {/* Icones dos jogadores */}
                     {!fight_camp &&
-                            <IconsContainer player_id={player?.id} matchData={matchData} />
+                        <IconsContainer player_id={player?.id} matchData={matchData} />
                     }
                     {/* Fight Camp */}
                     <FightCamp />
@@ -52,6 +70,11 @@ export default function GameBoardTable() {
                     </View>
                 </ThemedView>
             }
+            {/* Modal das habilidades das cartas */}
+            {card_skill && card_skill.slug !== '' &&
+                <OnInvoke slug={card_skill.slug} />
+            }
+            {/* Tela de Statisticas // falta fazer */}
             {matchData?.end_match &&
                 <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                     <TopBar />

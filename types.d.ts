@@ -46,7 +46,11 @@ declare type MatchReducerProps = {
     player_data?: PlayersInMatchApiProps,
     player_match_settings?: {
         player_view_id?: number,
-        cards_to_fight: CardProps[]
+        cards_to_fight: CardProps[],
+        current_skill: {
+            slug: string,
+            deck: CardProps[]
+        }
     },
 }
 
