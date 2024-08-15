@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View, DimensionValue } from "react-native";
 
 type Props = {
     values: String[]
     onPress?: (arg0: any) => void;
     disabled?: boolean
+    height?: DimensionValue
 }
 
 export default function ToggleButton(props: Props) {
     const [activeTab, setActiveTab] = useState(0);
     return (
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, {height: props.height}]}>
             {props.values.map((button, _index, _array) => {
                 var buttonStyle = {}
                 var buttonActive = {}
@@ -46,7 +47,6 @@ export default function ToggleButton(props: Props) {
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        height: 50,
         width: '100%',
         flex: 1,
         flexDirection: "row",
