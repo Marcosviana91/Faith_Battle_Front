@@ -16,6 +16,9 @@ import HandContainer from '@/components/cards/containers/HandContainer';
 import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
 import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
 import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
+import { OnInvoke as FogoDoCeuOnInvoke } from '@/components/cards/cardsComands/fogo_do_ceu';
+// import { OnInvoke as ProtecaoDivinaOnInvoke } from '@/components/cards/cardsComands/protecao_divina';
+// import { OnInvoke as SarcaArdenteOnInvoke } from '@/components/cards/cardsComands/sarca_ardente';
 
 
 export default function GameBoardTable() {
@@ -34,10 +37,14 @@ export default function GameBoardTable() {
                 return <EsterOnInvoke />
             case 'maria':
                 return <MariaOnInvoke />
-        
             case 'elias':
                 return <EliasOnInvoke />
-        
+            case 'fogo-do-ceu':
+                return <FogoDoCeuOnInvoke />
+            // case 'protecao-divina':
+            //     return <ProtecaoDivinaOnInvoke />
+            // case 'sarca-ardente':
+            //     return <SarcaArdenteOnInvoke />
             default:
                 break;
         }

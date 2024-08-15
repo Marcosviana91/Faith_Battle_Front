@@ -16,26 +16,28 @@ import { setCurrentSkill } from '@/store/reducers/matchReducer';
 export function OnInvoke() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_focus = matchData?.player_focus_id
     const [selectedCard, setSelectedCard] = useState<number>()
+    const [selectedPlayerId, setSelectedPalyerId] = useState<number>()
 
-    const player_data = matchData?.players_in_match?.find(_player => _player.id === player?.id)
-    const card_id = player_data?.card_prepare_camp![player_data?.card_prepare_camp?.length! - 1].in_game_id!
-    console.log(card_id)
+    const player_data = usePlayerData(player?.id!)
+    const player_target_data = usePlayerData(selectedPlayerId!)
 
-    const cardList = usePlayerData(player_focus!).card_battle_camp
+    const elias_id = player_data?.card_prepare_camp![player_data?.card_prepare_camp?.length! - 1].in_game_id!
+    const card_target_id = player_target_data?.card_battle_camp![selectedCard!].in_game_id!
+    console.log(elias_id)
 
     return (
         <ThemedModal title='Escolha um oponente e um uma carta.' hideCloseButton closeModal={() => { }} >
-            <SelectEnemyIconsContainer matchData={matchData} hideCurrentPlayer player_id={player?.id} />
+            <SelectEnemyIconsContainer matchData={matchData} hideCurrentPlayer player_id={player?.id} get_selected_player_id={setSelectedPalyerId} />
             {/* Cartas no campo de batalha */}
-            {matchData?.player_focus_id !== player?.id &&
+            {selectedPlayerId !== player?.id &&
                 <SubCardsContainer
-                    cards={cardList}
+                    cards={player_target_data.card_battle_camp}
                     cards_action={
                         <CardDestroy
-                            card={card_id}
-                            card_target={cardList![selectedCard!] ? cardList![selectedCard!].in_game_id as string : ''}
+                            elias_id={elias_id}
+                            card_target={card_target_id}
+                            player_id_target={selectedPlayerId!}
                         />
                     }
                     get_selected_card={setSelectedCard}
@@ -47,14 +49,14 @@ export function OnInvoke() {
 
 type Props = {
     onReturn?: () => void
-    card: string
+    elias_id: string
     card_target: string
+    player_id_target: number
 }
 
 export function CardDestroy(props: Props) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_focus = matchData?.player_focus_id
     const WS = useAppWebSocket();
     const dispatch = useDispatch()
 
@@ -67,7 +69,7 @@ export function CardDestroy(props: Props) {
         <Pressable
             style={{ backgroundColor: "red" }}
             onPress={() => {
-                console.log(props.card_target + " destriur " + props.card)
+                console.log(props.elias_id + " destriur " + props.card_target)
                 WS.sendJsonMessage({
                     "data_type": "match_move",
                     "user_data": {
@@ -80,14 +82,14 @@ export function CardDestroy(props: Props) {
                         "match_id": matchData?.id,
                         "round_match": matchData?.round_match,
                         "player_move": player?.id,
-                        "card_id": props.card,//Elias
+                        "card_id": props.elias_id,//Elias
                         "move_type": "card_skill",
-                        "player_target": player_focus,
+                        "player_target": props.player_id_target,
                         "card_target": props.card_target, //Carta para destruir
                     }
                 })
                 dispatch(setCurrentSkill(undefined))
-                if (props.onReturn) { props.onReturn() }
+                // if (props.onReturn) { props.onReturn() }
             }}
         >
             <FontAwesome6 name="explosion" size={80} color="black" />

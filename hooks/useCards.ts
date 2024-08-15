@@ -222,6 +222,17 @@ export function getCardInList(card_id: string | undefined, card_list: CardProps[
     })
     return card
 }
+
+export function getCardInListBySlug(card_slug: string | undefined, card_list: CardProps[] | undefined): CardProps | undefined {
+    let card = undefined;
+    if (card_slug == undefined || card_list == undefined) { return card }
+    card_list.map(_card => {
+        if (_card.slug == card_slug) {
+            card = _card
+        }
+    })
+    return card
+}
 export function isCardInList(card_id: string | undefined, card_list: CardProps[] | undefined) {
     let card_founded = false;
     if (card_id == undefined || card_list == undefined) { return card_founded }

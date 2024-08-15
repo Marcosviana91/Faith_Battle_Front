@@ -19,6 +19,7 @@ export function OnInvoke(props: OnInvokeProps) {
 }
 
 export function OnInvokeDefaultAction(props: { card: CardProps, matchData: MatchApiProps, player: PlayersInMatchApiProps, web_socket: WebSocketHook<unknown, MessageEvent<any> | null> }) {
+    console.log("Invocou heroi " + props.card.in_game_id)
     props.web_socket.sendJsonMessage({
         "data_type": "match_move",
         "user_data": {
