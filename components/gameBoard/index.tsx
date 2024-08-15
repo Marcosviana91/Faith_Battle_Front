@@ -36,16 +36,16 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
         },
         zonaPreparacao: {
             position: "absolute",
-            bottom: windowHeight * 0.03,
+            bottom: windowHeight * 0.026,
             left: windowWidth * 0.015,
-            width: windowWidth * 0.62,
-            height: windowHeight * 0.117,
+            maxWidth: '80%',
+            height: windowHeight * 0.122,
         },
         zonaBatalha: {
             position: "absolute",
-            bottom: windowHeight * 0.16,
+            bottom: windowHeight * 0.162,
             left: windowWidth * 0.015,
-            width: windowWidth * 0.965,
+            maxWidth: '96%',
             height: windowHeight * 0.125,
         },
     })
