@@ -1,9 +1,8 @@
 import { ThemedText } from "@/components/themed/ThemedText"
 import { RootReducer } from "@/store"
-import { View } from "react-native"
 import { useSelector } from "react-redux"
 import DefaultContainer from "./DefaultContainer"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import useWebSocket from "react-use-websocket"
 import { URI } from "@/store/server_urls"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
@@ -35,18 +34,18 @@ export default function PrepareContainer(props: { cards: CardProps[] }) {
         <DefaultContainer
             card_size="minimum"
             cards={props.cards}
-            card_action_component={[<OnMoveToPrepare />]}
+            card_action_component={[<OnMoveToPrepare card={selectedCard!} />]}
             card_action_function={actionFunction}
             get_selected_card={setSelectedCard}
         />
     )
 }
 
-function OnMoveToPrepare() {
+function OnMoveToPrepare(props: {card: CardProps}) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
 
-    if (matchData.player_turn !== player.id) {
+    if (matchData.player_turn !== player.id || props.card.status !== 'ready') {
         return null
     }
     return (
@@ -67,7 +66,7 @@ type Props = {
 
 export function OnMoveToPrepareFunction(props: Props) {
 
-    if (props.matchData?.player_turn !== props.player?.id) {
+    if (props.matchData?.player_turn !== props.player?.id || props.card.status !== 'ready') {
         return null
     }
 

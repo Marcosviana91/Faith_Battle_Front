@@ -2,20 +2,18 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, Pressable } from "react-native";
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
 
 import { ThemedModal } from '@/components/themed/ThemedModal';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ShowFightersIconsContainer } from "@/components/player_user/playerIcon";
-import { CardsContainer } from "@/components/cards/";
+import FightContainer from '../cards/containers/FightContainer';
 import BasicButton from '@/components/button/basic';
 import { clearCardsToFight, setCardsToFight } from '@/store/reducers/matchReducer';
+import useAppWebSocket from '@/hooks/useAppWebSocket';
 
 
 export default function FightCamp() {
@@ -25,7 +23,7 @@ export default function FightCamp() {
     const fight_camp = matchData?.fight_camp
     const player_match_settings = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)
 
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+    const WS = useAppWebSocket();
 
     const [showModal, setShowModal] = useState(true)
 
@@ -72,11 +70,12 @@ export default function FightCamp() {
                         visible={showModal}
                     >
                         {/* Header */}
-                            <ShowFightersIconsContainer matchData={matchData} />
+                        <ShowFightersIconsContainer matchData={matchData} />
                         {/* Botão Lutar */}
                         {(matchData?.player_turn === player?.id) && fight_camp && fight_camp.fight_stage == 1 &&
                             <View style={{ height: 50, width: 100 }}>
                                 <BasicButton
+                                    height={50}
                                     onPress={() => {
                                         console.log("Lutar")
                                         const data: APIResponseProps = {
@@ -105,6 +104,7 @@ export default function FightCamp() {
                         {fight_camp && fight_camp.fight_stage === 0 && fight_camp.player_defense_id == player?.id &&
                             <View style={{ height: 50, width: 100 }}>
                                 <BasicButton
+                                    height={50}
                                     onPress={() => {
                                         console.log("Defender")
                                         const data: APIResponseProps = {
@@ -133,19 +133,16 @@ export default function FightCamp() {
                             </View>
                         }
                         <View style={{ width: "100%" }}>
+                            <FightContainer attacking={fight_camp.fight_stage === 0 && player?.id === fight_camp.player_defense_id} cards={fight_camp.attack_cards!} />
                             {fight_camp.fight_stage === 0
-                                ? <CardsContainer size="small" zone="fighting" cards={fight_camp.attack_cards} />
-                                : <CardsContainer size="small" zone="gallery" cards={fight_camp.attack_cards} />
-                            }
-                            {fight_camp.fight_stage === 0
-                                ? <CardsContainer size="small" cards={player_match_settings?.cards_to_fight!} />
-                                : <CardsContainer size="small" zone='gallery' cards={fight_camp.defense_cards} />
+                                ? <FightContainer cards={player_match_settings?.cards_to_fight!} />
+                                : <FightContainer cards={fight_camp.defense_cards!} />
                             }
                         </View>
                         {player?.id === fight_camp.player_defense_id &&
                             <>
                                 {/* Cartas da Mão do Jogador - Filtrar cartas jogáveis (milagres, pacados, ect) */}
-                                {/* <CardsContainer size="small" zone='hand' cards={player!.card_hand} /> */}
+                                {/* <FightContainer zone='hand' cards={player!.card_hand} /> */}
                             </>
                         }
                     </ThemedModal>

@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View, DimensionValue } from "react-native";
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from "react";
 
@@ -8,7 +8,7 @@ type Props = {
     disabled?: boolean;
     lightColor?: string;
     darkColor?: string;
-    height?: number;
+    height?: DimensionValue | undefined;
 }
 
 export default function BasicButton(props: Props) {

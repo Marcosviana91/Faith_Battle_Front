@@ -3,7 +3,8 @@ import { ThemedView } from "@/components/themed/ThemedView";
 import { isCardInList, useCards } from "@/hooks/useCards";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { RootReducer } from "@/store";
-import { useEffect, useState } from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useState } from "react";
 import { View, ScrollView, StyleSheet, Pressable, Modal, Image } from "react-native"
 import { useSelector } from "react-redux";
 
@@ -11,9 +12,10 @@ import { useSelector } from "react-redux";
 type DefaultContainerProps = {
     cards: CardProps[],
     card_size?: "normal" | "medium" | "small" | "minimum";
-    card_action_function: (props: { card: CardProps, action_index: number }) => void;
+    card_action_function?: (props: { card: CardProps, action_index: number }) => void;
     card_action_component: React.ReactNode[];
     get_selected_card?: (card: CardProps) => void;
+    show_action_in_bottom?: boolean;
 
 }
 
@@ -47,21 +49,25 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                     <ThemedView
                         style={{ flex: 1, maxWidth: windowWidth }}
                     >
-                        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", flexDirection: props.show_action_in_bottom ? "column-reverse" : 'column' }}>
                             {/* Card Commands */}
-                            <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                {props.card_action_component.map((component, _index) => (
-                                    <Pressable
-                                        key={_index}
-                                        style={{ marginBottom: 24 }}
-                                        onPress={() => {
-                                            props.card_action_function({ card: selectedCard, action_index: _index })
-                                            setShowModal(false)
-                                        }}>
-                                        {component}
-                                    </Pressable>
-                                ))}
-                            </View>
+                            {selectedCard.status === 'ready' &&
+                                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                    {props.card_action_component.map((component, _index) => (
+                                        <Pressable
+                                            key={_index}
+                                            style={{ marginBottom: 24 }}
+                                            onPress={() => {
+                                                if (props.card_action_function) {
+                                                    props.card_action_function({ card: selectedCard, action_index: _index })
+                                                }
+                                                setShowModal(false)
+                                            }}>
+                                            {component}
+                                        </Pressable>
+                                    ))}
+                                </View>
+                            }
                             {/* A carta em si */}
                             <Pressable
                                 onPress={() => {
@@ -73,17 +79,16 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     style={[{ width: "100%", height: "100%" }]}
                                     source={useCards({ card_slug: selectedCard.slug })}
                                 />
-
-                                {/* {props.card?.in_game_id &&
-                                <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
-                                    <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card?.attack_point}</ThemedText>
-                                </View>
-                            }
-                            {props.card?.in_game_id &&
-                                <View style={{ backgroundColor: "red", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, right: 24, alignItems: "center", justifyContent: "center" }}>
-                                    <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card?.defense_points}</ThemedText>
-                                </View>
-                            } */}
+                                {selectedCard.in_game_id &&
+                                    <View>
+                                        <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
+                                            <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{selectedCard.attack_point}</ThemedText>
+                                        </View>
+                                        <View style={{ backgroundColor: "red", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, right: 24, alignItems: "center", justifyContent: "center" }}>
+                                            <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{selectedCard.defense_points}</ThemedText>
+                                        </View>
+                                    </View>
+                                }
                             </Pressable>
                         </View>
                     </ThemedView>
@@ -313,7 +318,12 @@ export function Card(props: Props) {
     }
 
     return (
-        <View style={{ alignSelf: isCardInList(props.card?.in_game_id!, cards_to_fight!) ? "flex-start" : "center" }}>
+        <View>
+            {isCardInList(props.card?.in_game_id!, cards_to_fight!) &&
+                <ThemedText style={{ position: 'absolute', zIndex: 1, lineHeight: 80 }}>
+                    <MaterialCommunityIcons name="sword" size={80} color="#000000" />
+                </ThemedText>
+            }
             <Image
                 resizeMode="stretch"
                 style={[cardSize, borderColor]}

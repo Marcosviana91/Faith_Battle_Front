@@ -1,7 +1,6 @@
 import BasicButton from "@/components/button/basic"
 import { SelectEnemyIconsContainer } from "@/components/player_user/playerIcon"
 import { ThemedModal } from "@/components/themed/ThemedModal"
-import { ThemedText } from "@/components/themed/ThemedText"
 import { RootReducer } from "@/store"
 import { toggleCardsToFight } from "@/store/reducers/matchReducer"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
@@ -50,6 +49,7 @@ export function DaviToggleAttack(props: Props) {
                             let __temp_card = { ...props.card }
                             __temp_card.skill_focus_player_id = matchData?.player_focus_id
                             dispatch(toggleCardsToFight(__temp_card))
+                            setShowModal(false)
                             if (props.onPress) { props.onPress() }
                         }}
                     >OK</BasicButton>
