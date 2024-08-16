@@ -13,17 +13,17 @@ import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
 import { usePlayerData } from '@/hooks/usePlayerData';
 import HandContainer from '@/components/cards/containers/HandContainer';
-import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
-import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
 import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
+import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
 import { OnAttack as JacoOnAttack } from '@/components/cards/cardsComands/jaco';
+import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
 import { OnInvoke as MoisesOnInvoke } from '@/components/cards/cardsComands/moises';
-import { OnInvoke as FogoDoCeuOnInvoke } from '@/components/cards/cardsComands/fogo_do_ceu';
 import { OnInvoke as DiluvioOnInvoke } from '@/components/cards/cardsComands/diluvio';
+import { OnInvoke as FogoDoCeuOnInvoke } from '@/components/cards/cardsComands/fogo_do_ceu';
 import { OnInvoke as RestauracaoDeFeOnInvoke } from '@/components/cards/cardsComands/restauracao_de_fe';
 import { OnInvoke as SabedoriaDeSalomaoOnInvoke } from '@/components/cards/cardsComands/sabedoria_de_salomao';
+import { OnInvoke as SarcaArdenteOnInvoke } from '@/components/cards/cardsComands/sarca_ardente';
 // import { OnInvoke as ProtecaoDivinaOnInvoke } from '@/components/cards/cardsComands/protecao_divina';
-// import { OnInvoke as SarcaArdenteOnInvoke } from '@/components/cards/cardsComands/sarca_ardente';
 
 
 export default function GameBoardTable() {
@@ -58,8 +58,8 @@ export default function GameBoardTable() {
                 return <SabedoriaDeSalomaoOnInvoke />
             // case 'protecao-divina':
             //     return <ProtecaoDivinaOnInvoke />
-            // case 'sarca-ardente':
-            //     return <SarcaArdenteOnInvoke />
+            case 'sarca-ardente':
+                return <SarcaArdenteOnInvoke />
             default:
                 break;
         }

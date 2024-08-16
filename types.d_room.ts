@@ -21,6 +21,7 @@ declare type MoveProps = {
     card_id: string;
     move_type: string // move_to_prepare, move_to_battle, attack, defense, attach, dettach, active, passive
     player_target: number;
+    player_target2: number;
     card_target?: string
 }
 

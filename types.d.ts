@@ -38,6 +38,7 @@ declare type APIMoveProps = {
     card_id?: number;
     move_type?: string
     player_target?: number
+    player_target2?: number
     card_target?: string
     card_list?: CardProps[]
 }
