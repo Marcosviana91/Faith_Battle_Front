@@ -1,13 +1,17 @@
+import { useSelector } from 'react-redux'
+import { RootReducer } from '@/store';
+
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { SimpleCard } from "@/components/cards/containers/DefaultContainer";
 import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { isSlugInCardList } from '@/hooks/useCards';
 
 // import { card_list } from "@/components/cards/index";
 
-const card_hero_list = [
+const card_hero_list: CardProps[] = [
     { "slug": 'abraao' },
     { "slug": 'adao' },
     { "slug": 'daniel' },
@@ -24,7 +28,7 @@ const card_hero_list = [
     { "slug": "salomao" },
     { "slug": "sansao" },
 ]
-const card_miracle_list = [
+const card_miracle_list: CardProps[] = [
     { "slug": 'cordeiro-de-deus' },
     { "slug": 'diluvio' },
     { "slug": 'fogo-do-ceu' },
@@ -38,7 +42,7 @@ const card_miracle_list = [
     { "slug": 'sabedoria-de-salomao' },
     { "slug": 'sarca-ardente' },
 ]
-const card_artfacts_list = [
+const card_artfacts_list: CardProps[] = [
     { "slug": 'arca-da-alianca' },
     { "slug": 'arca-de-noe' },
     { "slug": 'botas-do-evangelho' },
@@ -50,7 +54,7 @@ const card_artfacts_list = [
     { "slug": 'espada-do-espirito' },
     { "slug": 'os-10-mandamentos' },
 ]
-const card_sins_list = [
+const card_sins_list: CardProps[] = [
     { "slug": 'fruto-proibido' },
     { "slug": 'idolatria' },
     { "slug": 'traicao' },
@@ -80,7 +84,10 @@ const ALL_CARDS = [
 ]
 
 export default function CardScreen() {
+    const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const [indexToShow, setIndexToShow] = useState(0)
+
+    const cards_available = userData?.available_cards
 
     return (
         <ThemedView style={{ height: '100%' }}>
@@ -104,9 +111,9 @@ export default function CardScreen() {
                     </Pressable>
                     {indexToShow == _index &&
                         <ScrollView>
-                            <View style={[styles.container, {backgroundColor:card_list.color}]}>
+                            <View style={[styles.container, { backgroundColor: card_list.color }]}>
                                 {card_list.list.map((card_slug, index) => (
-                                    <SimpleCard key={index} size="medium" card={card_slug} />
+                                    <SimpleCard key={index} size="medium" card={card_slug} unavailable={!isSlugInCardList(card_slug.slug, cards_available)} />
                                 ))}
                             </View>
                         </ScrollView>

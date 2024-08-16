@@ -17,7 +17,7 @@ type DefaultContainerProps = {
     get_selected_card?: (card: CardProps) => void;
     show_action_in_bottom?: boolean;
     show_modal?: boolean;
-    set_show_modal?: (show_modal:boolean)=>void;
+    set_show_modal?: (show_modal: boolean) => void;
 
 }
 
@@ -86,7 +86,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     style={[{ width: "100%", height: "100%" }]}
                                     source={useCards({ card_slug: selectedCard.slug })}
                                 />
-                                {selectedCard.in_game_id  && (selectedCard.card_type === 'hero' || selectedCard.card_type === 'legendary' ) &&
+                                {selectedCard.in_game_id && (selectedCard.card_type === 'hero' || selectedCard.card_type === 'legendary') &&
                                     <View>
                                         <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
                                             <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{selectedCard.attack_point}</ThemedText>
@@ -107,6 +107,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
 
 
 type SimpleCardProps = {
+    unavailable?: boolean,
     size?: "normal" | "medium" | "small" | "minimum";
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
 }
@@ -204,6 +205,8 @@ export function SimpleCard(props: SimpleCardProps) {
                         setShowModal(!showModal)
                     }}
                 >
+                    {/* Overlay para cartas não disponíveis */}
+                    {props.unavailable && <View style={{ width: '100%', height: '100%', backgroundColor: '#000a', position: 'absolute', zIndex: 1, borderRadius: 10 }} />}
                     <Image
                         resizeMode="stretch"
                         style={[cardSize, borderColor]}
@@ -332,7 +335,7 @@ export function Card(props: Props) {
                 </ThemedText>
             }
             {/* Overlay para cartas não ready */}
-            {props.card?.status!=='ready' && <View style={{width:'100%', height:'100%', backgroundColor:'#000a', position:'absolute', zIndex:1, borderRadius:10}} />}
+            {props.card?.status !== 'ready' && <View style={{ width: '100%', height: '100%', backgroundColor: '#000a', position: 'absolute', zIndex: 1, borderRadius: 10 }} />}
             <Image
                 resizeMode="stretch"
                 style={[cardSize, borderColor]}
