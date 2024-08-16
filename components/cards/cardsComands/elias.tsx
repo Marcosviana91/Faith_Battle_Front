@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { Pressable } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
 import { ThemedModal } from '@/components/themed/ThemedModal';
 
-import { FontAwesome6 } from '@expo/vector-icons';
 import { SelectEnemyIconsContainer } from '@/components/player_user/playerIcon';
 import { SubCardsContainer } from '@/components/cards/containers/subContainer';
 import { usePlayerData } from '@/hooks/usePlayerData';
