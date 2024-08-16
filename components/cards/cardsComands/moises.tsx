@@ -17,20 +17,24 @@ import { ThemedText } from '@/components/themed/ThemedText';
 export function OnInvoke() {
     const cardList = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.deck
     const cardListSea = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.forgotten_sea
-    
+
     const dispatch = useDispatch()
     const [selectedOption, setSelectedOption] = useState<number>(0)
     const [selectedCard, setSelectedCard] = useState<number>()
 
-    if (cardList?.length! < 1) {
-        setSelectedOption(1)
-    }
+    useEffect(() => {
+        if (cardList?.length! < 1) {
+            setSelectedOption(1)
+        }
+    }, [])
+    
+    
 
     if (cardListSea!.length < 1 && cardList!.length < 1) {
         return (
             <ThemedModal title='Escolha um milagre.' closeModal={() => { dispatch(setCurrentSkill(undefined)) }} >
                 <ThemedText>Sem cartas de milagre</ThemedText>
-        </ThemedModal>
+            </ThemedModal>
         )
     }
 
@@ -39,7 +43,7 @@ export function OnInvoke() {
             <ToggleButton disabled={cardListSea!.length < 1 || cardList!.length < 1} height={100} values={['DECK', 'MAR']} onPress={setSelectedOption} />
             <View style={{ width: "100%" }}>
                 <SubCardsContainer
-                    cards={selectedOption===0 ?cardList : cardListSea}
+                    cards={selectedOption === 0 ? cardList : cardListSea}
                     cards_action={<ChooseCard list={cardList as []} selectedCard={selectedCard} />}
                     get_selected_card={(ind) => { setSelectedCard(ind) }}
                 />
@@ -59,8 +63,6 @@ function ChooseCard(props: ChangeCardOrderProps) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const WS = useAppWebSocket()
     const dispatch = useDispatch()
-
-    useEffect(() => { console.log(props.list![props.selectedCard!]) }, [])
 
     return (
         <>
