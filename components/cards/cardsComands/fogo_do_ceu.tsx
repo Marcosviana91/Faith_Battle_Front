@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Pressable } from 'react-native';
+import { useState, useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
@@ -27,12 +26,20 @@ export function OnInvoke() {
     const WS = useAppWebSocket();
     const dispatch = useDispatch()
 
-    let cards_whitout_noe: CardProps[] = [] 
-    player_target_data.card_battle_camp?.map((_card) => {
-        if (_card.slug !== 'noe') {
-            cards_whitout_noe.push( _card)
+    const [cards_whitout_noe, set_cards_whitout_noe] = useState<CardProps[]>([])
+
+    useEffect(() => {
+        if (player_target_data) {
+            let __temp_array:CardProps[]= []
+
+            player_target_data.card_battle_camp?.map((_card) => {
+                if (_card.slug !== 'noe') {
+                    __temp_array.push(_card)
+                }
+            })
+            set_cards_whitout_noe(__temp_array)
         }
-    })
+    }, [player_target_data])
 
 
     return (
@@ -62,7 +69,7 @@ export function OnInvoke() {
                                     "card_id": fogo_do_ceu_id,//Fogo do Céu
                                     "move_type": "card_skill",
                                     "player_target": selectedPlayerId,
-                                    "card_target": player_target_data.card_battle_camp![selectedCardIndex!].in_game_id, //Carta para destruir
+                                    "card_target": cards_whitout_noe[selectedCardIndex!].in_game_id, //Carta para destruir
                                 }
                             })
                             dispatch(setCurrentSkill(undefined))
