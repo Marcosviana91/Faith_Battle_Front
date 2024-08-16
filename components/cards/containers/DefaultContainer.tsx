@@ -16,12 +16,13 @@ type DefaultContainerProps = {
     card_action_component: React.ReactNode[];
     get_selected_card?: (card: CardProps) => void;
     show_action_in_bottom?: boolean;
+    show_modal?: boolean;
+    set_show_modal?: (show_modal:boolean)=>void;
 
 }
 
 export default function DefaultContainer(props: DefaultContainerProps) {
     const { width: windowWidth } = useScreenSizes();
-    const [showModal, setShowModal] = useState(false)
     const [selectedCard, setSelectedCard] = useState<CardProps>()
 
     return (
@@ -33,7 +34,9 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                             key={_index}
                             onPress={() => {
                                 setSelectedCard(card)
-                                setShowModal(true)
+                                if (props.set_show_modal) {
+                                    props.set_show_modal(true)
+                                }
                                 if (props.get_selected_card) {
                                     props.get_selected_card(card)
                                 }
@@ -45,7 +48,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                 </ScrollView>
             </View>
             {selectedCard && (
-                <Modal visible={showModal} transparent animationType='fade' >
+                <Modal visible={props.show_modal} transparent animationType='fade' >
                     <ThemedView
                         style={{ flex: 1, maxWidth: windowWidth }}
                     >
@@ -61,7 +64,9 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                                 if (props.card_action_function) {
                                                     props.card_action_function({ card: selectedCard, action_index: _index })
                                                 }
-                                                setShowModal(false)
+                                                if (props.set_show_modal) {
+                                                    props.set_show_modal(false)
+                                                }
                                             }}>
                                             {component}
                                         </Pressable>
@@ -71,7 +76,9 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                             {/* A carta em si */}
                             <Pressable
                                 onPress={() => {
-                                    setShowModal(false)
+                                    if (props.set_show_modal) {
+                                        props.set_show_modal(false)
+                                    }
                                 }}
                                 style={{ width: "90%", height: "70%", position: "relative" }}>
                                 <Image
