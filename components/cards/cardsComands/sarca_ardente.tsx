@@ -27,7 +27,7 @@ export function OnInvoke() {
             <ThemedText>Um jogador ganha 2 pontos de fé</ThemedText>
             <SelectFriendsIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} />
             <ThemedText>Um oponente perde 2 pontos de fé</ThemedText>
-            <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} />
+            <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             <BasicButton
                 height={50}
                 onPress={ () => {
