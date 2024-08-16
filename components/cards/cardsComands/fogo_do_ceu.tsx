@@ -6,7 +6,6 @@ import { RootReducer } from '@/store';
 
 import { ThemedModal } from '@/components/themed/ThemedModal';
 
-import { FontAwesome6 } from '@expo/vector-icons';
 import { SelectEnemyIconsContainer } from '@/components/player_user/playerIcon';
 import { SubCardsContainer } from '@/components/cards/containers/subContainer';
 import { usePlayerData } from '@/hooks/usePlayerData';
@@ -28,6 +27,13 @@ export function OnInvoke() {
     const WS = useAppWebSocket();
     const dispatch = useDispatch()
 
+    let cards_whitout_noe: CardProps[] = [] 
+    player_target_data.card_battle_camp?.map((_card) => {
+        if (_card.slug !== 'noe') {
+            cards_whitout_noe.push( _card)
+        }
+    })
+
 
     return (
         <ThemedModal title='Escolha um oponente e um uma carta.' hideCloseButton closeModal={() => { }} >
@@ -35,12 +41,12 @@ export function OnInvoke() {
             {/* Cartas no campo de batalha */}
             {selectedPlayerId !== player?.id && player_target_data &&
                 <SubCardsContainer
-                    cards={player_target_data.card_battle_camp}
+                    cards={cards_whitout_noe}
                     get_selected_card={setSelectedCardIndex}
                     cards_action={<BasicButton
                         height={50}
                         onPress={() => {
-                            console.log(fogo_do_ceu_id + " destriur " + player_target_data.card_battle_camp![selectedCardIndex!].in_game_id)
+                            console.log(fogo_do_ceu_id + " destriur " + cards_whitout_noe[selectedCardIndex!].in_game_id)
                             WS.sendJsonMessage({
                                 "data_type": "match_move",
                                 "user_data": {
