@@ -18,7 +18,7 @@ export function OnInvoke() {
     const [selectedPlayerId, setSelectedPlayerId] = useState<number>()
     const player_in_match_data = usePlayerData(player?.id!)
 
-    const restauracao_de_fe_id = getCardInListBySlug('sabedoria-de-salomao', player_in_match_data.card_prepare_camp)?.in_game_id
+    const sabedoria_de_salomao_id = getCardInListBySlug('sabedoria-de-salomao', player_in_match_data.card_prepare_camp)?.in_game_id
 
     const WS = useAppWebSocket();
     const dispatch = useDispatch()
@@ -30,7 +30,7 @@ export function OnInvoke() {
             <BasicButton
                 height={50}
                 onPress={() => {
-                    console.log(restauracao_de_fe_id + " restaurou a fé de " + selectedPlayerId)
+                    console.log(sabedoria_de_salomao_id + " restaurou a 3 pontos de sabadoria " + selectedPlayerId)
                     WS.sendJsonMessage({
                         "data_type": "match_move",
                         "user_data": {
@@ -43,7 +43,7 @@ export function OnInvoke() {
                             "match_id": matchData?.id,
                             "round_match": matchData?.round_match,
                             "player_move": player?.id,
-                            "card_id": restauracao_de_fe_id,// Restauração de Fé
+                            "card_id": sabedoria_de_salomao_id,// Sabedoria de Salomão
                             "move_type": "card_skill",
                             "player_target": selectedPlayerId,
                         }
