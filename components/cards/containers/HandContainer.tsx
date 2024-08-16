@@ -17,6 +17,7 @@ export default function HandContainer() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const WS = useAppWebSocket()
     const { height: windowHeight } = useScreenSizes()
+    const [showModal, setShowModal] = useState(false)
 
     function actionFunction(props: { card: CardProps, action_index: number }) {
 
@@ -49,6 +50,8 @@ export default function HandContainer() {
                     card_action_component={[<OnInvoke card={selectedCard!} />]}
                     card_action_function={actionFunction}
                     get_selected_card={setSelectedCard}
+                    show_modal={showModal}
+                    set_show_modal={setShowModal}
                 />
             }
         </View>
