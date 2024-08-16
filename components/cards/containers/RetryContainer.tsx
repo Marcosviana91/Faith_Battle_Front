@@ -18,6 +18,7 @@ export default function RetryContainer() {
     const dispatch = useDispatch()
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
     const [selectedCard, setSelectedCard] = useState<CardProps>()
+    const [showModal, setShowModal] = useState(false)
 
     function actionFunction(props: { card: CardProps, action_index: number }) {
         if (player.deck_try! < 3) {
@@ -67,6 +68,8 @@ export default function RetryContainer() {
                         card_action_component={[<CardRetry card={selectedCard!} />]}
                         card_action_function={actionFunction}
                         get_selected_card={setSelectedCard}
+                        show_modal={showModal}
+                        set_show_modal={setShowModal}
                     />
                 }
             </View>
@@ -78,9 +81,9 @@ export default function RetryContainer() {
                         cards={player!.card_hand!}
                         card_action_component={[<CardRetry card={selectedCard!} />]}
                         card_action_function={actionFunction}
-                        get_selected_card={(card) => {
-                            setSelectedCard(card)
-                        }}
+                        get_selected_card={setSelectedCard}
+                        show_modal={showModal}
+                        set_show_modal={setShowModal}
                     />
                 }
             </View>

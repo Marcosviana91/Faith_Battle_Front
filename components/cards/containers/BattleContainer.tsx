@@ -18,9 +18,10 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
     const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight!
-
+    
     const WS = useAppWebSocket();
     const [selectedCard, setSelectedCard] = useState<CardProps>()
+    const [showModal, setShowModal] = useState(false)
 
     function actionFunction(props: { card: CardProps, action_index: number }) {
         console.log('action_index ', props!.action_index)
@@ -62,6 +63,8 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
             card_action_component={[<OnMoveToFight card={selectedCard!} />, <OnRetreatToPrepare card={selectedCard!} />]}
             card_action_function={actionFunction}
             get_selected_card={setSelectedCard}
+            show_modal={showModal}
+            set_show_modal={setShowModal}
         />
     )
 }

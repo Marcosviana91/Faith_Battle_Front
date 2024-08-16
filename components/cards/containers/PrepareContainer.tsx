@@ -15,6 +15,7 @@ export default function PrepareContainer(props: { cards: CardProps[] }) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
     const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
     const [selectedCard, setSelectedCard] = useState<CardProps>()
+    const [showModal, setShowModal] = useState(false)
 
     function actionFunction(props: { card: CardProps, action_index: number }) {
 
@@ -37,6 +38,8 @@ export default function PrepareContainer(props: { cards: CardProps[] }) {
             card_action_component={[<OnMoveToPrepare card={selectedCard!} />]}
             card_action_function={actionFunction}
             get_selected_card={setSelectedCard}
+            show_modal={showModal}
+            set_show_modal={setShowModal}
         />
     )
 }
