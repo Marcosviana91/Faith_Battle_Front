@@ -135,6 +135,7 @@ type ContainerProps = {
     player_id?: number
     matchData?: MatchApiProps
     get_selected_player_id?: (player_id: number) => void
+    selected_player_id?: number
 }
 export function IconsContainer(props: ContainerProps) {
     const playerData = useSelector((state: RootReducer) => state.authReducer.user_data)
@@ -232,7 +233,7 @@ export function SelectEnemyIconsContainer(props: ContainerProps) {
                                     props.get_selected_player_id(_player.id)
                                 }
                             }}>
-                            <PlayerIcon id={_player.id} isCurrent={(_player.id == props.matchData!.player_turn)} isTarget={(_player.id == props.matchData!.player_focus_id)} type='mini' />
+                            <PlayerIcon id={_player.id} type='mini' isCurrent={props.selected_player_id === _player.id} />
                             <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
                                 <ThemedText>
                                     <MaterialCommunityIcons name="shield-cross" size={24} />
@@ -260,26 +261,30 @@ export function SelectFriendsIconsContainer(props: ContainerProps) {
                 if (_player.id === player?.id && props.hideCurrentPlayer) {
                     return null
                 }
-                return (
-                    <View key={_player.id} style={{
-                        height: 100
-                    }}>
-                        <Pressable
-                            onPress={() => {
-                                if (props.get_selected_player_id) {
-                                    props.get_selected_player_id(_player.id)
-                                }
-                            }}>
-                            <PlayerIcon id={_player.id} type='mini' />
-                            <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
-                                <ThemedText>
-                                    <MaterialCommunityIcons name="shield-cross" size={24} />
-                                </ThemedText>
-                                <ThemedText type='defaultSemiBold'>{_player.faith_points}</ThemedText>
-                            </ThemedView>
-                        </Pressable>
-                    </View>
-                )
+                
+                if (_player.id === player?.id ) {
+                    return (
+                        <View key={_player.id} style={{
+                            height: 100
+                        }}>
+                            <Pressable
+                                onPress={() => {
+                                    if (props.get_selected_player_id) {
+                                        props.get_selected_player_id(_player.id)
+                                    }
+                                }}>
+                                <PlayerIcon id={_player.id} type='mini' isCurrent={props.selected_player_id === _player.id} />
+                                <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
+                                    <ThemedText>
+                                        <MaterialCommunityIcons name="shield-cross" size={24} />
+                                    </ThemedText>
+                                    <ThemedText type='defaultSemiBold'>{_player.faith_points}</ThemedText>
+                                </ThemedView>
+                            </Pressable>
+                        </View>
+                    )
+                }
+                return null
             })}
         </ScrollView>
     )

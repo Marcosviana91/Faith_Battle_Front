@@ -12,9 +12,6 @@ import { useDispatch, useSelector } from "react-redux"
 type Props = {
     onPress?: () => void
     card: CardProps
-    zone?: "select" | "retry" | "hand" | "prepare" | "battle" | "deck" | "forgotten_sea" | "fighting" | "will-fight"
-    target_index?: number;
-    target_slug?: string;
 }
 
 export function DaviToggleAttack(props: Props) {
@@ -22,6 +19,7 @@ export function DaviToggleAttack(props: Props) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const [showModal, setShowModal] = useState(false)
+    const [selectedPlayerId, setSelectedPlayerId] = useState<number>()
 
 
     if (matchData?.player_turn !== player?.id) {
@@ -40,11 +38,11 @@ export function DaviToggleAttack(props: Props) {
             </Pressable>
             <ThemedModal visible={showModal} title='Escolha um oponente' hideCloseButton>
                 <View>
-                    <SelectEnemyIconsContainer matchData={matchData}/>
+                    <SelectEnemyIconsContainer matchData={matchData} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId}/>
                 </View>
                 <View style={{ height: 50, width: 100 }}>
                     <BasicButton
-                        disabled={matchData?.player_focus_id === player?.id}
+                        disabled={selectedPlayerId===undefined}
                         onPress={() => {
                             let __temp_card = { ...props.card }
                             __temp_card.skill_focus_player_id = matchData?.player_focus_id
