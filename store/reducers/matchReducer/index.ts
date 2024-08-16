@@ -6,7 +6,11 @@ var initialState: MatchReducerProps = {
     player_data: undefined,
     player_match_settings: {
         player_view_id: undefined,
-        cards_to_fight: []
+        cards_to_fight: [],
+        current_skill: {
+            slug: "",
+            deck: [],
+        },
     },
 }
 
@@ -40,6 +44,9 @@ const matchSlice = createSlice({
         setCardsToFight: (state, action: PayloadAction<CardProps[]>) => {
             state.player_match_settings!.cards_to_fight = action.payload
         },
+        setCurrentSkill: (state, action: PayloadAction<{ slug: string, deck: CardProps[] }|undefined>) => {
+            state.player_match_settings!.current_skill = action.payload!
+        },
         clearCardsToFight: (state) => {
             state.player_match_settings!.cards_to_fight = []
         },
@@ -51,5 +58,5 @@ const matchSlice = createSlice({
 
     }
 })
-export const { setMatch, setRoom, setPlayer, setPlayerFocus, toggleCardsToFight, setCardsToFight, clearCardsToFight, leaveMatch } = matchSlice.actions
+export const { setMatch, setRoom, setPlayer, setPlayerFocus, toggleCardsToFight, setCardsToFight, setCurrentSkill, clearCardsToFight, leaveMatch } = matchSlice.actions
 export default matchSlice.reducer

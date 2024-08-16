@@ -94,6 +94,7 @@ export default function TopBar() {
                     {/* Botão de se render */}
                     {player?.faith_points! > 0 && !matchData?.end_match &&
                         <BasicButton
+                        height={40}
                             onPress={() => {
                                 WS.sendJsonMessage({
                                     "data_type": "match_move",

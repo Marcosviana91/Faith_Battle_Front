@@ -1,16 +1,23 @@
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import { Provider } from "react-redux";
 import { Slot } from "expo-router";
 
 import { store } from '@/store';
 import { ThemedView } from "@/components/themed/ThemedView";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
+import { ConnectionStatus } from '@/components/connectionSpot';
 
 
 export default function RootLayout() {
+    const { width: windowWidth, height: windowHeight } = useScreenSizes();
     return (
         <Provider store={store}>
             {Platform.OS === 'android' && <ThemedView style={{ height: 50 }} lightColor="#fffc" darkColor="#000c" />}
-            <Slot />
+            <View style={{ height: windowHeight, maxWidth: windowWidth }}>
+                <ConnectionStatus />
+                <Slot />
+                {Platform.OS === 'android' && <ThemedView style={{ height: 50 }} lightColor="#fffc" darkColor="#000c" />}
+            </View>
         </Provider>
     );
 }

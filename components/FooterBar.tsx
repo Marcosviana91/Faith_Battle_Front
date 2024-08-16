@@ -6,15 +6,15 @@ export default function FooterBar() {
     const navigation = useNavigation()
     return (
         <View style={styles.container}>
-            <BasicButton onPress={() =>
-                    navigation.navigate('Cartas' as never)
-                }>Cartas</BasicButton>
-            <BasicButton onPress={() =>
-                    navigation.navigate('Jogar' as never)
-                }>Jogar</BasicButton>
-            <BasicButton onPress={() =>
-                    navigation.navigate('Profile' as never)
-                }>Perfil</BasicButton>
+            <BasicButton height={50} onPress={() =>
+                navigation.navigate('Cartas' as never)
+            }>Cartas</BasicButton>
+            <BasicButton height={50} onPress={() =>
+                navigation.navigate('Jogar' as never)
+            }>Jogar</BasicButton>
+            <BasicButton height={50}onPress={() =>
+                navigation.navigate('Profile' as never)
+            }>Perfil</BasicButton>
         </View>
     )
 }

@@ -27,6 +27,7 @@ export default function ActionButtons() {
                 {(matchData?.player_turn === player?.id) && !(player_match_settings?.cards_to_fight?.length! > 0) && fight_camp == undefined &&
                     <View>
                         <BasicButton
+                            height={30}
                             onPress={() => {
                                 WS.sendJsonMessage({
                                     "data_type": "match_move",
@@ -53,6 +54,7 @@ export default function ActionButtons() {
                 {(player_match_settings?.cards_to_fight?.length! > 0) && !fight_camp &&
                     <View>
                         <BasicButton
+                            height={30}
                             onPress={() => {
                                 if (!player_focus || player_focus == player?.id) {
                                     console.log("Escolha um oponente")

@@ -7,5 +7,8 @@ declare type APIResponseProps = {
     player_data?: PlayersInMatchApiProps
     room_list?: RoomApiProps[]
     match_move?: APIMoveProps,
-    // card_data?: any,
+    card_data?: {
+        slug: string,
+        deck: CardProps[]
+    }
 }

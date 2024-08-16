@@ -1,3 +1,5 @@
+import { RootReducer } from "@/store"
+import { useSelector } from "react-redux"
 
 export const AVATAR = [
     {
@@ -46,4 +48,11 @@ export function useAvatar(
     props: { avatar_index: number }
 ) {
     return AVATAR[props.avatar_index].path
+}
+
+export function usePlayerData(player_id: number) {
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
+    
+    const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
+    return _data[0]
 }

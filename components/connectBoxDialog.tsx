@@ -11,24 +11,8 @@ import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ThemedModal } from './themed/ThemedModal';
 
-const card_list = [
-    {"slug":'abraao'},
-    {"slug":'adao'},
-    {"slug":'daniel'},
-    {"slug":'davi'},
-    {"slug":'elias'},
-    {"slug":'ester'},
-    {"slug":'eva'},
-    {"slug":'jaco'},
-    {"slug":"jose-do-egito"},
-    {"slug":"josue"},
-    {"slug":"maria"},
-    {"slug":"moises"},
-    {"slug":"noe"},
-    {"slug":"salomao"},
-    {"slug":"sansao"},
-]
 
 type ModalProps = {
     onClose: () => void;
@@ -49,79 +33,50 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
     }, [roomData])
 
     return (
-        <Modal presentationStyle='overFullScreen' transparent>
-
-            <View style={styles.container}>
-                <ThemedView style={[styles.dialog, { borderWidth: 1, borderRadius: 24, padding: 8 }]}>
-                    {/* Header */}
-                    <View style={{ flexDirection: "row", width: '100%', height: 50, alignItems: 'center', justifyContent: 'space-between' }}>
-                        <ThemedText style={{ paddingStart: 8 }} type='subtitle'>ID: {props.id}</ThemedText>
-                        <TouchableHighlight onPress={props.onClose} style={{ borderRadius: 50 }}>
-                            <ThemedText style={{ height: "100%", lineHeight: 48 }}>
-                                <Ionicons name="close-circle-outline" size={48} style={{ height: "100%" }} />
-                            </ThemedText>
-                        </TouchableHighlight>
+        <ThemedModal presentationStyle='overFullScreen' transparent title={"ID: " + props.id} closeModal={props.onClose} >
+            {/* Content */}
+            <View style={{ width:'100%', minHeight: 150 }}>
+                <ThemedText >Nome: {props.name}</ThemedText>
+                <ThemedText >Tipo da partida: {props.match_type}</ThemedText>
+                <ThemedText >Jogadores: {props.connected_players?.length} / {props.max_players}</ThemedText>
+                {/* Senhas */}
+                {props.has_password && (
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                        <ThemedText>Digite a senha:</ThemedText>
+                        <ThemedTextInput
+                            value={roomPass}
+                            onChangeText={setRoomPass}
+                        />
                     </View>
-
-                    {/* Content */}
-                    <View style={{ flex: 1, padding: 8 }}>
-                        <ThemedText >Nome: {props.name}</ThemedText>
-                        <ThemedText >Tipo da partida: {props.match_type}</ThemedText>
-                        <ThemedText >Jogadores: {props.connected_players?.length} / {props.max_players}</ThemedText>
-                        {/* Senhas */}
-                        {props.has_password && (
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-                                <ThemedText>Digite a senha:</ThemedText>
-                                <ThemedTextInput
-                                    value={roomPass}
-                                    onChangeText={setRoomPass}
-                                />
-                            </View>
-                        )}
-                    </View>
-
-                    {/* Footer */}
-                    <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 8 }}>
-                        <TouchableHighlight
-                            disabled={isFull}
-                            onPress={() => {
-                                if (!isFull) {
-                                    if (roomPass == "") {
-                                        setRoomPass("undefined")
+                )}
+            </View>
+            {/* Footer */}
+            <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 8 }}>
+                <TouchableHighlight
+                    disabled={isFull}
+                    onPress={() => {
+                        if (!isFull) {
+                            if (roomPass == "") {
+                                setRoomPass("undefined")
+                            }
+                            enterRoom({
+                                id: props.id,
+                                password: roomPass,
+                                connected_players: [
+                                    {
+                                        id: userData?.id,
+                                        available_cards: userData?.available_cards,
+                                        xp_points: 200
                                     }
-                                    enterRoom({
-                                        id: props.id,
-                                        password: roomPass,
-                                        connected_players: [
-                                            {
-                                                id: userData?.id,
-                                                available_cards: card_list,
-                                                xp_points: 200
-                                            }
-                                        ]
-                                    })
-                                }
-                            }}
-                            style={{ backgroundColor: isFull ? '#888' : "#090", borderRadius: 8 }}
-                        >
-                            <Ionicons name="enter-outline" size={48} color="black" />
-                        </TouchableHighlight>
-                    </View>
-                </ThemedView>
-            </View >
-        </Modal >
+                                ]
+                            })
+                        }
+                    }}
+                    style={{ backgroundColor: isFull ? '#888' : "#090", borderRadius: 8 }}
+                >
+                    <Ionicons name="enter-outline" size={48} color="black" />
+                </TouchableHighlight>
+            </View>
+        </ThemedModal >
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#000c",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    dialog: {
-        width: "90%",
-        height: 300,
-    },
-})

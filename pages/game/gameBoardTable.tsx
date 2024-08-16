@@ -1,33 +1,69 @@
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { View, StyleSheet, Image, Pressable } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { globalStyles } from "@/constants/Styles";
-
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ThemedView } from '@/components/themed/ThemedView';
 import { ThemedText } from '@/components/themed/ThemedText';
 
 import GameBoard from "@/components/gameBoard";
-import PlayerIcon from "@/components/gameBoard/playerIcon";
-import { CardsContainer } from "@/components/cards/";
+import { IconsContainer } from "@/components/player_user/playerIcon";
 import FightCamp from '@/components/gameBoard/fightCamp';
 import TopBar from '@/components/gameBoard/topBar';
+import { usePlayerData } from '@/hooks/usePlayerData';
+import HandContainer from '@/components/cards/containers/HandContainer';
+import { OnInvoke as EliasOnInvoke } from '@/components/cards/cardsComands/elias';
+import { OnInvoke as EsterOnInvoke } from '@/components/cards/cardsComands/ester';
+import { OnAttack as JacoOnAttack } from '@/components/cards/cardsComands/jaco';
+import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria';
+import { OnInvoke as MoisesOnInvoke } from '@/components/cards/cardsComands/moises';
+import { OnInvoke as DiluvioOnInvoke } from '@/components/cards/cardsComands/diluvio';
+import { OnInvoke as FogoDoCeuOnInvoke } from '@/components/cards/cardsComands/fogo_do_ceu';
+import { OnInvoke as RestauracaoDeFeOnInvoke } from '@/components/cards/cardsComands/restauracao_de_fe';
+import { OnInvoke as SabedoriaDeSalomaoOnInvoke } from '@/components/cards/cardsComands/sabedoria_de_salomao';
+import { OnInvoke as SarcaArdenteOnInvoke } from '@/components/cards/cardsComands/sarca_ardente';
+// import { OnInvoke as ProtecaoDivinaOnInvoke } from '@/components/cards/cardsComands/protecao_divina';
 
 
 export default function GameBoardTable() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const player_focus = matchData?.player_focus_id
+    const card_skill = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)
+    const player_focus_id = matchData?.player_focus_id
     const fight_camp = matchData?.fight_camp
 
-    // Aplicar DRY
-    function getPlayerData(player_id: number) {
-        const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
-        return _data[0]
-    }
+    const player_data = usePlayerData(player?.id!)
+    const player_focus_data = usePlayerData(player_focus_id!)
 
+    function OnInvoke(props: {slug:string}) {
+        switch (props.slug) {
+            case 'ester':
+                return <EsterOnInvoke />
+            case 'jaco':
+                return <JacoOnAttack />
+            case 'maria':
+                return <MariaOnInvoke />
+            case 'elias':
+                return <EliasOnInvoke />
+            case 'moises':
+                return <MoisesOnInvoke />
+            case 'fogo-do-ceu':
+                return <FogoDoCeuOnInvoke />
+            case 'restauracao-de-fe':
+                return <RestauracaoDeFeOnInvoke />
+            case 'diluvio':
+                return <DiluvioOnInvoke />
+            case 'sabedoria-de-salomao':
+                return <SabedoriaDeSalomaoOnInvoke />
+            // case 'protecao-divina':
+            //     return <ProtecaoDivinaOnInvoke />
+            case 'sarca-ardente':
+                return <SarcaArdenteOnInvoke />
+            default:
+                break;
+        }
+    }
 
     return (
         <>
@@ -37,37 +73,32 @@ export default function GameBoardTable() {
                     {/* Aplicar DRY */}
                     {/* Icones dos jogadores */}
                     {!fight_camp &&
-                        <View style={[styles.gameBoardHeader,]}>
-                            {matchData?.players_in_match?.map((player) => (
-                                <View key={player.id} style={{ alignItems: "center" }}>
-                                    <PlayerIcon id={player.id} isCurrent={(player.id == matchData.player_turn)} isTarget={(player.id == matchData.player_focus_id)} type='mini' />
-                                    <View style={{ flexDirection: 'row', marginTop: -16 }}>
-                                        <MaterialCommunityIcons name="shield-cross" size={24} color="black" />
-                                        <ThemedText type='defaultSemiBold'>{player.faith_points}</ThemedText>
-                                    </View>
-                                </View>
-                            ))}
-                        </View>
+                        <IconsContainer player_id={player?.id} matchData={matchData} />
                     }
                     {/* Fight Camp */}
                     <FightCamp />
                     {/* GameBoards */}
                     <View style={[globalStyles.contentContainer]}>
                         {/* Enemy board */}
-                        {player_focus !== 0 && player_focus !== player?.id &&
-                            <GameBoard {...getPlayerData(player_focus!)} />
+                        {player_focus_id !== 0 && player_focus_id !== player?.id &&
+                            <GameBoard {...player_focus_data} />
                         }
                         {/* Player board */}
-                        <GameBoard {...getPlayerData(player?.id!)} />
+                        <GameBoard {...player_data} />
                     </View>
                     {/* Mão do jogador */}
                     <View>
-                        <CardsContainer size="small" zone='hand' cards={player!.card_hand} />
+                        <HandContainer />
                     </View>
                 </ThemedView>
             }
+            {/* Modal das habilidades das cartas */}
+            {card_skill && card_skill.slug !== '' &&
+                <OnInvoke slug={card_skill.slug} />
+            }
+            {/* Tela de Statisticas // falta fazer */}
             {matchData?.end_match &&
-                <ThemedView style={{flex:1, alignItems:"center", justifyContent:"center"}}>
+                <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                     <TopBar />
                     <ThemedText>A partida acabou: {matchData.end_match}</ThemedText>
                 </ThemedView>

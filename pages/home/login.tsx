@@ -16,7 +16,7 @@ import { useLoginMutation, useNewUserMutation, useGetUserDataMutation } from '@/
 import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
 import { useKeyboard } from "@/hooks/useKeyboard";
-import { useAvatar, AVATAR } from '@/hooks/useAvatar';
+import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
@@ -184,7 +184,7 @@ export default function LoginScreen() {
                     </ThemedView>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 300 }}>
                         {isCreating ? (
-                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10 }}>
+                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height:50 }}>
                                 <BasicButton
                                     darkColor='#060'
                                     lightColor='#1ad81a'
@@ -212,7 +212,7 @@ export default function LoginScreen() {
                                 >Cancelar</BasicButton>
                             </View>
                         ) : (
-                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10 }}>
+                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height:50 }}>
                                 <BasicButton onPress={() => {
                                     if (userName.toLowerCase() === 'fake01' && password === "") {
                                         dispatch(login({

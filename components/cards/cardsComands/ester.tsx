@@ -1,59 +1,30 @@
 import { useEffect, useState } from 'react';
 import { View, Pressable } from 'react-native';
 
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
 import { ThemedModal } from '@/components/themed/ThemedModal';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SubCardsContainer } from '@/components/cards/subContainer';
+import { SubCardsContainer } from '@/components/cards/containers/subContainer';
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
 import BasicButton from '@/components/button/basic';
+import useAppWebSocket from '@/hooks/useAppWebSocket';
+import { setCurrentSkill } from '@/store/reducers/matchReducer';
 
-export function OnInvoke(props: { in_game_id: string }) {
+export function OnInvoke() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const card_skill = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)
     const [selectedCard, setSelectedCard] = useState<number>()
-    const [cardList, setcardList] = useState<CardProps[]>([])
+    const [cardList, setcardList] = useState<CardProps[]>(card_skill?.deck!)
 
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
-
-    useEffect(() => {
-        console.log("SubContainer " + props.in_game_id)
-        WS.sendJsonMessage({
-            "data_type": "match_move",
-            "user_data": {
-                "id": player?.id
-            },
-            "room_data": {
-                "id": matchData?.id
-            },
-            "match_move": {
-                "match_id": matchData?.id,
-                "round_match": matchData?.round_match,
-                "player_move": player?.id,
-                "card_id": props.in_game_id,
-                "move_type": "move_to_prepare"
-            }
-        })
-    }, [])
-
-    useEffect(() => {
-        setcardList(player?.card_deck as [])
-    }, [player])
-
-    useEffect(() => {
-        if (selectedCard) {
-            console.log("Escolheu " + cardList![selectedCard!].in_game_id)
-        }
-    }, [selectedCard])
+    const dispatch = useDispatch()
+    const WS = useAppWebSocket()
 
     return (
         <ThemedModal title='Reorganize as cartas.' hideCloseButton closeModal={() => { }} >
-            {/* Cartas no campo de batalha */}
             <SubCardsContainer
                 cards={cardList}
                 cards_action={
@@ -65,6 +36,7 @@ export function OnInvoke(props: { in_game_id: string }) {
             />
             <View style={{ width: "50%", height: 50, margin: 16 }}>
                 <BasicButton
+                height={50}
                     onPress={() => {
                         console.log("Enviar novo deck");
                         WS.sendJsonMessage({
@@ -83,6 +55,7 @@ export function OnInvoke(props: { in_game_id: string }) {
                                 "move_type": "change_deck"
                             }
                         })
+                        dispatch(setCurrentSkill(undefined))
                     }}
                 >Ok</BasicButton>
             </View>

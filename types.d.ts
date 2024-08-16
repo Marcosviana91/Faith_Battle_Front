@@ -20,14 +20,16 @@ declare type MatchApiProps = {
 declare type CardProps = {
     slug: string,
     path?: ImageSourcePropType,
+    card_type?: string,
     in_game_id?: string,
     attack_point?: number,
     defense_points?: number,
     wisdom_cost?: number,
     status?: "ready" | "not-enough" | "used",
-    skill_focus_player_id?: number
+    skill_focus_player_id?: number,
+    skill_focus_player2_id?: number,
+    skill_focus_card_id?: string,
 }
-
 
 declare type APIMoveProps = {
     match_id?: string;
@@ -36,6 +38,7 @@ declare type APIMoveProps = {
     card_id?: number;
     move_type?: string
     player_target?: number
+    player_target2?: number
     card_target?: string
     card_list?: CardProps[]
 }
@@ -46,7 +49,12 @@ declare type MatchReducerProps = {
     player_data?: PlayersInMatchApiProps,
     player_match_settings?: {
         player_view_id?: number,
-        cards_to_fight: CardProps[]
+        cards_to_fight: CardProps[],
+        current_skill: {
+            slug: string,
+            deck: CardProps[],
+            forgotten_sea?: CardProps[],
+        }
     },
 }
 

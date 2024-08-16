@@ -14,24 +14,6 @@ import BasicButton from '@/components/button/basic';
 import { ThemedTextInput } from '@/components/themed/ThemedTextInput';
 
 
-const card_list = [
-    { "slug": 'abraao' },
-    { "slug": 'adao' },
-    { "slug": 'daniel' },
-    { "slug": 'davi' },
-    { "slug": 'elias' },
-    { "slug": 'ester' },
-    { "slug": 'eva' },
-    { "slug": 'jaco' },
-    { "slug": "jose-do-egito" },
-    { "slug": "josue" },
-    { "slug": "maria" },
-    { "slug": "moises" },
-    { "slug": "noe" },
-    { "slug": "salomao" },
-    { "slug": "sansao" },
-]
-
 export default function SearchRoom() {
     const dispatch = useDispatch()
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
@@ -60,7 +42,7 @@ export default function SearchRoom() {
             <View style={styles.searchRoomContainer} >
                 <View style={{ flexDirection: "row", width: '95%' }}>
                     <View style={{ width: '100%', padding: 10, flexDirection: "row" }}>
-                        <ToggleButton values={buttons} onPress={setTable} />
+                        <ToggleButton height={50} values={buttons} onPress={setTable} />
                     </View>
                 </View>
                 {table === 0 && (
@@ -81,6 +63,7 @@ export default function SearchRoom() {
                             <Text>Estilo de Jogo</Text>
                             <ToggleButton
                                 disabled
+                                height={50}
                                 values={gameTypesList}
                                 onPress={setNewRoomGameType}
                             />
@@ -101,19 +84,21 @@ export default function SearchRoom() {
                                 onChangeText={setNewRoomPassword}
                             />
                         </View>
-                        <BasicButton onPress={() => {
-                            createRoom({
-                                name: newRoomName,
-                                created_by: {
-                                    id: userData?.id,
-                                    available_cards: card_list,
-                                    xp_points: 0
-                                },
-                                match_type: newRoomGameType,
-                                max_players: Number(newRoomPlayerQtd),
-                                password: newRoomPassword
-                            })
-                        }}>
+                        <BasicButton
+                            height={50}
+                            onPress={() => {
+                                createRoom({
+                                    name: newRoomName,
+                                    created_by: {
+                                        id: userData?.id,
+                                        available_cards: userData?.available_cards,
+                                        xp_points: 0
+                                    },
+                                    match_type: newRoomGameType,
+                                    max_players: Number(newRoomPlayerQtd),
+                                    password: newRoomPassword
+                                })
+                            }}>
                             Criar
                         </BasicButton>
                     </View>
