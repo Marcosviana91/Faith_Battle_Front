@@ -26,7 +26,9 @@ declare type CardProps = {
     defense_points?: number,
     wisdom_cost?: number,
     status?: "ready" | "not-enough" | "used",
-    skill_focus_player_id?: number
+    skill_focus_player_id?: number,
+    skill_focus_player2_id?: number,
+    skill_focus_card_id?: string,
 }
 
 declare type APIMoveProps = {
@@ -49,7 +51,8 @@ declare type MatchReducerProps = {
         cards_to_fight: CardProps[],
         current_skill: {
             slug: string,
-            deck: CardProps[]
+            deck: CardProps[],
+            forgotten_sea?: CardProps[],
         }
     },
 }
