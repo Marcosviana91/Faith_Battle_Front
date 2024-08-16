@@ -233,7 +233,7 @@ export function SelectEnemyIconsContainer(props: ContainerProps) {
                                     props.get_selected_player_id(_player.id)
                                 }
                             }}>
-                            <PlayerIcon id={_player.id} type='mini' isCurrent={props.selected_player_id === _player.id} />
+                            <PlayerIcon id={_player.id} type='mini' isTarget={props.selected_player_id === _player.id} />
                             <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
                                 <ThemedText>
                                     <MaterialCommunityIcons name="shield-cross" size={24} />
