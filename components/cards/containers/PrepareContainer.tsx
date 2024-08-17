@@ -51,6 +51,9 @@ function OnMoveToPrepare(props: {card: CardProps}) {
     if (matchData.player_turn !== player.id || props.card.status !== 'ready') {
         return null
     }
+    if (String(player.id) !== props.card.in_game_id!.split('-')[0]) {
+        return null
+    }
     return (
         <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto" }}>
             <ThemedText style={{ lineHeight: 80 }}>
