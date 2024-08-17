@@ -31,12 +31,15 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
         let __temp_list = cards_to_fight!.map(_card => _card)
         const target_index = fight_camp?.attack_cards?.findIndex(_card => _card.in_game_id === selectedCard!.in_game_id)
         if (sub_card && typeof target_index == 'number') {
-            if (__temp_list[target_index].slug === sub_card.slug) {
-                __temp_list[target_index] = not_defense
-            }
-            else {
-                __temp_list[target_index] = sub_card
-            }
+            const _index = __temp_list.findIndex(_card => _card.in_game_id === sub_card.in_game_id)
+                if (_index === target_index) {
+                    __temp_list![_index] = not_defense
+                } else if ( _index >= 0) {
+                    __temp_list![_index] = not_defense
+                    __temp_list![target_index] = sub_card
+                } else {
+                    __temp_list![target_index] = sub_card
+                }
         }
         dispatch(setCardsToFight(__temp_list))
         setShowModal(false)
