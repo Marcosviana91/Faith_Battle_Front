@@ -22,6 +22,7 @@ type DefaultContainerProps = {
 }
 
 export default function DefaultContainer(props: DefaultContainerProps) {
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
     const { width: windowWidth } = useScreenSizes();
     const [selectedCard, setSelectedCard] = useState<CardProps>()
 
@@ -54,7 +55,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                     >
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", flexDirection: props.show_action_in_bottom ? "column-reverse" : 'column' }}>
                             {/* Card Commands */}
-                            {selectedCard.status === 'ready' &&
+                            {selectedCard.status === 'ready' && String(player.id) == selectedCard.in_game_id!.split('-')[0] &&
                                 <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                     {props.card_action_component.map((component, _index) => (
                                         <Pressable
