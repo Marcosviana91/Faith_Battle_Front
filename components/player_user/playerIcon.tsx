@@ -180,6 +180,9 @@ export function IconsContainer(props: ContainerProps) {
                                                 dispatch(setPlayerFocus(_player.id))
                                             }
                                         }}
+                                        style={{
+                                            height: '100%',
+                                        }}
                                     >
 
                                         <PlayerIcon id={_player.id} isCurrent={(_player.id == props.matchData!.player_turn)} isTarget={(_player.id == props.matchData!.player_focus_id)} type='mini' />
@@ -218,6 +221,7 @@ export function SelectEnemyIconsContainer(props: ContainerProps) {
             flexDirection: "row",
             columnGap: 16,
             paddingHorizontal: 8,
+            justifyContent: "center",
         }}>
             {props.matchData?.players_in_match?.map((_player) => {
                 if (_player.id === player?.id) {
@@ -232,6 +236,9 @@ export function SelectEnemyIconsContainer(props: ContainerProps) {
                                 if (props.get_selected_player_id) {
                                     props.get_selected_player_id(_player.id)
                                 }
+                            }}
+                            style={{
+                                height: '100%',
                             }}>
                             <PlayerIcon id={_player.id} type='mini' isTarget={props.selected_player_id === _player.id} />
                             <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
@@ -256,13 +263,14 @@ export function SelectFriendsIconsContainer(props: ContainerProps) {
             flexDirection: "row",
             columnGap: 16,
             paddingHorizontal: 8,
+            justifyContent: "center",
         }}>
             {props.matchData?.players_in_match?.map((_player) => {
                 if (_player.id === player?.id && props.hideCurrentPlayer) {
                     return null
                 }
-                
-                if (_player.id === player?.id ) {
+
+                if (_player.id === player?.id) {
                     return (
                         <View key={_player.id} style={{
                             height: 100
@@ -272,6 +280,9 @@ export function SelectFriendsIconsContainer(props: ContainerProps) {
                                     if (props.get_selected_player_id) {
                                         props.get_selected_player_id(_player.id)
                                     }
+                                }}
+                                style={{
+                                    height: '100%',
                                 }}>
                                 <PlayerIcon id={_player.id} type='mini' isCurrent={props.selected_player_id === _player.id} />
                                 <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>

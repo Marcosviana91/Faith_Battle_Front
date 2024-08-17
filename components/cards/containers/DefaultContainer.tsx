@@ -54,7 +54,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                     >
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", flexDirection: props.show_action_in_bottom ? "column-reverse" : 'column' }}>
                             {/* Card Commands */}
-                            {selectedCard.status === 'ready' && 
+                            {selectedCard.status === 'ready' &&
                                 <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                     {props.card_action_component.map((component, _index) => (
                                         <Pressable
@@ -87,12 +87,14 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     source={useCards({ card_slug: selectedCard.slug })}
                                 />
                                 {selectedCard.in_game_id && (selectedCard.card_type === 'hero' || selectedCard.card_type === 'legendary') &&
-                                    <View>
-                                        <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
-                                            <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{selectedCard.attack_point}</ThemedText>
-                                        </View>
-                                        <View style={{ backgroundColor: "red", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, right: 24, alignItems: "center", justifyContent: "center" }}>
-                                            <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{selectedCard.defense_points}</ThemedText>
+                                    <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 20, alignItems:'center' }}>
+                                        <View style={{ height: 60, width: '90%', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            <View style={{ backgroundColor: "yellow", width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                                <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{selectedCard.attack_point}</ThemedText>
+                                            </View>
+                                            <View style={{ backgroundColor: "red", width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                                <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{selectedCard.defense_points}</ThemedText>
+                                            </View>
                                         </View>
                                     </View>
                                 }

@@ -11,6 +11,7 @@ import useAppWebSocket from '@/hooks/useAppWebSocket';
 import { setCurrentSkill } from '@/store/reducers/matchReducer';
 import BasicButton from '@/components/button/basic';
 import { getCardInListBySlug } from '@/hooks/useCards';
+import { ThemedText } from '@/components/themed/ThemedText';
 
 export function OnInvoke() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
@@ -25,7 +26,8 @@ export function OnInvoke() {
 
 
     return (
-        <ThemedModal title='Escolha um aliado para dar sabedoria.' hideCloseButton closeModal={() => { }} >
+        <ThemedModal title='Sabedoria de Salomão.' hideCloseButton closeModal={() => { }} >
+            <ThemedText>Escolha um aliado para dar sabedoria</ThemedText>
             <SelectFriendsIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             <BasicButton
                 height={50}

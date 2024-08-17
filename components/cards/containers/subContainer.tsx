@@ -124,7 +124,7 @@ function SubCard(props: Props) {
 
             <Modal visible={showModal} transparent animationType='fade' >
                 <ThemedView
-                    style={{ flex: 1, maxWidth: windowWidth}}
+                    style={{ flex: 1, maxWidth: windowWidth }}
                 >
                     {/* Card Commands */}
                     <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
@@ -142,12 +142,14 @@ function SubCard(props: Props) {
                                 source={useCards({ card_slug: props.card?.slug })}
                             />
                             {props.card && props.card.in_game_id &&
-                                <View>
-                                    <View style={{ backgroundColor: "yellow", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, left: 24, alignItems: "center", justifyContent: "center" }}>
-                                        <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card.attack_point}</ThemedText>
-                                    </View>
-                                    <View style={{ backgroundColor: "red", position: 'absolute', width: 50, height: 50, borderRadius: 40, bottom: 24, right: 24, alignItems: "center", justifyContent: "center" }}>
-                                        <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700 }}>{props.card.defense_points}</ThemedText>
+                                <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 20, alignItems: 'center' }}>
+                                    <View style={{ height: 60, width: '90%', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ backgroundColor: "yellow", width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                            <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{props.card.attack_point}</ThemedText>
+                                        </View>
+                                        <View style={{ backgroundColor: "red", width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                            <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{props.card.defense_points}</ThemedText>
+                                        </View>
                                     </View>
                                 </View>
                             }

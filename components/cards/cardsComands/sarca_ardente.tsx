@@ -29,12 +29,12 @@ export function OnInvoke() {
 
     return (
         <ThemedModal title='Sarça Ardente:' hideCloseButton closeModal={() => { }} >
-            <ThemedView style={{alignItems:"center", padding:4, borderWidth:2, borderRadius:8, minWidth: "70%"}}>
+            <ThemedView style={{alignItems:"center", padding:4, borderWidth:2, borderRadius:8, minWidth: "70%", height:150}}>
                 <ThemedText>Aliado para ganhar 2 de fé</ThemedText>
                 <SelectFriendsIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             </ThemedView>
 
-            <ThemedView style={{alignItems:"center", padding:4, borderWidth:2, borderRadius:8, minWidth: "70%"}}>
+            <ThemedView style={{alignItems:"center", padding:4, borderWidth:2, borderRadius:8, minWidth: "70%", height:150}}>
                 <ThemedText>Oponente para perder 2 de fé</ThemedText>
                 <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayer2Id} selected_player_id={selectedPlayer2Id} />
             </ThemedView>
