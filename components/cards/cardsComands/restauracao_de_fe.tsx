@@ -28,7 +28,7 @@ export function OnInvoke() {
         <ThemedModal title='Escolha um aliado para restaurar a fé.' hideCloseButton closeModal={() => { }} >
             <SelectFriendsIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             <BasicButton
-               
+                disabled={selectedPlayerId === undefined}
                 onPress={() => {
                     console.log(restauracao_de_fe_id + " restaurou a fé de " + selectedPlayerId)
                     WS.sendJsonMessage({

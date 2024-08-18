@@ -51,7 +51,7 @@ export function OnInvoke() {
                     cards={cards_whitout_noe}
                     get_selected_card={setSelectedCardIndex}
                     cards_action={<BasicButton
-                       
+                        disabled={selectedPlayerId === undefined}
                         onPress={() => {
                             console.log(fogo_do_ceu_id + " destriur " + cards_whitout_noe[selectedCardIndex!].in_game_id)
                             WS.sendJsonMessage({

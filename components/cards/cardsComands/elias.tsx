@@ -36,7 +36,7 @@ export function OnInvoke() {
                     cards={player_target_data.card_battle_camp}
                     get_selected_card={setSelectedCardIndex}
                     cards_action={<BasicButton
-                       
+                        disabled={selectedPlayerId === undefined}
                         onPress={() => {
                             console.log(elias_id + " destriur " + player_target_data.card_battle_camp![selectedCardIndex!].in_game_id)
                             WS.sendJsonMessage({
