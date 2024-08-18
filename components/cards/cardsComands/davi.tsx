@@ -37,7 +37,7 @@ export function DaviToggleAttack(props: Props) {
                 <MaterialCommunityIcons name="sword" size={80} color="black" />
             </Pressable>
             <ThemedModal visible={showModal} title='Escolha um oponente' hideCloseButton>
-                <View>
+                <View style={{ width:'95%', minHeight:'15%'}}>
                     <SelectEnemyIconsContainer matchData={matchData} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
                 </View>
                 <View style={{ height: 50, width: 100 }}>
