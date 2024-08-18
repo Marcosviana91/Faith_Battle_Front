@@ -30,15 +30,20 @@ export function SubCardsContainer(props: CardsContainerProps) {
     })
 
     return (
-        <View style={{ width: '100%' }}>
-            <ScrollView horizontal>
-                <View style={[styles.cardsContainer,]}>
-                    {props.cards?.map((card, _index) => (
-                        <SubCard key={_index} index={_index} card={card} card_actions={props.cards_action} get_selected_card={props.get_selected_card} />
-                    )
-                    )}
-                </View>
-            </ScrollView>
+        <View style={{ width: '100%', height: 230 }}>
+            {props.cards?.length === 0 ?
+                <View style={{ alignItems: 'center' }}>
+                    <ThemedText style={{ fontSize: 60, lineHeight: 200 }}>Sem cartas</ThemedText>
+                </View> :
+                <ScrollView horizontal>
+                    <View style={[styles.cardsContainer]}>
+                        {props.cards?.map((card, _index) => (
+                            <SubCard key={_index} index={_index} card={card} card_actions={props.cards_action} get_selected_card={props.get_selected_card} />
+                        )
+                        )}
+                    </View>
+                </ScrollView>
+            }
         </View>
     )
 }
@@ -105,7 +110,8 @@ function SubCard(props: Props) {
 
     return (
         <>
-            <View style={{ alignSelf: isCardInList(props.card?.in_game_id!, cards_to_fight!) ? "flex-start" : "center" }}>
+            {/* <View style={{ alignSelf: isCardInList(props.card?.in_game_id!, cards_to_fight!) ? "flex-start" : "center", backgroundColor:'red' }}> */}
+            <View style={{ alignSelf: "center" }}>
                 <Pressable
                     onPress={() => {
                         setShowModal(!showModal)
@@ -141,6 +147,7 @@ function SubCard(props: Props) {
                                 style={[styles.image, { width: "100%", height: "100%" }]}
                                 source={useCards({ card_slug: props.card?.slug })}
                             />
+                            {/* Pontos de Ataque e Defesa */}
                             {props.card && props.card.in_game_id &&
                                 <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 20, alignItems: 'center' }}>
                                     <View style={{ height: 60, width: '90%', flexDirection: 'row', justifyContent: 'space-between' }}>

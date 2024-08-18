@@ -80,12 +80,13 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                         props.set_show_modal(false)
                                     }
                                 }}
-                                style={{ width: "90%", height: "70%", position: "relative" }}>
+                                style={{ width: "90%", height: "60%", position: "relative" }}>
                                 <Image
                                     resizeMode="stretch"
                                     style={[{ width: "100%", height: "100%" }]}
                                     source={useCards({ card_slug: selectedCard.slug })}
                                 />
+                                {/* Pontos de Ataque e Defesa */}
                                 {selectedCard.in_game_id && (selectedCard.card_type === 'hero' || selectedCard.card_type === 'legendary') &&
                                     <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 20, alignItems:'center' }}>
                                         <View style={{ height: 60, width: '90%', flexDirection: 'row', justifyContent: 'space-between' }}>
