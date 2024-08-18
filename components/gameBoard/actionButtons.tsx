@@ -55,6 +55,7 @@ export default function ActionButtons() {
                     <View>
                         <BasicButton
                             height={30}
+                            disabled={(!player_focus || player_focus == player?.id)}
                             onPress={() => {
                                 if (!player_focus || player_focus == player?.id) {
                                     console.log("Escolha um oponente")
@@ -81,7 +82,7 @@ export default function ActionButtons() {
                                 }
                             }}
                         >
-                            Atacar
+                            {(!player_focus || player_focus == player?.id) ? 'Escolha um oponente' : 'Atacar'}
                         </BasicButton>
                     </View>
                 }
