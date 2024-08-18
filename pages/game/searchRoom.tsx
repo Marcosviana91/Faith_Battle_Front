@@ -6,6 +6,7 @@ import { StyleSheet, View, Text } from 'react-native';
 
 import { useCreateRoomsMutation } from '@/store/api'
 import { setRoom } from "@/store/reducers/matchReducer";
+import { useKeyboard } from '@/hooks/useKeyboard';
 
 import SearchRoomList from '@/pages/game/searchRoomList'
 import ToggleButton from '@/components/button/toggle';
@@ -16,9 +17,9 @@ import { ThemedTextInput } from '@/components/themed/ThemedTextInput';
 
 export default function SearchRoom() {
     const dispatch = useDispatch()
+    const keyboardIsShow = useKeyboard()
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const [createRoom, { data: createdRoomData }] = useCreateRoomsMutation();
-
 
     const gameTypesList = ['survival', 'cooperative']
     // Create new room 'form' values
@@ -36,9 +37,32 @@ export default function SearchRoom() {
         }
     }, [createdRoomData])
 
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        searchRoomContainer: {
+            width: "90%",
+            height: keyboardIsShow[0] ? "50%" : "70%",
+            backgroundColor: "#D9BD76",
+            alignItems: "center",
+            padding: 8,
+        },
+        roomListContainer: {
+            backgroundColor: "red",
+            width: "95%",
+            flex: 1,
+            borderRadius: 8,
+            padding: 8,
+            rowGap: 8,
+        }
+    });
+
 
     return (
-        <View style={[styles.container, { backgroundColor: "#000000b3" }]}>
+        <View style={[styles.container, { backgroundColor: "#000000b3", justifyContent: keyboardIsShow[0] ? 'flex-start' : 'center', paddingTop: keyboardIsShow[0] ? 16: 0 }]}>
             <View style={styles.searchRoomContainer} >
                 <View style={{ flexDirection: "row", width: '95%' }}>
                     <View style={{ width: '100%', padding: 10, flexDirection: "row" }}>
@@ -107,26 +131,3 @@ export default function SearchRoom() {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    searchRoomContainer: {
-        width: "90%",
-        height: "70%",
-        backgroundColor: "#D9BD76",
-        alignItems: "center",
-        padding: 8,
-    },
-    roomListContainer: {
-        backgroundColor: "red",
-        width: "95%",
-        flex: 1,
-        borderRadius: 8,
-        padding: 8,
-        rowGap: 8,
-    }
-});
