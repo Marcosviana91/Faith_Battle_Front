@@ -38,11 +38,11 @@ export function DaviToggleAttack(props: Props) {
             </Pressable>
             <ThemedModal visible={showModal} title='Escolha um oponente' hideCloseButton>
                 <View>
-                    <SelectEnemyIconsContainer matchData={matchData} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId}/>
+                    <SelectEnemyIconsContainer matchData={matchData} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
                 </View>
                 <View style={{ height: 50, width: 100 }}>
                     <BasicButton
-                        disabled={selectedPlayerId===undefined}
+                        disabled={selectedPlayerId === undefined}
                         onPress={() => {
                             let __temp_card = { ...props.card }
                             __temp_card.skill_focus_player_id = matchData?.player_focus_id

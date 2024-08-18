@@ -89,7 +89,7 @@ export default function GameRoom() {
             {/* Botão de ficar pronto */}
             {room.room_stage === 0 && (
                 <BasicButton
-                    height={50}
+                   
                     onPress={() => {
                         WS.sendJsonMessage({
                             data_type: 'ready',
@@ -117,7 +117,7 @@ export default function GameRoom() {
                 </View>
                 <View style={{ flexDirection: 'row', gap: 8, paddingTop: 24 }}>
                     <BasicButton
-                        height={50}
+                       
                         disabled={player.card_retry?.length! > 0}
                         onPress={() => {
                             WS.sendJsonMessage({
@@ -134,7 +134,7 @@ export default function GameRoom() {
                         OK
                     </BasicButton>
                     <BasicButton
-                        height={50}
+                       
                         disabled={!(player.card_retry?.length! > 0)}
                         onPress={() => {
                             WS.sendJsonMessage({

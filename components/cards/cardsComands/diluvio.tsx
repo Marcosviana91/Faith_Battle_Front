@@ -28,7 +28,7 @@ export function OnInvoke() {
         <ThemedModal title='Escolha um oponente para enviar o Dilúvio.' hideCloseButton closeModal={() => { }} >
             <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             <BasicButton
-                height={50}
+               
                 onPress={() => {
                     console.log(restauracao_de_fe_id + " inundou " + selectedPlayerId)
                     WS.sendJsonMessage({

@@ -66,7 +66,7 @@ export default function SearchRoom() {
             <View style={styles.searchRoomContainer} >
                 <View style={{ flexDirection: "row", width: '95%' }}>
                     <View style={{ width: '100%', padding: 10, flexDirection: "row" }}>
-                        <ToggleButton height={50} values={buttons} onPress={setTable} />
+                        <ToggleButton values={buttons} onPress={setTable} />
                     </View>
                 </View>
                 {table === 0 && (
@@ -87,7 +87,7 @@ export default function SearchRoom() {
                             <Text>Estilo de Jogo</Text>
                             <ToggleButton
                                 disabled
-                                height={50}
+                               
                                 values={gameTypesList}
                                 onPress={setNewRoomGameType}
                             />
@@ -109,7 +109,7 @@ export default function SearchRoom() {
                             />
                         </View>
                         <BasicButton
-                            height={50}
+                           
                             onPress={() => {
                                 createRoom({
                                     name: newRoomName,

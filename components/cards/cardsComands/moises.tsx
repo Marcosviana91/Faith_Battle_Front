@@ -27,8 +27,8 @@ export function OnInvoke() {
             setSelectedOption(1)
         }
     }, [])
-    
-    
+
+
 
     if (cardListSea!.length < 1 && cardList!.length < 1) {
         return (
@@ -68,7 +68,6 @@ function ChooseCard(props: ChangeCardOrderProps) {
         <>
             <View style={{ width: "50%", height: 50, margin: 16 }}>
                 <BasicButton
-                    height={50}
                     onPress={() => {
                         WS.sendJsonMessage({
                             "data_type": "match_move",

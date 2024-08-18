@@ -75,7 +75,7 @@ export default function FightCamp() {
                         {(matchData?.player_turn === player?.id) && fight_camp && fight_camp.fight_stage == 1 &&
                             <View style={{ height: 50, width: 100 }}>
                                 <BasicButton
-                                    height={50}
+                                   
                                     onPress={() => {
                                         console.log("Lutar")
                                         const data: APIResponseProps = {
@@ -104,7 +104,7 @@ export default function FightCamp() {
                         {fight_camp && fight_camp.fight_stage === 0 && fight_camp.player_defense_id == player?.id &&
                             <View style={{ height: 50, width: 100 }}>
                                 <BasicButton
-                                    height={50}
+                                   
                                     onPress={() => {
                                         console.log("Defender")
                                         const data: APIResponseProps = {

@@ -11,7 +11,7 @@ type Props = {
 export default function ToggleButton(props: Props) {
     const [activeTab, setActiveTab] = useState(0);
     return (
-        <View style={[styles.buttonContainer, {height: props.height}]}>
+        <View style={[styles.buttonContainer, {height: props.height? props.height : 50}]}>
             {props.values.map((button, _index, _array) => {
                 var buttonStyle = {}
                 var buttonActive = {}

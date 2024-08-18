@@ -21,7 +21,7 @@ export function OnAttack() {
                 <ThemedText>A carta é do tipo MILAGRE. Você comprou uma carta!</ThemedText>
             }
             <BasicButton
-                height={50}
+               
                 onPress={() => {
                     dispatch(setCurrentSkill(undefined))
                 }}

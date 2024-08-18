@@ -29,7 +29,7 @@ export default function BasicButton(props: Props) {
     });
 
     return (
-        <View style={{height: props.height, minWidth: 100}}>
+        <View style={{height: props.height? props.height : 50, minWidth: 100}}>
             <TouchableOpacity disabled={props.disabled} style={styles.button} onPress={props.onPress}>
                 <Text style={{ fontWeight: '700', color: 'black', textAlign:"center" }}>{props.children}</Text>
             </TouchableOpacity>

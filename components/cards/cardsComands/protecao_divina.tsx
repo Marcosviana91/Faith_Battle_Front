@@ -26,7 +26,7 @@ export function OnInvoke() {
         <ThemedModal title='Escolha um aliado para proteger.' hideCloseButton closeModal={() => { }} >
             <SelectFriendsIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} />
             <BasicButton
-                height={50}
+               
                 onPress={() => {
                     let _card = {...card, "skill_focus_player_id": selectedPlayerId}
                     console.log("enviar id do aliado: " + selectedPlayerId)

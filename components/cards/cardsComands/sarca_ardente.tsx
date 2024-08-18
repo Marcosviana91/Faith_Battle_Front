@@ -39,7 +39,7 @@ export function OnInvoke() {
                 <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayer2Id} selected_player_id={selectedPlayer2Id} />
             </ThemedView>
             <BasicButton
-                height={50}
+               
                 onPress={() => {
                     console.log(saraca_ardente_id + " restaurou a fé de " + selectedPlayerId)
                     WS.sendJsonMessage({

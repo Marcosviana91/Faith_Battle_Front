@@ -30,7 +30,7 @@ export function OnInvoke() {
             <ThemedText>Escolha um aliado para dar sabedoria</ThemedText>
             <SelectFriendsIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             <BasicButton
-                height={50}
+               
                 onPress={() => {
                     console.log(sabedoria_de_salomao_id + " restaurou a 3 pontos de sabadoria " + selectedPlayerId)
                     WS.sendJsonMessage({

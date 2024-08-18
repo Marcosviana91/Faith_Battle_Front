@@ -88,6 +88,7 @@ export default function ActionButtons() {
             </> :
             <View style={{ width: '30%' }}>
                 <BasicButton
+                    height={35}
                     onPress={() => {
                         dispatch(leaveMatch())
                     }}
