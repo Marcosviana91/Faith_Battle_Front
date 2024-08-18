@@ -4,7 +4,7 @@ import { isCardInList, useCards } from "@/hooks/useCards";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { RootReducer } from "@/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, Pressable, Modal, Image } from "react-native"
 import { useSelector } from "react-redux";
 
@@ -246,8 +246,10 @@ type Props = {
 
 export function Card(props: Props) {
     const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
 
     const { width: windowWidth, height: windowHeight } = useScreenSizes();
+    const [current_card_id, setCurrentCardId] = useState('')
 
     // tamanho padrão
     //  width: 430,
@@ -330,6 +332,12 @@ export function Card(props: Props) {
             break;
     }
 
+    useEffect(() => {
+        if (props.card?.in_game_id) {
+            setCurrentCardId(props.card?.in_game_id!.split('-')[0])
+        }
+    },[props.card])
+
     return (
         <View>
             {isCardInList(props.card?.in_game_id!, cards_to_fight!) &&
@@ -338,7 +346,7 @@ export function Card(props: Props) {
                 </ThemedText>
             }
             {/* Overlay para cartas não ready */}
-            {props.card?.status !== 'ready' && <View style={{ width: '100%', height: '100%', backgroundColor: '#000a', position: 'absolute', zIndex: 1, borderRadius: 10 }} />}
+            {props.card?.status !== 'ready' && String(player.id) === current_card_id && <View style={{ width: '100%', height: '100%', backgroundColor: '#000a', position: 'absolute', zIndex: 1, borderRadius: 10 }} />}
             <Image
                 resizeMode="stretch"
                 style={[cardSize, borderColor]}
