@@ -12,14 +12,12 @@ import BasicButton from '@/components/button/basic';
 import { setCurrentSkill } from '@/store/reducers/matchReducer';
 import useAppWebSocket from '@/hooks/useAppWebSocket';
 import ToggleButton from '@/components/button/toggle';
-import { ThemedText } from '@/components/themed/ThemedText';
 
 export function OnInvoke() {
     const cardListDeck = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.deck
     const cardListSea = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.forgotten_sea
     const [cardList, setCardList] = useState<CardProps[]>(cardListDeck!)
 
-    const dispatch = useDispatch()
     const [selectedOption, setSelectedOption] = useState<number>(0)
     const [selectedCard, setSelectedCard] = useState<number>()
 
@@ -34,18 +32,11 @@ export function OnInvoke() {
         if (selectedOption === 1) { setCardList(cardListSea!) }
     }, [selectedOption])
 
-    if (cardListSea!.length < 1 && cardList!.length < 1) {
-        return (
-            <ThemedModal title='Escolha um milagre.' closeModal={() => { dispatch(setCurrentSkill(undefined)) }} >
-                <ThemedText>Sem cartas de milagre</ThemedText>
-            </ThemedModal>
-        )
-    }
 
     return (
         <ThemedModal title='Escolha um milagre.' hideCloseButton closeModal={() => { }} >
             <View style={{ height: 50, minWidth: '50%' }}>
-                <ToggleButton disabled={cardListSea!.length < 1 || cardList!.length < 1} values={['DECK', 'MAR']} onPress={setSelectedOption} />
+                <ToggleButton values={['DECK', 'MAR']} onPress={setSelectedOption} />
 
             </View>
             <View style={{ width: "100%" }}>
