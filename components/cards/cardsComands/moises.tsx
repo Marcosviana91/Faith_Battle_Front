@@ -15,8 +15,9 @@ import ToggleButton from '@/components/button/toggle';
 import { ThemedText } from '@/components/themed/ThemedText';
 
 export function OnInvoke() {
-    const cardList = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.deck
+    const cardListDeck = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.deck
     const cardListSea = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.forgotten_sea
+    const [cardList, setCardList] = useState<CardProps[]>(cardListDeck!)
 
     const dispatch = useDispatch()
     const [selectedOption, setSelectedOption] = useState<number>(0)
@@ -28,7 +29,10 @@ export function OnInvoke() {
         }
     }, [])
 
-
+    useEffect(() => {
+        if (selectedOption === 0) { setCardList(cardListDeck!) }
+        if (selectedOption === 1) { setCardList(cardListSea!) }
+    }, [selectedOption])
 
     if (cardListSea!.length < 1 && cardList!.length < 1) {
         return (
@@ -40,10 +44,13 @@ export function OnInvoke() {
 
     return (
         <ThemedModal title='Escolha um milagre.' hideCloseButton closeModal={() => { }} >
-            <ToggleButton disabled={cardListSea!.length < 1 || cardList!.length < 1} height={100} values={['DECK', 'MAR']} onPress={setSelectedOption} />
+            <View style={{ height: 50, minWidth: '50%' }}>
+                <ToggleButton disabled={cardListSea!.length < 1 || cardList!.length < 1} values={['DECK', 'MAR']} onPress={setSelectedOption} />
+
+            </View>
             <View style={{ width: "100%" }}>
                 <SubCardsContainer
-                    cards={selectedOption === 0 ? cardList : cardListSea}
+                    cards={cardList}
                     cards_action={<ChooseCard list={cardList as []} selectedCard={selectedCard} />}
                     get_selected_card={(ind) => { setSelectedCard(ind) }}
                 />
