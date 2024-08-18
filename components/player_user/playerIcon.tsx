@@ -86,7 +86,7 @@ export function PlayerIcon(props: Props) {
 
         return (
             <View style={{ alignItems: "center", width: 100 }}>
-                <Text style={{ fontSize: 18, fontWeight: "700" }}>{userData?.user_data?.username}</Text>
+                <ThemedText style={{ fontSize: 18, fontWeight: "700" }}>{userData?.user_data?.username}</ThemedText>
                 <View style={[styles.playerIcon, styles.playerImage]}>
                     <Image
                         style={{ height: 150, width: 100 }}
