@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Pressable, View, Text } from "react-native"
+import { View } from "react-native"
 
 import { RootReducer } from "@/store"
 import { setPlayer } from "@/store/reducers/matchReducer"
@@ -18,9 +18,32 @@ export default function RetryContainer() {
     const dispatch = useDispatch()
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
     const [selectedCard, setSelectedCard] = useState<CardProps>()
+    const [selectedCardRetry, setSelectedCardRetry] = useState<CardProps>()
     const [showModal, setShowModal] = useState(false)
 
+    // useEffect(() => {
+    //     if (selectedCard) {
+    //         console.log("selectedCard: ", selectedCard)
+    //     }
+    //     if (selectedCardRetry) {
+    //         console.log("selectedCardRetry: ", selectedCardRetry)
+    //     }
+    // }, [selectedCard, selectedCardRetry])
+
+    useEffect(() => {
+        setSelectedCardRetry(undefined)
+    }, [selectedCard])
+
+    useEffect(() => {
+        setSelectedCard(undefined)
+    }, [selectedCardRetry])
+
+    // useEffect(() => {
+    //     console.log("player: ", player)
+    // }, [player])
+
     function actionFunction(props: { card: CardProps, action_index: number }) {
+
         if (player.deck_try! < 3) {
             var hand_cards: CardProps[] = []
             var retry_cards: CardProps[] = []
@@ -35,7 +58,6 @@ export default function RetryContainer() {
                                 hand_cards = [...hand_cards, card]
                             }
                         })
-
                     }
                     else if (isSlugInCardList(props.card.slug, player.card_retry)) {
                         player.card_retry!.map(card => {
@@ -65,10 +87,10 @@ export default function RetryContainer() {
                     <DefaultContainer
                         card_size="medium"
                         cards={player.card_retry!}
-                        card_action_component={[<CardRetry card={selectedCard!} />]}
+                        card_action_component={[<CardRetry card={selectedCardRetry!} />]}
                         card_action_function={actionFunction}
-                        get_selected_card={setSelectedCard}
-                        show_modal={showModal}
+                        get_selected_card={setSelectedCardRetry}
+                        show_modal={showModal && Boolean(selectedCardRetry)}
                         set_show_modal={setShowModal}
                     />
                 }
@@ -82,7 +104,7 @@ export default function RetryContainer() {
                         card_action_component={[<CardRetry card={selectedCard!} />]}
                         card_action_function={actionFunction}
                         get_selected_card={setSelectedCard}
-                        show_modal={showModal}
+                        show_modal={showModal && Boolean(selectedCard)}
                         set_show_modal={setShowModal}
                     />
                 }
@@ -91,8 +113,15 @@ export default function RetryContainer() {
     )
 }
 function CardRetry(props: { card: CardProps }) {
-
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+
+    // useEffect(() => {
+    //     console.log("CardRetry - props ", props)
+    // })
+
+    if (!props.card) {
+        return (null)
+    }
 
     if (player?.deck_try! >= 3) {
         return (
