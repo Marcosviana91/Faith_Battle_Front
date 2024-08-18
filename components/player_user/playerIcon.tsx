@@ -205,11 +205,13 @@ export function IconsContainer(props: ContainerProps) {
 
 export function ShowFightersIconsContainer(props: ContainerProps) {
     return (
-        <View style={{ flexDirection: "row", alignItems: 'center', marginBottom: 12, width: '100%', paddingHorizontal: 24 }}>
+        <ThemedView style={{borderWidth:1, borderRadius:8, padding:8, flexDirection: "row", alignItems: 'center', marginBottom: 12, width: '100%', paddingHorizontal: 24 }}>
             <PlayerIcon id={props.matchData?.fight_camp?.player_attack_id!} type='mini' />
-            <MaterialCommunityIcons style={{}} size={30} name="sword-cross" />
+            <ThemedText style={{ lineHeight: 50 }}>
+                <MaterialCommunityIcons size={40} name="sword-cross" />
+            </ThemedText>
             <PlayerIcon id={props.matchData?.fight_camp?.player_defense_id!} type='mini' />
-        </View>
+        </ThemedView>
     )
 }
 
