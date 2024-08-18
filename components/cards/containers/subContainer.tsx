@@ -125,6 +125,22 @@ function SubCard(props: Props) {
                         style={[cardSize, borderColor]}
                         source={useCards({ card_slug: props.card?.slug })}
                     />
+                    {/* Pontos de Ataque e Defesa */}
+                    {props.card?.in_game_id && (props.card?.card_type === 'hero' || props.card?.card_type === 'legendary') &&
+                        <View style={{ height: 30, width: '100%', position: 'absolute', bottom: 2, alignItems: 'center' }}>
+                            <View style={{ height: 30, width: '90%', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                                <ThemedView lightColor="#ffe600" darkColor="#585000" style={{ flexGrow: 1, height: 30, borderTopStartRadius: 8, borderBottomStartRadius: 8, alignItems: "center", justifyContent: "center" }}>
+                                    <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 24, fontWeight: 700, lineHeight: 26 }}>{props.card?.attack_point}</ThemedText>
+                                </ThemedView>
+
+                                <ThemedView lightColor="#ff3838" darkColor="#421313" style={{ flexGrow: 1, height: 30, borderTopEndRadius: 8, borderBottomEndRadius: 8, alignItems: "center", justifyContent: "center" }}>
+                                    <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 24, fontWeight: 700, lineHeight: 26 }}>{props.card?.defense_points}</ThemedText>
+                                </ThemedView>
+
+                            </View>
+                        </View>
+                    }
                 </Pressable>
             </View>
 
@@ -151,12 +167,12 @@ function SubCard(props: Props) {
                             {props.card && props.card.in_game_id &&
                                 <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 20, alignItems: 'center' }}>
                                     <View style={{ height: 60, width: '90%', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View style={{ backgroundColor: "yellow", width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
-                                            <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{props.card.attack_point}</ThemedText>
-                                        </View>
-                                        <View style={{ backgroundColor: "red", width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
-                                            <ThemedText style={{ color: 'black', fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{props.card.defense_points}</ThemedText>
-                                        </View>
+                                        <ThemedView lightColor="#ffe600" darkColor="#585000" style={{ width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                            <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{props.card.attack_point}</ThemedText>
+                                        </ThemedView>
+                                        <ThemedView lightColor="#ff3838" darkColor="#421313" style={{ width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                            <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{props.card.defense_points}</ThemedText>
+                                        </ThemedView>
                                     </View>
                                 </View>
                             }
