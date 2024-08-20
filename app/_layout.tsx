@@ -6,6 +6,7 @@ import { store } from '@/store';
 import { ThemedView } from "@/components/themed/ThemedView";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { ConnectionStatus } from '@/components/connectionSpot';
+import { NotificationBox } from "@/components/notificationBox";
 
 
 export default function RootLayout() {
@@ -15,6 +16,7 @@ export default function RootLayout() {
             {Platform.OS === 'android' && <ThemedView style={{ height: 50 }} lightColor="#fffc" darkColor="#000c" />}
             <View style={{ height: windowHeight, maxWidth: windowWidth }}>
                 <ConnectionStatus />
+                <NotificationBox />
                 <Slot />
                 {Platform.OS === 'android' && <ThemedView style={{ height: 50 }} lightColor="#fffc" darkColor="#000c" />}
             </View>

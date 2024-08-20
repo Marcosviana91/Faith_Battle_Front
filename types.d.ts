@@ -59,3 +59,15 @@ declare type MatchReducerProps = {
     },
 }
 
+declare type NotificationReducerProps = {
+    notifications: NotificationProps[]
+}
+
+declare type NotificationProps ={
+    id?: string,
+    player_trigger_id: number,
+    card_trigger_id: string,
+    move_type: string,
+    player_target_id: number,
+    card_target_id?: string
+}
