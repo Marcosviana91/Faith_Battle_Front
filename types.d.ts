@@ -47,6 +47,7 @@ declare type MatchReducerProps = {
     room_data?: RoomApiProps,
     match_data?: MatchApiProps,
     player_data?: PlayersInMatchApiProps,
+    players_data?: UserProps[],
     player_match_settings?: {
         player_view_id?: number,
         cards_to_fight: CardProps[],

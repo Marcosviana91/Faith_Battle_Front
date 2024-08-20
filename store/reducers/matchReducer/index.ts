@@ -4,6 +4,7 @@ var initialState: MatchReducerProps = {
     room_data: undefined,
     match_data: undefined,
     player_data: undefined,
+    players_data: [],
     player_match_settings: {
         player_view_id: undefined,
         cards_to_fight: [],
@@ -25,6 +26,15 @@ const matchSlice = createSlice({
         setPlayer: (state, action: PayloadAction<PlayersInMatchApiProps>) => {
             state.player_data = action.payload
         },
+        addPlayersData: (state, action: PayloadAction<UserProps>) => {
+            const _temp_array = state.players_data?.map(p => p)
+            if (_temp_array && _temp_array?.length > 0) {
+                state.players_data = [..._temp_array, action.payload]
+            }
+            else {
+                state.players_data = [action.payload]
+            }
+        },
         setMatch: (state, action: PayloadAction<MatchApiProps>) => {
             state.match_data = action.payload
         },
@@ -44,7 +54,7 @@ const matchSlice = createSlice({
         setCardsToFight: (state, action: PayloadAction<CardProps[]>) => {
             state.player_match_settings!.cards_to_fight = action.payload
         },
-        setCurrentSkill: (state, action: PayloadAction<{ slug: string, deck: CardProps[] }|undefined>) => {
+        setCurrentSkill: (state, action: PayloadAction<{ slug: string, deck: CardProps[] } | undefined>) => {
             state.player_match_settings!.current_skill = action.payload!
         },
         clearCardsToFight: (state) => {
@@ -58,5 +68,5 @@ const matchSlice = createSlice({
 
     }
 })
-export const { setMatch, setRoom, setPlayer, setPlayerFocus, toggleCardsToFight, setCardsToFight, setCurrentSkill, clearCardsToFight, leaveMatch } = matchSlice.actions
+export const { setMatch, setRoom, setPlayer, addPlayersData, setPlayerFocus, toggleCardsToFight, setCardsToFight, setCurrentSkill, clearCardsToFight, leaveMatch } = matchSlice.actions
 export default matchSlice.reducer

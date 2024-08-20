@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootReducer } from '@/store';
 
-import { setPlayerFocus } from "@/store/reducers/matchReducer";
+import { setPlayerFocus, addPlayersData } from "@/store/reducers/matchReducer";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 import { View, Image, Text, StyleSheet, Pressable, ScrollView } from "react-native";
@@ -27,8 +27,12 @@ type Props = {
 
 
 export function PlayerIcon(props: Props) {
+    const dispatch = useDispatch()
+    const playersData = useSelector((state: RootReducer) => state.matchReducer.players_data)
     const [getUser, { data: userData, error: userError }] = useGetUserDataMutation();
     const [avatar, setAvatar] = useState()
+    const _PlayerData = playersData?.filter((player) => player.id === props.id)[0]
+    const [playerDataCurrent, setPlayerDataCurrent] = useState<UserProps>()
 
     var border_color = 'gray'
     if (props.isTarget) { border_color = "red" }
@@ -66,12 +70,22 @@ export function PlayerIcon(props: Props) {
     })
     useEffect(() => {
         if (props.id > 0) {
-            getUser(props.id)
+            if (_PlayerData) {
+                setPlayerDataCurrent(_PlayerData)
+                setAvatar(useAvatar({ avatar_index: _PlayerData.avatar! }))
+            } else (
+                getUser(props.id)
+            )
         }
     }, [])
     useEffect(() => {
         if (userData) {
+            setPlayerDataCurrent(userData.user_data)
             setAvatar(useAvatar({ avatar_index: userData.user_data?.avatar! }))
+            if (userData.user_data) {
+                dispatch(addPlayersData(userData.user_data))
+
+            }
         }
     }, [userData])
 
@@ -86,7 +100,7 @@ export function PlayerIcon(props: Props) {
 
         return (
             <View style={{ alignItems: "center", width: 100 }}>
-                <ThemedText style={{ fontSize: 18, fontWeight: "700" }}>{userData?.user_data?.username}</ThemedText>
+                <ThemedText style={{ fontSize: 18, fontWeight: "700" }}>{playerDataCurrent?.username}</ThemedText>
                 <View style={[styles.playerIcon, styles.playerImage]}>
                     <Image
                         style={{ height: 150, width: 100 }}
@@ -118,7 +132,7 @@ export function PlayerIcon(props: Props) {
                     alignItems: "center"
                 }}
             >
-                <Text style={{ fontSize: 14, fontWeight: "700" }}>{userData?.user_data?.username}</Text>
+                <Text style={{ fontSize: 14, fontWeight: "700" }}>{playerDataCurrent?.username}</Text>
             </View>
             <View style={styles.playerIconMini}>
                 <Image
@@ -205,7 +219,7 @@ export function IconsContainer(props: ContainerProps) {
 
 export function ShowFightersIconsContainer(props: ContainerProps) {
     return (
-        <ThemedView style={{borderWidth:1, borderRadius:8, padding:8, flexDirection: "row", alignItems: 'center', marginBottom: 12, width: '100%', paddingHorizontal: 24 }}>
+        <ThemedView style={{ borderWidth: 1, borderRadius: 8, padding: 8, flexDirection: "row", alignItems: 'center', marginBottom: 12, width: '100%', paddingHorizontal: 24 }}>
             <PlayerIcon id={props.matchData?.fight_camp?.player_attack_id!} type='mini' />
             <ThemedText style={{ lineHeight: 50 }}>
                 <MaterialCommunityIcons size={40} name="sword-cross" />
