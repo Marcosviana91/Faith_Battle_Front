@@ -59,9 +59,11 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
 }
 
 function OnCardToggleDefense(props: { player_in_match: PlayersInMatchApiProps, get_selected_card_index: (card_index: number) => void, dispatchCardAction: () => void, style?: StyleProp<ViewStyle> }) {
+    const _card_in_battle_camp_without_artifacts = props.player_in_match.card_battle_camp?.filter(card => (card.card_type !== "artifact"))
+
     return (
         <View style={props.style}>
-            <SubCardsContainer cards={props.player_in_match.card_battle_camp} get_selected_card={props.get_selected_card_index} cards_action={<Pressable onPress={() => props.dispatchCardAction()}>
+            <SubCardsContainer cards={_card_in_battle_camp_without_artifacts} get_selected_card={props.get_selected_card_index} cards_action={<Pressable onPress={() => props.dispatchCardAction()}>
                 <MaterialCommunityIcons name="shield-sword" size={80} color="black" />
             </Pressable>} />
         </View>
