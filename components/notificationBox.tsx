@@ -70,7 +70,7 @@ function Notification(props: NotificationProps) {
             }}
         >
             <Animated.View entering={BounceInDown} exiting={SlideOutRight} layout={LinearTransition}
-                style={{ backgroundColor: '#fffb', height: 90, width: NOTIFICATION_WIDTH, borderTopStartRadius: 8, borderBottomStartRadius: 8 }}
+                style={{ backgroundColor: '#fffb', minHeight: 90, paddingBottom:8, width: NOTIFICATION_WIDTH, borderTopStartRadius: 8, borderBottomStartRadius: 8 }}
             >
                 {!props.stillUntilDismiss && <View style={{ width: '100%', height: 8, position: 'absolute' }}>
                     <Animated.View style={{ width: width, alignSelf: 'flex-end', height: 8, backgroundColor: 'red' }} />
