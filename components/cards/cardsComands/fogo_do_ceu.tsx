@@ -30,7 +30,7 @@ export function OnInvoke() {
 
     useEffect(() => {
         if (player_target_data) {
-            let __temp_array:CardProps[]= []
+            let __temp_array: CardProps[] = []
 
             player_target_data.card_battle_camp?.map((_card) => {
                 if (_card.slug !== 'noe') {
@@ -47,35 +47,61 @@ export function OnInvoke() {
             <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             {/* Cartas no campo de batalha */}
             {selectedPlayerId !== player?.id && player_target_data &&
-                <SubCardsContainer
-                    cards={cards_whitout_noe}
-                    get_selected_card={setSelectedCardIndex}
-                    cards_action={<BasicButton
-                        disabled={selectedPlayerId === undefined}
-                        onPress={() => {
-                            console.log(fogo_do_ceu_id + " destriur " + cards_whitout_noe[selectedCardIndex!].in_game_id)
-                            WS.sendJsonMessage({
-                                "data_type": "match_move",
-                                "user_data": {
-                                    "id": player?.id
-                                },
-                                "room_data": {
-                                    "id": matchData?.id
-                                },
-                                "match_move": {
-                                    "match_id": matchData?.id,
-                                    "round_match": matchData?.round_match,
-                                    "player_move": player?.id,
-                                    "card_id": fogo_do_ceu_id,//Fogo do Céu
-                                    "move_type": "card_skill",
-                                    "player_target": selectedPlayerId,
-                                    "card_target": cards_whitout_noe[selectedCardIndex!].in_game_id, //Carta para destruir
-                                }
-                            })
-                            dispatch(setCurrentSkill(undefined))
-                        }}
-                    >Ok</BasicButton>}
-                />}
+                <>
+                    <SubCardsContainer
+                        cards={cards_whitout_noe}
+                        get_selected_card={setSelectedCardIndex}
+                        cards_action={<BasicButton
+                            disabled={selectedPlayerId === undefined}
+                            onPress={() => {
+                                console.log(fogo_do_ceu_id + " destriur " + cards_whitout_noe[selectedCardIndex!].in_game_id)
+                                WS.sendJsonMessage({
+                                    "data_type": "match_move",
+                                    "user_data": {
+                                        "id": player?.id
+                                    },
+                                    "room_data": {
+                                        "id": matchData?.id
+                                    },
+                                    "match_move": {
+                                        "match_id": matchData?.id,
+                                        "round_match": matchData?.round_match,
+                                        "player_move": player?.id,
+                                        "card_id": fogo_do_ceu_id,//Fogo do Céu
+                                        "move_type": "card_skill",
+                                        "player_target": selectedPlayerId,
+                                        "card_target": cards_whitout_noe[selectedCardIndex!].in_game_id, //Carta para destruir
+                                    }
+                                })
+                                dispatch(setCurrentSkill(undefined))
+                            }}
+                        >Ok</BasicButton>}
+                    />
+                    {cards_whitout_noe.length == 0 &&
+                        <BasicButton
+                            onPress={() => {
+                                WS.sendJsonMessage({
+                                    "data_type": "match_move",
+                                    "user_data": {
+                                        "id": player?.id
+                                    },
+                                    "room_data": {
+                                        "id": matchData?.id
+                                    },
+                                    "match_move": {
+                                        "match_id": matchData?.id,
+                                        "round_match": matchData?.round_match,
+                                        "player_move": player?.id,
+                                        "card_id": fogo_do_ceu_id,//Fogo do Céu
+                                        "move_type": "card_skill",
+                                    }
+                                })
+                                dispatch(setCurrentSkill(undefined))
+                            }}
+                        >OK</BasicButton>
+                    }
+                </>
+            }
         </ThemedModal>
     )
 }

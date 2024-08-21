@@ -32,13 +32,39 @@ export function OnInvoke() {
             <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             {/* Cartas no campo de batalha */}
             {selectedPlayerId !== player?.id && player_target_data &&
-                <SubCardsContainer
-                    cards={player_target_data.card_battle_camp}
-                    get_selected_card={setSelectedCardIndex}
-                    cards_action={<BasicButton
-                        disabled={selectedPlayerId === undefined}
+                <>
+                    <SubCardsContainer
+                        cards={player_target_data.card_battle_camp}
+                        get_selected_card={setSelectedCardIndex}
+                        cards_action={<BasicButton
+                            disabled={selectedPlayerId === undefined}
+                            onPress={() => {
+                                console.log(elias_id + " destriur " + player_target_data.card_battle_camp![selectedCardIndex!].in_game_id)
+                                WS.sendJsonMessage({
+                                    "data_type": "match_move",
+                                    "user_data": {
+                                        "id": player?.id
+                                    },
+                                    "room_data": {
+                                        "id": matchData?.id
+                                    },
+                                    "match_move": {
+                                        "match_id": matchData?.id,
+                                        "round_match": matchData?.round_match,
+                                        "player_move": player?.id,
+                                        "card_id": elias_id,//Elias
+                                        "move_type": "card_skill",
+                                        "player_target": selectedPlayerId,
+                                        "card_target": player_target_data.card_battle_camp![selectedCardIndex!].in_game_id, //Carta para destruir
+                                    }
+                                })
+                                dispatch(setCurrentSkill(undefined))
+                            }}
+                        >Ok</BasicButton>}
+                    />
+                    {player_target_data.card_battle_camp?.length == 0 &&
+                    <BasicButton
                         onPress={() => {
-                            console.log(elias_id + " destriur " + player_target_data.card_battle_camp![selectedCardIndex!].in_game_id)
                             WS.sendJsonMessage({
                                 "data_type": "match_move",
                                 "user_data": {
@@ -53,14 +79,14 @@ export function OnInvoke() {
                                     "player_move": player?.id,
                                     "card_id": elias_id,//Elias
                                     "move_type": "card_skill",
-                                    "player_target": selectedPlayerId,
-                                    "card_target": player_target_data.card_battle_camp![selectedCardIndex!].in_game_id, //Carta para destruir
                                 }
                             })
                             dispatch(setCurrentSkill(undefined))
                         }}
-                    >Ok</BasicButton>}
-                />}
+                    >OK</BasicButton>
+                }
+                </>
+                }
         </ThemedModal>
     )
 }
