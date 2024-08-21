@@ -7,6 +7,7 @@ import { useState } from "react"
 
 import { OnInvoke as HeroOnInvoke, OnInvokeDefaultAction as HeroOnInvokeAction } from "../cardsComands/heros"
 import { OnInvoke as MiracleOnInvoke, OnInvokeDefaultAction as MiracleOnInvokeAction } from "../cardsComands/miracles"
+import { OnInvoke as ArtifactOnInvoke, OnInvokeDefaultAction as ArtifactOnInvokeAction } from "../cardsComands/artifacts"
 import useAppWebSocket from "@/hooks/useAppWebSocket"
 import { useScreenSizes } from "@/hooks/useScreenSizes"
 
@@ -32,6 +33,14 @@ export default function HandContainer() {
                 break
             case "hero":
                 HeroOnInvokeAction({
+                    card: props.card,
+                    web_socket: WS,
+                    player: player!,
+                    matchData: matchData!,
+                })
+                break
+            case "artifact":
+                ArtifactOnInvokeAction({
                     card: props.card,
                     web_socket: WS,
                     player: player!,
@@ -74,6 +83,10 @@ function OnInvoke(props: { card: CardProps }) {
         case "miracle":
             return (
                 <MiracleOnInvoke card={props.card} />
+            )
+        case "artifact":
+            return (
+                <ArtifactOnInvoke card={props.card} />
             )
     }
 
