@@ -334,7 +334,7 @@ export function Card(props: Props) {
 
     useEffect(() => {
         if (props.card?.in_game_id) {
-            setCurrentCardId(props.card?.in_game_id!.split('-')[0])
+            setCurrentCardId(props.card?.in_game_id!.split('_')[0])
         }
     }, [props.card])
 
@@ -368,6 +368,23 @@ export function Card(props: Props) {
                     </View>
                 </View>
             }
+        </View>
+    )
+}
+
+type NotifyCardProps = {
+    card_slug?: string; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
+}
+
+export function NotifyCard(props: NotifyCardProps) {
+
+    return (
+        <View>
+            <Image
+                resizeMode="stretch"
+                style={{width:50, height:75}}
+                source={useCards({ card_slug: props.card_slug })}
+            />
         </View>
     )
 }

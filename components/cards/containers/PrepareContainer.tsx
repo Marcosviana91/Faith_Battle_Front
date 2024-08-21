@@ -51,7 +51,7 @@ function OnMoveToPrepare(props: {card: CardProps}) {
     if (matchData.player_turn !== player.id || props.card.status !== 'ready') {
         return null
     }
-    if (String(player.id) !== props.card.in_game_id!.split('-')[0]) {
+    if (String(player.id) !== props.card.in_game_id!.split('_')[0]) {
         return null
     }
     return (

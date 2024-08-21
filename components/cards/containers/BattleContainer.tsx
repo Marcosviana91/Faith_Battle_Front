@@ -78,7 +78,7 @@ function OnMoveToFight(props: { card: CardProps }) {
         return null
     }
 
-    if (String(player.id) !== props.card.in_game_id!.split('-')[0]) {
+    if (String(player.id) !== props.card.in_game_id!.split('_')[0]) {
         return null
     }
 
@@ -113,7 +113,7 @@ function OnRetreatToPrepare(props: { card: CardProps }) {
     if (matchData.player_turn !== player.id || isCardInList(props.card.in_game_id, cards_to_fight)) {
         return null
     }
-    if (String(player.id) !== props.card.in_game_id!.split('-')[0]) {
+    if (String(player.id) !== props.card.in_game_id!.split('_')[0]) {
         return null
     }
     return (
