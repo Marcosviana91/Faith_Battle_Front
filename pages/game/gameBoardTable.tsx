@@ -20,6 +20,7 @@ import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria
 import { OnInvoke as MoisesOnInvoke } from '@/components/cards/cardsComands/moises';
 import { OnInvoke as DiluvioOnInvoke } from '@/components/cards/cardsComands/diluvio';
 import { OnInvoke as FogoDoCeuOnInvoke } from '@/components/cards/cardsComands/fogo_do_ceu';
+import { OnInvoke as NoCeuTemPaoOnInvoke } from '@/components/cards/cardsComands/no_ceu_tem_pao';
 import { OnInvoke as RestauracaoDeFeOnInvoke } from '@/components/cards/cardsComands/restauracao_de_fe';
 import { OnInvoke as SabedoriaDeSalomaoOnInvoke } from '@/components/cards/cardsComands/sabedoria_de_salomao';
 import { OnInvoke as SarcaArdenteOnInvoke } from '@/components/cards/cardsComands/sarca_ardente';
@@ -54,6 +55,8 @@ export default function GameBoardTable() {
                 return <RestauracaoDeFeOnInvoke />
             case 'diluvio':
                 return <DiluvioOnInvoke />
+            case 'no-ceu-tem-pao':
+                return <NoCeuTemPaoOnInvoke />
             case 'sabedoria-de-salomao':
                 return <SabedoriaDeSalomaoOnInvoke />
             // case 'protecao-divina':
