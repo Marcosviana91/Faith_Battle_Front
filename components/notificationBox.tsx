@@ -1,40 +1,109 @@
 import { RootReducer } from "@/store"
-import { View, Text} from "react-native"
+import { Button, Pressable, Text, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavBarDimension } from "@/hooks/useScreenSizes"
+import { PlayerIcon } from "./player_user/playerIcon"
+import { NotifyCard } from "./cards/containers/DefaultContainer"
+import { addNotify, rmvNotify } from "@/store/reducers/notificationReducer"
+import Animated, { BounceInDown, Easing, LinearTransition, SlideOutRight, useSharedValue, withTiming } from "react-native-reanimated"
+import { useEffect } from "react"
+import useAppWebSocket from "@/hooks/useAppWebSocket"
+
+const NOTIFICATION_WIDTH = 300
+const NOTIFICATION_TIMEOUT = 3000
 
 
 export function NotificationBox() {
     const notificationsData = useSelector((state: RootReducer) => state.notificationReducer.notifications)
     const navBarHeight = useNavBarDimension()
+    const dispatch = useDispatch()
+    const WS = useAppWebSocket()
 
-    return null ; (
-        <View style={{ backgroundColor: '#fff7', zIndex: 9000, position: 'absolute', right: 0, bottom: navBarHeight, paddingBottom: 8, height: "100%", width: 280, flexDirection: 'column-reverse', paddingRight: 8, gap: 8 }}>
-            {notificationsData.map((notification) => (<Notification {...notification} />))}
+    useEffect(() => {
+        if (WS.lastJsonMessage) {
+            const data = WS.lastJsonMessage as APIResponseProps
+            if (data.data_type === "notification") {
+                console.log('<<< NOTIFICATION: ', data.notification)
+                dispatch(addNotify(data.notification))
+            }
+        }
+    }, [WS.lastJsonMessage])
 
+
+    return (
+        <View style={{ zIndex: 9000, position: 'absolute', right: 0, bottom: navBarHeight, paddingBottom: 8, width: NOTIFICATION_WIDTH, flexDirection: 'column', justifyContent: 'flex-end', paddingRight: 8, gap: 8 }}>
+            {notificationsData.map((notification) => (<Notification key={notification.id} {...notification} />))}
+            {/* <Button
+                title="ADD"
+                onPress={() => {
+                    dispatch(addNotify({
+                        stillUntilDismiss: true,
+                        title: "Nova rodada!",
+                        message: "Sua vez!",
+                    }))
+                }}
+            /> */}
         </View>
     )
 }
 
 function Notification(props: NotificationProps) {
     const dispatch = useDispatch()
-    return (
-        <View style={{ backgroundColor: 'cyan', height: 100 }}>
-            <View style={{ width: '100%', height:8 }}>
-                <View style={{ width: '5%', alignSelf: 'flex-end', height:8, backgroundColor:'red' }}>
-                </View>
-            </View>
-            <View style={{ backgroundColor:'#fffc', flex:1, flexDirection:'row' }}>
 
-                <Text>{props.player_trigger_id}</Text>
-                <Text>{props.card_trigger_id.split('-')[1]}</Text>
-                <Text>{props.player_target_id}</Text>
-                {props.card_target_id &&
-                    <>
-                        <Text>{props.card_target_id.split('-')[1]}</Text>
-                    </>
-                }
-            </View>
-        </View>
+    const width = useSharedValue(NOTIFICATION_WIDTH)
+
+    useEffect(() => {
+        if (!props.stillUntilDismiss) {
+            width.value = withTiming(0, { duration: NOTIFICATION_TIMEOUT, easing: Easing.linear })
+            setTimeout(() => {
+                dispatch(rmvNotify(props.id!))
+            }, NOTIFICATION_TIMEOUT)
+        }
+    }, [])
+
+
+    return (
+        <Pressable
+            onPress={() => {
+                dispatch(rmvNotify(props.id!))
+                width.value = 0
+            }}
+        >
+            <Animated.View entering={BounceInDown} exiting={SlideOutRight} layout={LinearTransition}
+                style={{ backgroundColor: '#fffb', height: 90, width: NOTIFICATION_WIDTH, borderTopStartRadius: 8, borderBottomStartRadius: 8 }}
+            >
+                {!props.stillUntilDismiss && <View style={{ width: '100%', height: 8, position: 'absolute' }}>
+                    <Animated.View style={{ width: width, alignSelf: 'flex-end', height: 8, backgroundColor: 'red' }} />
+                </View>}
+                {props.message ?
+                    (<View style={{ paddingHorizontal: 8 }}>
+                        <View style={{height:30}}>
+                            <Text style={{ fontSize: 18, fontWeight: 700 }}>{props.title}</Text>
+                        </View>
+                        <View>
+                            <Text>{props.message}</Text>
+                        </View>
+
+                    </View>) :
+                    (<View style={{ flexDirection: 'row', paddingTop: 10, paddingEnd: 4, justifyContent: 'flex-end', gap: 16 }}>
+                        <View>
+                            <PlayerIcon id={props.player_trigger_id!} type="mini" isCurrent />
+                        </View>
+                        <View>
+                            <NotifyCard card_slug={props.card_trigger_id!.split('_')[1]} />
+                        </View>
+                        <View>
+                            <PlayerIcon id={props.player_target_id!} type="mini" isTarget />
+                        </View>
+                        {props.card_target_id &&
+                            <View>
+                                <NotifyCard card_slug={props.card_target_id.split('_')[1]} />
+                            </View>
+                        }
+                    </View>)}
+
+            </Animated.View>
+        </Pressable>
+
     )
 } 
