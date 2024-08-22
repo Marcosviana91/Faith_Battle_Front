@@ -12,6 +12,7 @@ type CardsContainerProps = {
     cards?: CardProps[];
     cards_action?: React.ReactNode;
     get_selected_card?: (card_index: number) => void;
+    selected_card_index?: number;
 }
 
 // SubContainer

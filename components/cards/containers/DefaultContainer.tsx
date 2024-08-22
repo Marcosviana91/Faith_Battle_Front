@@ -7,13 +7,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, Pressable, Modal, Image } from "react-native"
 import { useSelector } from "react-redux";
+import { SelectableCardsContainer } from "./SelectableCardsContainer";
 
 
 type DefaultContainerProps = {
     cards: CardProps[],
     card_size?: "normal" | "medium" | "small" | "minimum";
     card_action_function?: (props: { card: CardProps, action_index: number }) => void;
-    card_action_component: React.ReactNode[];
+    card_action_component?: React.ReactNode[];
     get_selected_card?: (card: CardProps) => void;
     show_action_in_bottom?: boolean;
     show_modal?: boolean;
@@ -54,17 +55,20 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                     >
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", flexDirection: props.show_action_in_bottom ? "column-reverse" : 'column' }}>
                             {/* Card Commands */}
-                            {selectedCard.status === 'ready' &&
+                            {selectedCard.status === 'ready' && props.card_action_component &&
                                 <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                     {props.card_action_component.map((component, _index) => (
                                         <Pressable
                                             key={_index}
-                                            style={{ marginBottom: 24 }}
+                                            style={{
+                                                marginBottom: props.show_action_in_bottom ? 0 : 24,
+                                                marginTop: props.show_action_in_bottom ? 24 : 0
+                                            }}
                                             onPress={() => {
                                                 if (props.card_action_function) {
                                                     props.card_action_function({ card: selectedCard, action_index: _index })
                                                 }
-                                                if (props.set_show_modal) {
+                                                if (props.set_show_modal && selectedCard?.card_type !== 'artifact') {
                                                     props.set_show_modal(false)
                                                 }
                                             }}>
@@ -100,6 +104,12 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     </View>
                                 }
                             </Pressable>
+                            {/* Itens equipados */}
+                            {selectedCard.attached_cards && selectedCard.attached_cards.length > 1 &&
+                                <View>
+                                    <SelectableCardsContainer card_size="minimum" cards={selectedCard.attached_cards} />
+                                </View>
+                            }
                         </View>
                     </ThemedView>
                 </Modal>
@@ -110,7 +120,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
 
 
 type SimpleCardProps = {
-    unavailable?: boolean,
+    unavailable?: boolean, // seta overlay para cartas não disponíveis para jogar
     size?: "normal" | "medium" | "small" | "minimum";
     card?: CardProps; //Caso não seja passado um Slug, deve renderizar uma carta virada de costa
 }
@@ -382,7 +392,7 @@ export function NotifyCard(props: NotifyCardProps) {
         <View>
             <Image
                 resizeMode="stretch"
-                style={{width:50, height:75}}
+                style={{ width: 50, height: 75 }}
                 source={useCards({ card_slug: props.card_slug })}
             />
         </View>

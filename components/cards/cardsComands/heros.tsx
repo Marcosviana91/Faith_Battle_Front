@@ -10,9 +10,9 @@ type OnInvokeProps = {
 export function OnInvoke(props: OnInvokeProps) {
 
     return (
-        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto", marginVertical: 24 }}>
-            <ThemedText style={{ lineHeight: 80 }}>
-                <MaterialCommunityIcons name="arrow-up" size={80} />
+        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", minWidth: 150, alignItems:'center' }}>
+            <ThemedText style={{ lineHeight: 50 }}>
+                <MaterialCommunityIcons name="arrow-up" size={50} />
             </ThemedText>
         </ThemedView>
     )

@@ -12,9 +12,9 @@ type Props = {
 
 export function OnInvoke(props: Props) {
     return (
-        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto", marginVertical: 24 }}>
-            <ThemedText style={{ lineHeight: 80 }}>
-            <Feather name="layers" size={80} />
+        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", minWidth: 150, alignItems: 'center' }}>
+            <ThemedText style={{ lineHeight: 50 }}>
+                <Feather name="layers" size={50} />
             </ThemedText>
         </ThemedView>
     )
