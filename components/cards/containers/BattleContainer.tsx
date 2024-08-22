@@ -85,6 +85,10 @@ function OnMoveToFight(props: { card: CardProps }) {
     if (props.card.slug === 'davi' && !isCardInList(props.card.in_game_id, cards_to_fight)) {
         return <DaviToggleAttack card={props.card} />
     }
+    
+    if (props.card.card_type === "artifact") {
+        return null
+    }
 
     if (isCardInList(props.card.in_game_id, cards_to_fight)) {
         return (
@@ -114,6 +118,9 @@ function OnRetreatToPrepare(props: { card: CardProps }) {
         return null
     }
     if (String(player.id) !== props.card.in_game_id!.split('_')[0]) {
+        return null
+    }
+    if (props.card.card_type === "artifact") {
         return null
     }
     return (

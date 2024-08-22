@@ -21,7 +21,7 @@ export const Colors = {
   dark: {
     text: '#687076',
     button_background_disabled: '#333',
-    button_txtInput: "#27419B",
+    button_txtInput: "#5872d1",
     background: '#11181C',
     border: '#9BA1A6',
     tint: tintColorDark,
