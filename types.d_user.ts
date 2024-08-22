@@ -44,4 +44,3 @@ declare type PlayersInMatchApiProps = {
     nao_sofre_danos_de_efeitos?: boolean,
     nao_sofre_ataque_de_herois?: boolean,
 }
-
