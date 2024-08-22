@@ -29,6 +29,9 @@ declare type CardProps = {
     skill_focus_player_id?: number,
     attachable?: boolean,
     attached_cards?: CardProps[],
+    imbloqueavel?: boolean,
+    indestrutivel?: boolean,
+    nao_pode_ser_alvo_de_pecado?: boolean,
 }
 
 declare type APIMoveProps = {
