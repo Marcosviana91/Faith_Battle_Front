@@ -27,8 +27,11 @@ declare type CardProps = {
     wisdom_cost?: number,
     status?: "ready" | "not-enough" | "used",
     skill_focus_player_id?: number,
-    skill_focus_player2_id?: number,
-    skill_focus_card_id?: string,
+    attachable?: boolean,
+    attached_cards?: CardProps[],
+    imbloqueavel?: boolean,
+    indestrutivel?: boolean,
+    nao_pode_ser_alvo_de_pecado?: boolean,
 }
 
 declare type APIMoveProps = {
