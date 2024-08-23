@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { View } from "react-native"
+import { Pressable, View } from "react-native"
 
 import { RootReducer } from "@/store"
 import { setPlayer } from "@/store/reducers/matchReducer"
@@ -21,15 +21,6 @@ export default function RetryContainer() {
     const [selectedCardRetry, setSelectedCardRetry] = useState<CardProps>()
     const [showModal, setShowModal] = useState(false)
 
-    // useEffect(() => {
-    //     if (selectedCard) {
-    //         console.log("selectedCard: ", selectedCard)
-    //     }
-    //     if (selectedCardRetry) {
-    //         console.log("selectedCardRetry: ", selectedCardRetry)
-    //     }
-    // }, [selectedCard, selectedCardRetry])
-
     useEffect(() => {
         setSelectedCardRetry(undefined)
     }, [selectedCard])
@@ -38,45 +29,59 @@ export default function RetryContainer() {
         setSelectedCard(undefined)
     }, [selectedCardRetry])
 
-    // useEffect(() => {
-    //     console.log("player: ", player)
-    // }, [player])
+    function CardRetry(props: { card: CardProps }) {
 
-    function actionFunction(props: { card: CardProps, action_index: number }) {
-
-        if (player.deck_try! < 3) {
-            var hand_cards: CardProps[] = []
-            var retry_cards: CardProps[] = []
-
-            switch (props.action_index) {
-                case 0:
-                    if (isSlugInCardList(props.card.slug, player.card_hand)) {
-                        player.card_hand!.map(card => {
-                            if (card.slug == props.card.slug) {
-                                retry_cards = player.card_retry ? [...player.card_retry, card] : [card]
-                            } else {
-                                hand_cards = [...hand_cards, card]
-                            }
-                        })
-                    }
-                    else if (isSlugInCardList(props.card.slug, player.card_retry)) {
-                        player.card_retry!.map(card => {
-                            if (card.slug == props.card.slug) {
-                                hand_cards = [...player.card_hand!, card]
-                            } else {
-                                retry_cards = [...retry_cards, card]
-                            }
-                        })
-                    }
-                    dispatch(setPlayer({
-                        ...player!, card_retry: retry_cards, card_hand: hand_cards
-                    }))
-                    break
-                default:
-                    console.log('action_index ', props.action_index)
-                    break
-            }
+        if (!props.card) {
+            return (null)
         }
+
+        if (player?.deck_try! >= 3) {
+            return (
+                <View style={{ borderRadius: 8, marginTop: 8 }}>
+                    <MaterialCommunityIcons name="block-helper" size={50} color="black" />
+                </View>
+            )
+        }
+        return (
+            <Pressable
+                onPress={() => {
+                    if (player.deck_try! < 3) {
+                        var hand_cards: CardProps[] = []
+                        var retry_cards: CardProps[] = []
+
+                        if (isSlugInCardList(props.card.slug, player.card_hand)) {
+                            player.card_hand!.map(card => {
+                                if (card.slug == props.card.slug) {
+                                    retry_cards = player.card_retry ? [...player.card_retry, card] : [card]
+                                } else {
+                                    hand_cards = [...hand_cards, card]
+                                }
+                            })
+                        }
+                        else if (isSlugInCardList(props.card.slug, player.card_retry)) {
+                            player.card_retry!.map(card => {
+                                if (card.slug == props.card.slug) {
+                                    hand_cards = [...player.card_hand!, card]
+                                } else {
+                                    retry_cards = [...retry_cards, card]
+                                }
+                            })
+                        }
+                        dispatch(setPlayer({
+                            ...player!, card_retry: retry_cards, card_hand: hand_cards
+                        }))
+                    }
+                    setShowModal(false)
+                }}
+            >
+                <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", minWidth:150, alignItems:'center' }}>
+                    <ThemedText style={{ lineHeight: 50 }}>
+                        {isSlugInCardList(props.card.slug, player?.card_hand) && <MaterialCommunityIcons name="reload-alert" size={50} />}
+                        {isSlugInCardList(props.card.slug, player?.card_retry) && <MaterialCommunityIcons name="reload" size={50} />}
+                    </ThemedText>
+                </ThemedView>
+            </Pressable>
+        )
     }
 
     return (
@@ -88,7 +93,6 @@ export default function RetryContainer() {
                         card_size="medium"
                         cards={player.card_retry!}
                         card_action_component={[<CardRetry card={selectedCardRetry!} />]}
-                        card_action_function={actionFunction}
                         get_selected_card={setSelectedCardRetry}
                         show_modal={showModal && Boolean(selectedCardRetry)}
                         set_show_modal={setShowModal}
@@ -102,7 +106,6 @@ export default function RetryContainer() {
                         card_size="medium"
                         cards={player!.card_hand!}
                         card_action_component={[<CardRetry card={selectedCard!} />]}
-                        card_action_function={actionFunction}
                         get_selected_card={setSelectedCard}
                         show_modal={showModal && Boolean(selectedCard)}
                         set_show_modal={setShowModal}
@@ -112,30 +115,4 @@ export default function RetryContainer() {
         </View>
     )
 }
-function CardRetry(props: { card: CardProps }) {
-    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
 
-    // useEffect(() => {
-    //     console.log("CardRetry - props ", props)
-    // })
-
-    if (!props.card) {
-        return (null)
-    }
-
-    if (player?.deck_try! >= 3) {
-        return (
-            <View style={{ borderRadius: 8, marginTop: 8 }}>
-                <MaterialCommunityIcons name="block-helper" size={80} color="black" />
-            </View>
-        )
-    }
-    return (
-        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto" }}>
-            <ThemedText style={{ lineHeight: 80 }}>
-                {isSlugInCardList(props.card.slug, player?.card_hand) && <MaterialCommunityIcons name="reload-alert" size={80} />}
-                {isSlugInCardList(props.card.slug, player?.card_retry) && <MaterialCommunityIcons name="reload" size={80} />}
-            </ThemedText>
-        </ThemedView>
-    )
-}

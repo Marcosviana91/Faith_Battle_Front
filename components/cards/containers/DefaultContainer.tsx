@@ -13,7 +13,7 @@ type DefaultContainerProps = {
     cards: CardProps[],
     card_size?: "normal" | "medium" | "small" | "minimum";
     card_action_function?: (props: { card: CardProps, action_index: number }) => void;
-    card_action_component: React.ReactNode[];
+    card_action_component: React.ReactNode;
     get_selected_card?: (card: CardProps) => void;
     show_action_in_bottom?: boolean;
     show_modal?: boolean;
@@ -55,22 +55,8 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", flexDirection: props.show_action_in_bottom ? "column-reverse" : 'column' }}>
                             {/* Card Commands */}
                             {selectedCard.status === 'ready' &&
-                                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                    {props.card_action_component.map((component, _index) => (
-                                        <Pressable
-                                            key={_index}
-                                            style={{ marginBottom: 24 }}
-                                            onPress={() => {
-                                                if (props.card_action_function) {
-                                                    props.card_action_function({ card: selectedCard, action_index: _index })
-                                                }
-                                                if (props.set_show_modal) {
-                                                    props.set_show_modal(false)
-                                                }
-                                            }}>
-                                            {component}
-                                        </Pressable>
-                                    ))}
+                                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: props.show_action_in_bottom ? 0 : 24, marginTop: props.show_action_in_bottom ? 24 :0 }}>
+                                    {props.card_action_component}
                                 </View>
                             }
                             {/* A carta em si */}

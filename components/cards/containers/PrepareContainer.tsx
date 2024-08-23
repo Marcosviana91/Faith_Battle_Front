@@ -1,96 +1,42 @@
-import { ThemedText } from "@/components/themed/ThemedText"
 import { RootReducer } from "@/store"
 import { useSelector } from "react-redux"
 import DefaultContainer from "./DefaultContainer"
 import { useState } from "react"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { ThemedView } from "@/components/themed/ThemedView"
 
-import useAppWebSocket from "@/hooks/useAppWebSocket"
-import { WebSocketHook } from "react-use-websocket/dist/lib/types"
+import { OnMoveToBattle as HeroOnMoveToBattle } from "../cardsComands/heros"
+import { OnAttach as ArtifacOnAttach } from "../cardsComands/artifacts"
 
 
 export default function PrepareContainer(props: { cards: CardProps[] }) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
-    const WS = useAppWebSocket();
     const [selectedCard, setSelectedCard] = useState<CardProps>()
     const [showModal, setShowModal] = useState(false)
 
-    function actionFunction(props: { card: CardProps, action_index: number }) {
+    function OnMoveToPrepare() {
+        if ((matchData.player_turn !== player.id) || selectedCard!.status !== 'ready') {
+            return null
+        }
 
-        switch (props!.action_index) {
-            default:
-                console.log('action_index ', props!.action_index)
-                OnMoveToPrepareFunction({
-                    card: props.card,
-                    web_socket: WS,
-                    player: player!,
-                    matchData: matchData!,
-                })
-                break
+        switch (selectedCard!.card_type) {
+            case "hero":
+                return (
+                    <HeroOnMoveToBattle card={selectedCard!} setShowModal={setShowModal} />
+                )
+            case "artifact":
+                return (
+                    <ArtifacOnAttach card={selectedCard!} setShowModal={setShowModal} />
+                )
         }
     }
     return (
         <DefaultContainer
             card_size="minimum"
             cards={props.cards}
-            card_action_component={[<OnMoveToPrepare card={selectedCard!} />]}
-            card_action_function={actionFunction}
+            card_action_component={<OnMoveToPrepare />}
             get_selected_card={setSelectedCard}
             show_modal={showModal}
             set_show_modal={setShowModal}
         />
     )
-}
-
-function OnMoveToPrepare(props: {card: CardProps}) {
-    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
-    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
-
-    if (matchData.player_turn !== player.id || props.card.status !== 'ready') {
-        return null
-    }
-    if (String(player.id) !== props.card.in_game_id!.split('_')[0]) {
-        return null
-    }
-    return (
-        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto" }}>
-            <ThemedText style={{ lineHeight: 80 }}>
-                <MaterialCommunityIcons name="arrow-up" size={80} s />
-            </ThemedText>
-        </ThemedView>
-    )
-}
-type Props = {
-    onPress?: () => void
-    card: CardProps
-    matchData: MatchApiProps
-    player: PlayersInMatchApiProps
-    web_socket: WebSocketHook<unknown, MessageEvent<any> | null>
-}
-
-export function OnMoveToPrepareFunction(props: Props) {
-
-    if (props.matchData?.player_turn !== props.player?.id || props.card.status !== 'ready') {
-        return null
-    }
-
-    props.web_socket.sendJsonMessage({
-        "data_type": "match_move",
-        "user_data": {
-            "id": props.player?.id
-        },
-        "room_data": {
-            "id": props.matchData?.id
-        },
-        "match_move": {
-            "match_id": props.matchData?.id,
-            "round_match": props.matchData?.round_match,
-            "player_move": props.player?.id,
-            "card_id": props.card.in_game_id,
-            "move_type": "move_to_battle"
-        }
-    })
-
 }
