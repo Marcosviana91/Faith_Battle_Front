@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, Pressable, Modal, Image } from "react-native"
 import { useSelector } from "react-redux";
+import { SelectableCardsContainer } from "./SelectableCardsContainer";
 
 
 type DefaultContainerProps = {
@@ -24,6 +25,10 @@ type DefaultContainerProps = {
 export default function DefaultContainer(props: DefaultContainerProps) {
     const { width: windowWidth } = useScreenSizes();
     const [selectedCard, setSelectedCard] = useState<CardProps>()
+
+    // Gambiarra pra esconder itens que não pertencem a esta carta, enquanto o backend não resolve
+    const my_id = selectedCard?.in_game_id?.split('_')[0]
+    const my_itens = selectedCard?.attached_cards?.filter(card => card.in_game_id?.split('_')[0] === my_id)
 
     return (
         <>
@@ -55,7 +60,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", flexDirection: props.show_action_in_bottom ? "column-reverse" : 'column' }}>
                             {/* Card Commands */}
                             {selectedCard.status === 'ready' &&
-                                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: props.show_action_in_bottom ? 0 : 24, marginTop: props.show_action_in_bottom ? 24 :0 }}>
+                                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: props.show_action_in_bottom ? 0 : 24, marginTop: props.show_action_in_bottom ? 24 : 0 }}>
                                     {props.card_action_component}
                                 </View>
                             }
@@ -86,6 +91,12 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     </View>
                                 }
                             </Pressable>
+                            {/* Itens Equipados */}
+                            {my_itens &&
+                                <View style={{marginTop:16}}>
+                                    <SelectableCardsContainer cards={my_itens} set_selected_card={()=>{}} card_size="minimum" />
+                                </View>
+                            }
                         </View>
                     </ThemedView>
                 </Modal>
@@ -368,7 +379,7 @@ export function NotifyCard(props: NotifyCardProps) {
         <View>
             <Image
                 resizeMode="stretch"
-                style={{width:50, height:75}}
+                style={{ width: 50, height: 75 }}
                 source={useCards({ card_slug: props.card_slug })}
             />
         </View>
