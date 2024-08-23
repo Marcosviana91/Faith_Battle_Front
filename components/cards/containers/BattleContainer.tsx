@@ -7,10 +7,10 @@ import { useState } from "react"
 
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { ThemedView } from "@/components/themed/ThemedView"
-import { WebSocketHook } from "react-use-websocket/dist/lib/types"
 import useAppWebSocket from "@/hooks/useAppWebSocket"
 import { toggleCardsToFight } from "@/store/reducers/matchReducer"
 import { DaviToggleAttack } from "../cardsComands/davi";
+import { Pressable } from "react-native";
 
 
 export default function BattleContainer(props: { cards: CardProps[] }) {
@@ -18,7 +18,7 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
     const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight!
-    
+
     const WS = useAppWebSocket();
     const [selectedCard, setSelectedCard] = useState<CardProps>()
     const [showModal, setShowModal] = useState(false)
@@ -28,39 +28,124 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
 
         switch (props!.action_index) {
             case 0:
-                if (props.card.slug === 'davi' && !isCardInList(props.card.in_game_id, cards_to_fight)) {
-                    break
-                }
-                console.log('alternar modo de ataque')
-                dispatch(toggleCardsToFight(props.card))
+
                 break
             case 1:
-                console.log('recuar')
-                WS.sendJsonMessage({
-                    "data_type": "match_move",
-                    "user_data": {
-                        "id": player?.id
-                    },
-                    "room_data": {
-                        "id": matchData?.id
-                    },
-                    "match_move": {
-                        "match_id": matchData?.id,
-                        "round_match": matchData?.round_match,
-                        "player_move": player?.id,
-                        "card_id": props.card.in_game_id,
-                        "move_type": "retreat_to_prepare"
-                    }
-                })
+
 
                 break
         }
     }
+
+
+    function OnRetreatToPrepare() {
+        const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
+        const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
+        const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight!
+        const WS = useAppWebSocket();
+
+        if (matchData.player_turn !== player.id || isCardInList(selectedCard!.in_game_id, cards_to_fight)) {
+            return null
+        }
+        if (String(player.id) !== selectedCard!.in_game_id!.split('_')[0]) {
+            return null
+        }
+        return (
+            <Pressable
+                onPress={() => {
+                    console.log('recuar')
+                    WS.sendJsonMessage({
+                        "data_type": "match_move",
+                        "user_data": {
+                            "id": player?.id
+                        },
+                        "room_data": {
+                            "id": matchData?.id
+                        },
+                        "match_move": {
+                            "match_id": matchData?.id,
+                            "round_match": matchData?.round_match,
+                            "player_move": player?.id,
+                            "card_id": selectedCard!.in_game_id,
+                            "move_type": "retreat_to_prepare"
+                        }
+                    })
+                    setShowModal(false)
+                }}
+            >
+                <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", minWidth: 150, alignItems: 'center' }}>
+                    <ThemedText style={{ lineHeight: 50 }}>
+                        <MaterialCommunityIcons name="arrow-down" size={50} />
+                    </ThemedText>
+                </ThemedView>
+            </Pressable>
+        )
+    }
+
+    function OnMoveToFight() {
+        const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
+        const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
+        const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight!
+
+        if (matchData.player_turn !== player.id) {
+            return null
+        }
+
+        if (String(player.id) !== selectedCard!.in_game_id!.split('_')[0]) {
+            return null
+        }
+
+        if (selectedCard!.slug === 'davi' && !isCardInList(selectedCard!.in_game_id, cards_to_fight)) {
+            return <DaviToggleAttack card={selectedCard!} setShowModal={setShowModal} />
+        }
+
+        if (isCardInList(selectedCard!.in_game_id, cards_to_fight)) {
+            return (
+                <Pressable
+                    onPress={() => {
+                        if (selectedCard!.slug === 'davi' && !isCardInList(selectedCard!.in_game_id, cards_to_fight)) {
+                            return
+                        }
+                        console.log('alternar modo de ataque')
+                        dispatch(toggleCardsToFight(selectedCard!))
+                        setShowModal(false)
+                    }}
+                >
+                    <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", minWidth: 150, alignItems: 'center' }}>
+                        <ThemedText style={{ lineHeight: 50 }}>
+                            <MaterialCommunityIcons name="cancel" size={50} s />
+                        </ThemedText>
+                    </ThemedView>
+                </Pressable>
+            )
+        }
+
+        return (
+            <Pressable
+                onPress={() => {
+                    if (selectedCard!.slug === 'davi' && !isCardInList(selectedCard!.in_game_id, cards_to_fight)) {
+                        return
+                    }
+                    console.log('alternar modo de ataque')
+                    dispatch(toggleCardsToFight(selectedCard!))
+                    setShowModal(false)
+                }}
+            >
+
+                <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", minWidth: 150, alignItems: 'center' }}>
+                    <ThemedText style={{ lineHeight: 50 }}>
+                        <MaterialCommunityIcons name="sword" size={50} s />
+                    </ThemedText>
+                </ThemedView>
+            </Pressable>
+        )
+    }
+
     return (
         <DefaultContainer
             card_size="minimum"
             cards={props.cards}
-            card_action_component={[<OnMoveToFight card={selectedCard!} />, <OnRetreatToPrepare card={selectedCard!} />]}
+            card_action_component={[<OnMoveToFight />, <OnRetreatToPrepare />]}
             card_action_function={actionFunction}
             get_selected_card={setSelectedCard}
             show_modal={showModal}
@@ -69,66 +154,3 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
     )
 }
 
-function OnMoveToFight(props: { card: CardProps }) {
-    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
-    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
-    const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight!
-
-    if (matchData.player_turn !== player.id) {
-        return null
-    }
-
-    if (String(player.id) !== props.card.in_game_id!.split('_')[0]) {
-        return null
-    }
-
-    if (props.card.slug === 'davi' && !isCardInList(props.card.in_game_id, cards_to_fight)) {
-        return <DaviToggleAttack card={props.card} />
-    }
-
-    if (isCardInList(props.card.in_game_id, cards_to_fight)) {
-        return (
-            <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto" }}>
-                <ThemedText style={{ lineHeight: 80 }}>
-                    <MaterialCommunityIcons name="cancel" size={80} s />
-                </ThemedText>
-            </ThemedView>
-        )
-    }
-
-    return (
-        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto" }}>
-            <ThemedText style={{ lineHeight: 80 }}>
-                <MaterialCommunityIcons name="sword" size={80} s />
-            </ThemedText>
-        </ThemedView>
-    )
-}
-
-function OnRetreatToPrepare(props: { card: CardProps }) {
-    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
-    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
-    const cards_to_fight = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)?.cards_to_fight!
-
-    if (matchData.player_turn !== player.id || isCardInList(props.card.in_game_id, cards_to_fight)) {
-        return null
-    }
-    if (String(player.id) !== props.card.in_game_id!.split('_')[0]) {
-        return null
-    }
-    return (
-        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto" }}>
-            <ThemedText style={{ lineHeight: 80 }}>
-                <MaterialCommunityIcons name="arrow-down" size={80} />
-            </ThemedText>
-        </ThemedView>
-    )
-}
-
-type Props = {
-    onPress?: () => void
-    card: CardProps
-    matchData: MatchApiProps
-    player: PlayersInMatchApiProps
-    web_socket: WebSocketHook<unknown, MessageEvent<any> | null>
-}

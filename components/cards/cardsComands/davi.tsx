@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux"
 type Props = {
     onPress?: () => void
     card: CardProps
+    setShowModal: (showModal: boolean) => void
 }
 
 export function DaviToggleAttack(props: Props) {
@@ -47,7 +48,7 @@ export function DaviToggleAttack(props: Props) {
                             let __temp_card = { ...props.card }
                             __temp_card.skill_focus_player_id = matchData?.player_focus_id
                             dispatch(toggleCardsToFight(__temp_card))
-                            setShowModal(false)
+                            props.setShowModal(false)
                             if (props.onPress) { props.onPress() }
                         }}
                     >OK</BasicButton>
