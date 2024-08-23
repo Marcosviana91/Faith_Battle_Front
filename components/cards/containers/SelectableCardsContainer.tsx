@@ -17,7 +17,7 @@ export function SelectableCardsContainer(props: SelectableCardsContainerProps) {
 
     return (
         <View style={{ width: "100%" }}>
-            <ScrollView horizontal contentContainerStyle={{ flexDirection: 'row', gap: 2 }}>
+            <ScrollView horizontal contentContainerStyle={{ flexDirection: 'row', gap: 4 }}>
                 {props.cards.map((card, _index) => (
                     <Pressable
                         key={_index}
