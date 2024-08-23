@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Image, Pressable } from "react-native"
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
 
 import { RootReducer } from '@/store';
 import { leaveMatch } from '@/store/reducers/matchReducer';
@@ -15,6 +13,7 @@ import ActionButtons from '@/components/gameBoard/actionButtons';
 import BasicButton from '@/components/button/basic';
 
 import { AntDesign } from '@expo/vector-icons';
+import useAppWebSocket from '@/hooks/useAppWebSocket';
 
 
 function contaTempo(tempoInicial: string) {
@@ -48,7 +47,7 @@ export default function TopBar() {
     const dispatch = useDispatch()
 
 
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+    const WS = useAppWebSocket();
 
 
     var timer: NodeJS.Timeout

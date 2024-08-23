@@ -3,17 +3,17 @@ import { RootReducer } from "@/store"
 import { useSelector } from "react-redux"
 import DefaultContainer from "./DefaultContainer"
 import { useState } from "react"
-import useWebSocket from "react-use-websocket"
-import { URI } from "@/store/server_urls"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { ThemedView } from "@/components/themed/ThemedView"
+
+import useAppWebSocket from "@/hooks/useAppWebSocket"
 import { WebSocketHook } from "react-use-websocket/dist/lib/types"
 
 
 export default function PrepareContainer(props: { cards: CardProps[] }) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+    const WS = useAppWebSocket();
     const [selectedCard, setSelectedCard] = useState<CardProps>()
     const [showModal, setShowModal] = useState(false)
 

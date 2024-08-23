@@ -10,8 +10,7 @@ import { ThemedText } from "@/components/themed/ThemedText";
 import BasicButton from "@/components/button/basic";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
+import useAppWebSocket from "@/hooks/useAppWebSocket";
 
 import { PlayerIcon } from "@/components/player_user/playerIcon";
 import { ThemedModal } from "@/components/themed/ThemedModal";
@@ -26,7 +25,7 @@ export default function GameRoom() {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
 
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+    const WS = useAppWebSocket();
 
     if (!room || !userData) {
         // navigation.navigate("Home" as never)

@@ -6,8 +6,7 @@ import { clearCardsToFight, leaveMatch } from '@/store/reducers/matchReducer';
 
 import BasicButton from '@/components/button/basic';
 
-import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
+import useAppWebSocket from "@/hooks/useAppWebSocket";
 
 export default function ActionButtons() {
     const dispatch = useDispatch()
@@ -18,7 +17,7 @@ export default function ActionButtons() {
     const player_focus = matchData?.player_focus_id
     const fight_camp = matchData?.fight_camp
 
-    const WS = useWebSocket(`ws://${URI}/ws/`, { share: true });
+    const WS = useAppWebSocket();
 
     return (
         <>{!matchData?.end_match ?
