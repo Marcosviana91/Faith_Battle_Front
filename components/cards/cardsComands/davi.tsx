@@ -46,7 +46,7 @@ export function DaviToggleAttack(props: Props) {
                         disabled={selectedPlayerId === undefined}
                         onPress={() => {
                             let __temp_card = { ...props.card }
-                            __temp_card.skill_focus_player_id = matchData?.player_focus_id
+                            __temp_card.skill_focus_player_id = selectedPlayerId
                             dispatch(toggleCardsToFight(__temp_card))
                             props.setShowModal(false)
                             if (props.onPress) { props.onPress() }
