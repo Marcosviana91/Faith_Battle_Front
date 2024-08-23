@@ -1,10 +1,17 @@
-import { Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { ThemedText } from "@/components/themed/ThemedText";
-import { ThemedView } from "@/components/themed/ThemedView";
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Pressable } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
+
 import { RootReducer } from "@/store";
 import useAppWebSocket from "@/hooks/useAppWebSocket";
+import { usePlayerData } from "@/hooks/usePlayerData";
+
+import { ThemedText } from "@/components/themed/ThemedText";
+import { ThemedView } from "@/components/themed/ThemedView";
+import { SelectableCardsContainer } from "../containers/SelectableCardsContainer";
+import BasicButton from "@/components/button/basic";
 
 
 type Props = {
@@ -53,6 +60,8 @@ export function OnInvoke(props: Props) {
 export function OnAttach(props: Props) {
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
+    const playerInMatchData = usePlayerData(player.id)
+    const [selectedCard, setSelectedCard] = useState<CardProps>()
     const WS = useAppWebSocket()
 
     if (matchData.player_turn !== player.id || props.card.status !== 'ready') {
@@ -61,33 +70,37 @@ export function OnAttach(props: Props) {
     if (String(player.id) !== props.card.in_game_id!.split('_')[0]) {
         return null
     }
+    const heros_in_prepare = playerInMatchData.card_prepare_camp?.filter(_card => _card.card_type === 'hero')
+    if (!heros_in_prepare) {
+        return null
+    }
     return (
-        <Pressable
-            onPress={() => {
-                WS.sendJsonMessage({
-                    "data_type": "match_move",
-                    "user_data": {
-                        "id": player.id
-                    },
-                    "room_data": {
-                        "id": matchData.id
-                    },
-                    "match_move": {
-                        "match_id": matchData.id,
-                        "round_match": matchData.round_match,
-                        "player_move": player.id,
-                        "card_id": props.card.in_game_id,
-                        "move_type": "move_to_battle"
-                    }
-                })
-                props.setShowModal(false)
-            }}
-        >
-            <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto" }}>
-                <ThemedText style={{ lineHeight: 80 }}>
-                    {/* <MaterialCommunityIcons name="arrow-up" size={80} s /> */}
-                </ThemedText>
-            </ThemedView>
-        </Pressable>
+        <ThemedView style={{ borderRadius: 20, borderWidth: 2, backgroundColor: '#fff4', gap: 16, padding: 4 }}>
+            <BasicButton
+                disabled={!selectedCard}
+                onPress={() => {
+                    console.log(`Equipar ${props.card.in_game_id} no herói ${selectedCard?.in_game_id}`)
+                    WS.sendJsonMessage({
+                        "data_type": "match_move",
+                        "user_data": {
+                            "id": player.id
+                        },
+                        "room_data": {
+                            "id": matchData.id
+                        },
+                        "match_move": {
+                            "match_id": matchData?.id,
+                            "round_match": matchData.round_match,
+                            "player_move": player.id,
+                            "card_id": props.card.in_game_id,
+                            "move_type": "attach",
+                            "card_target": selectedCard?.in_game_id
+                        }
+                    })
+                    props.setShowModal(false)
+                }}
+            >EQUIPAR</BasicButton>
+            <SelectableCardsContainer cards={heros_in_prepare} selected_card={selectedCard} set_selected_card={setSelectedCard} />
+        </ThemedView>
     )
 }

@@ -37,6 +37,7 @@ export default function PrepareContainer(props: { cards: CardProps[] }) {
             get_selected_card={setSelectedCard}
             show_modal={showModal}
             set_show_modal={setShowModal}
+            show_action_in_bottom={selectedCard?.card_type === 'artifact'}
         />
     )
 }
