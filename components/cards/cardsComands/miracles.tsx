@@ -12,9 +12,9 @@ type Props = {
 
 export function OnInvoke(props: Props) {
     return (
-        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", width: "auto", marginVertical: 24 }}>
-            <ThemedText style={{ lineHeight: 80 }}>
-                <SimpleLineIcons name="magic-wand" size={80} />
+        <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto",minWidth: 150, alignItems:'center' }}>
+            <ThemedText style={{ lineHeight: 50 }}>
+                <SimpleLineIcons name="magic-wand" size={50} />
             </ThemedText>
         </ThemedView>
     )
