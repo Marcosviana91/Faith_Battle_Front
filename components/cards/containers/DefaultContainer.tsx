@@ -13,7 +13,6 @@ import { SelectableCardsContainer } from "./SelectableCardsContainer";
 type DefaultContainerProps = {
     cards: CardProps[],
     card_size?: "normal" | "medium" | "small" | "minimum";
-    card_action_function?: (props: { card: CardProps, action_index: number }) => void;
     card_action_component: React.ReactNode;
     get_selected_card?: (card: CardProps) => void;
     show_action_in_bottom?: boolean;
@@ -36,7 +35,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                 <ScrollView horizontal contentContainerStyle={{ flexDirection: 'row', gap: 2 }}>
                     {props.cards.map((card, _index) => (
                         <Pressable
-                            key={_index}
+                            key={card.in_game_id}
                             onPress={() => {
                                 setSelectedCard(card)
                                 if (props.set_show_modal) {

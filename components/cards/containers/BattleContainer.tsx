@@ -23,20 +23,6 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
     const [selectedCard, setSelectedCard] = useState<CardProps>()
     const [showModal, setShowModal] = useState(false)
 
-    function actionFunction(props: { card: CardProps, action_index: number }) {
-        console.log('action_index ', props!.action_index)
-
-        switch (props!.action_index) {
-            case 0:
-
-                break
-            case 1:
-
-
-                break
-        }
-    }
-
 
     function OnRetreatToPrepare() {
         const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
@@ -146,7 +132,6 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
             card_size="minimum"
             cards={props.cards}
             card_action_component={[<OnMoveToFight />, <OnRetreatToPrepare />]}
-            card_action_function={actionFunction}
             get_selected_card={setSelectedCard}
             show_modal={showModal}
             set_show_modal={setShowModal}
