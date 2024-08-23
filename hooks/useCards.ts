@@ -4,42 +4,52 @@ const CARD_LIST: CardProps[] = [
     {
         slug: "arca-da-alianca",
         path: require("@/assets/images/Cards/Artefatos/Arca da Aliança.png"),
+        description: "Todos os heróis na sua ZB ganham 1/1.",
     },
     {
         slug: "arca-de-noe",
         path: require("@/assets/images/Cards/Artefatos/Arca de Noé.png"),
+        description: "O Herói equipado é indestrutível.",
     },
     {
         slug: "botas-do-evangelho",
         path: require("@/assets/images/Cards/Artefatos/Botas do Evangélho.png"),
+        description: "Quando o Herói equipado atacar, compre uma carta.",
     },
     {
         slug: "cajado-de-moises",
         path: require("@/assets/images/Cards/Artefatos/Cajado de Moisés.png"),
+        description: "O Herói equipado ganha 1/0. Se está equipado a Moisés, seus milagres custam -1 de sabedoria.",
     },
     {
         slug: "capacete-da-salvacao",
         path: require("@/assets/images/Cards/Artefatos/Capacete da Salvação.png"),
+        description: "O Herói equipado recebe 1/0 e é incorruptível.",
     },
     {
         slug: "cinturao-da-verdade",
         path: require("@/assets/images/Cards/Artefatos/Cinturão da Verdade.png"),
+        description: "Quando o Herói equipado atacar, o jogador revela a carta do topo do seu deck e perde pontos de Fé igual ao custo de sabedoria desta carta.",
     },
     {
         slug: "couraca-da-justica",
         path: require("@/assets/images/Cards/Artefatos/Couraça da Justiça.png"),
+        description: "O Herói equipado ganha 2/2.",
     },
     {
         slug: "escudo-da-fe",
         path: require("@/assets/images/Cards/Artefatos/Escudo da Fé.png"),
+        description: "O Herói equipado ganha 0/2.",
     },
     {
         slug: "espada-do-espirito",
         path: require("@/assets/images/Cards/Artefatos/Espada do Espírito.png"),
+        description: "O Herói equipado ganha 1/0 e é imbloqueável.",
     },
     {
         slug: "os-10-mandamentos",
         path: require("@/assets/images/Cards/Artefatos/Os 10 Mandamentos.png"),
+        description: "Suas cartas custam -1 de Sabedoria para serrem jogadas.",
     },
     // Heróis
     {
@@ -193,6 +203,20 @@ const CARD_LIST: CardProps[] = [
 ]
 
 
+export function getCardDescription(
+    card_slug: string | undefined
+) {
+
+    if (card_slug) {
+        for (const card of CARD_LIST) {
+            if (card.slug === card_slug) {
+                return card.description
+            }
+        }
+
+    }
+    return ""
+}
 export function useCards(
     props: { card_slug: string | undefined }
 ) {

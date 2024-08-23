@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components/themed/ThemedText";
 import { ThemedView } from "@/components/themed/ThemedView";
-import { isCardInList, useCards } from "@/hooks/useCards";
+import { isCardInList, useCards, getCardDescription } from "@/hooks/useCards";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { RootReducer } from "@/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -24,10 +24,20 @@ type DefaultContainerProps = {
 export default function DefaultContainer(props: DefaultContainerProps) {
     const { width: windowWidth } = useScreenSizes();
     const [selectedCard, setSelectedCard] = useState<CardProps>()
+    const [selectedSubCard, setSelectedSubCard] = useState<CardProps>()
+    const [showSubCardDescription, setShowSubCardDescription] = useState(false)
 
     // Gambiarra pra esconder itens que não pertencem a esta carta, enquanto o backend não resolve
     const my_id = selectedCard?.in_game_id?.split('_')[0]
     const my_itens = selectedCard?.attached_cards?.filter(card => card.in_game_id?.split('_')[0] === my_id)
+
+    useEffect(() => {
+        if (showSubCardDescription) {
+            setTimeout(() => {
+                setShowSubCardDescription(false)
+            }, 5000)
+        }
+    }, [showSubCardDescription])
 
     return (
         <>
@@ -35,7 +45,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                 <ScrollView horizontal contentContainerStyle={{ flexDirection: 'row', gap: 2 }}>
                     {props.cards.map((card, _index) => (
                         <Pressable
-                            key={card.in_game_id}
+                            key={_index}
                             onPress={() => {
                                 setSelectedCard(card)
                                 if (props.set_show_modal) {
@@ -92,9 +102,27 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                             </Pressable>
                             {/* Itens Equipados */}
                             {my_itens &&
-                                <View style={{marginTop:16}}>
-                                    <SelectableCardsContainer cards={my_itens} set_selected_card={()=>{}} card_size="minimum" />
-                                </View>
+                                <>
+                                    <View style={{ marginTop: 16 }}>
+                                        <SelectableCardsContainer cards={my_itens} set_selected_card={(param) => {
+                                            setSelectedSubCard(param)
+                                            setShowSubCardDescription(true)
+                                        }} selected_card={selectedSubCard} card_size="minimum" />
+                                    </View>
+                                    {showSubCardDescription &&
+                                    <Pressable
+                                    style={{ position: 'absolute',width: '90%',}}
+                                        onPress={()=>{
+                                            setShowSubCardDescription(false)
+                                        }}
+                                    >
+                                        <ThemedView style={{ padding: 16, borderWidth: 2, gap: 8 }}>
+                                            <ThemedText type="subtitle">{selectedSubCard?.slug.replaceAll('-', ' ').toUpperCase()}</ThemedText>
+                                            <ThemedText style={{ textAlign: 'justify' }} >{getCardDescription(selectedSubCard?.slug)}</ThemedText>
+                                        </ThemedView>
+                                    </Pressable>
+                                    }
+                                </>
                             }
                         </View>
                     </ThemedView>

@@ -24,7 +24,7 @@ export function NotificationBox() {
             const data = WS.lastJsonMessage as APIResponseProps
             if (data.data_type === "notification") {
                 console.log('<<< NOTIFICATION: ', data.notification)
-                dispatch(addNotify(data.notification))
+                dispatch(addNotify(data.notification!))
             }
         }
     }, [WS.lastJsonMessage])

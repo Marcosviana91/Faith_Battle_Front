@@ -20,6 +20,7 @@ declare type MatchApiProps = {
 declare type CardProps = {
     slug: string,
     path?: ImageSourcePropType,
+    description?: string,
     card_type?: string,
     in_game_id?: string,
     attack_point?: number,
