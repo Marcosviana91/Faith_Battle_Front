@@ -39,8 +39,8 @@ declare type PlayersInMatchApiProps = {
     faith_points?: number,
     wisdom_points?: number
     wisdom_available?: number
-    nao_perde_fe?: boolean,
-    nao_pode_ser_alvo_de_pecado?: boolean
+    fe_inabalavel?: boolean,
+    incorruptivel?: boolean
     nao_sofre_danos_de_efeitos?: boolean,
     nao_sofre_ataque_de_herois?: boolean,
 }

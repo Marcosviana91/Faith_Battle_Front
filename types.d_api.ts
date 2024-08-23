@@ -11,5 +11,5 @@ declare type APIResponseProps = {
         slug: string,
         deck: CardProps[]
     }
-    notification: NotificationProps,
+    notification?: NotificationProps,
 }

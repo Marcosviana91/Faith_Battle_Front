@@ -31,7 +31,7 @@ declare type CardProps = {
     attached_cards?: CardProps[],
     imbloqueavel?: boolean,
     indestrutivel?: boolean,
-    nao_pode_ser_alvo_de_pecado?: boolean,
+    incorruptivel?: boolean,
 }
 
 declare type APIMoveProps = {
