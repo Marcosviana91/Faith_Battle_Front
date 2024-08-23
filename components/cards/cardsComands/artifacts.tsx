@@ -71,7 +71,7 @@ export function OnAttach(props: Props) {
         return null
     }
     const heros_in_prepare = playerInMatchData.card_prepare_camp?.filter(_card => _card.card_type === 'hero')
-    if (!heros_in_prepare) {
+    if (!heros_in_prepare || heros_in_prepare.length < 1) {
         return null
     }
     return (
