@@ -120,7 +120,7 @@ export default function FightCamp() {
                                                 "round_match": matchData?.round_match,
                                                 "player_move": player?.id,
                                                 "move_type": "defense",
-                                                "player_target": fight_camp.player_attack_id,
+                                                "player_target_id": fight_camp.player_attack_id,
                                                 "card_list": player_match_settings?.cards_to_fight!,
                                             }
                                         }

@@ -45,7 +45,7 @@ export function OnInvoke() {
                             "player_move": player?.id,
                             "card_id": no_ceu_tem_pao_id,// No céu tem pão
                             "move_type": "card_skill",
-                            "player_target": selectedPlayerId,
+                            "player_target_id": selectedPlayerId,
                         }
                     })
                     dispatch(setCurrentSkill(undefined))

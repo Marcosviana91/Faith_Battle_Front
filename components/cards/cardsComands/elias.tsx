@@ -21,7 +21,7 @@ export function OnInvoke() {
     const player_in_match_data = usePlayerData(player?.id!)
     const player_target_data = usePlayerData(selectedPlayerId!)
 
-    const elias_id = getCardInListBySlug('elias', player_in_match_data.card_prepare_camp)?.in_game_id
+    const elias_id = getCardInListBySlug('elias', player_in_match_data!.card_prepare_camp)?.in_game_id
 
     const WS = useAppWebSocket();
     const dispatch = useDispatch()
@@ -54,8 +54,8 @@ export function OnInvoke() {
                                         "player_move": player?.id,
                                         "card_id": elias_id,//Elias
                                         "move_type": "card_skill",
-                                        "player_target": selectedPlayerId,
-                                        "card_target": player_target_data.card_battle_camp![selectedCardIndex!].in_game_id, //Carta para destruir
+                                        "player_target_id": selectedPlayerId,
+                                        "card_target_id": player_target_data.card_battle_camp![selectedCardIndex!].in_game_id, //Carta para destruir
                                     }
                                 })
                                 dispatch(setCurrentSkill(undefined))

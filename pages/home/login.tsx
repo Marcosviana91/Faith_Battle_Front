@@ -1,4 +1,7 @@
-import { Image, StyleSheet, View, TouchableOpacity, Alert, ImageBackground, Pressable, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
+import { useDispatch } from "react-redux";
+
+import { Image, StyleSheet, View, TouchableOpacity, ImageBackground, Pressable, ScrollView, ToastAndroid, Platform } from 'react-native';
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 import { ThemedTextInput } from '@/components/themed/ThemedTextInput'
@@ -7,26 +10,25 @@ import BasicButton from '@/components/button/basic';
 import { Ionicons } from '@expo/vector-icons';
 
 
-import { useState, useEffect } from 'react';
-import { useDispatch } from "react-redux";
-
 import { globalStyles } from '@/constants/Styles';
 
 import { useLoginMutation, useNewUserMutation, useGetUserDataMutation } from '@/store/api'
-import { login } from "@/store/reducers/authReducer";
 import { getData, storeData } from '@/store/database';
+
+import { login } from "@/store/reducers/authReducer";
+import { addNotify } from "@/store/reducers/notificationReducer"
+
 import { useKeyboard } from "@/hooks/useKeyboard";
 import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
     const [backGroundImage, setBackGroundImage] = useState(0)
-    const [userId, setUserId] = useState(0)
     const [userToken, setUserToken] = useState('')
 
     const [doLogin, { data: tokenAuthData, error: authError }] = useLoginMutation();
     const [getUser, { data: userData, error: userError }] = useGetUserDataMutation();
-    const [createUser, { data: newUserData }] = useNewUserMutation();
+    const [createUser, { data: newUserData, error: newUserError }] = useNewUserMutation();
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [hidePassword, setHidePassword] = useState(true)
@@ -35,7 +37,8 @@ export default function LoginScreen() {
     const [realName, setRealName] = useState('')
     // const [email, setEmail] = useState('')
     const [showAvatarList, setShowAvatarList] = useState(false);
-    const [myAvatar, setMyAvatar] = useState(0);
+    const [myAvatar, setMyAvatar] = useState(1);
+
 
     const backGroun_list = [
         require("@/assets/images/Backgrounds/01.png"),
@@ -43,6 +46,13 @@ export default function LoginScreen() {
     ]
     const keyboardIsShow = useKeyboard()
 
+    useEffect(() => {
+        getData('faith_battle_user').then(_data => {
+            if (_data) {
+                dispatch(login(_data))
+            }
+        })
+    }, [])
 
     useEffect(() => {
         setTimeout(() => {
@@ -56,33 +66,55 @@ export default function LoginScreen() {
 
     useEffect(() => {
         if (authError) {
-            // console.log(authError.data.detail)
-            Alert.alert('Não logou', 'Usuário ou senha inválidos.', [
-                { text: 'OK' },
-            ])
-            window.alert('Usuário ou senha inválidos.')
+            console.log(authError)
+            if (Platform.OS === "android") {
+                ToastAndroid.show('Não foi possivel conectar as servidor!', ToastAndroid.SHORT);
+            }
+            else {
+                window.alert('Não foi possivel conectar as servidor!')
+            }
         }
         if (tokenAuthData) {
-            if (tokenAuthData.token_type === "Bearer") {
+            if (tokenAuthData.access_token) {
                 setUserToken(tokenAuthData.access_token)
-                setUserId(tokenAuthData.sub)
+                getUser(tokenAuthData.id)
+            } else if (tokenAuthData.status_code === 403) {
+                if (tokenAuthData.detail === 'user deactivated') {
+                    if (Platform.OS === "android") {
+                        ToastAndroid.show('usuário desativado.', ToastAndroid.SHORT);
+                    }
+                    else {
+                        window.alert('usuário desativado.')
+                    }
+                } else {
+                    if (Platform.OS === "android") {
+                        ToastAndroid.show('Usuário ou senha inválidos.', ToastAndroid.SHORT);
+                    }
+                    else {
+                        window.alert('Usuário ou senha inválidos.')
+                    }
+
+                }
             }
         }
     }, [authError, tokenAuthData])
 
     useEffect(() => {
-        if (userId) {
-            getUser(userId)
-        }
-
-    }, [userId])
-
-    useEffect(() => {
         if (userData) {
-            let data = { ...userData.user_data!, "token": userToken }
+            console.log(userData)
+            let data = { ...userData, "token": userToken }
+            storeData('faith_battle_user', data)
             dispatch(login(data))
         }
     }, [userData])
+
+    useEffect(() => {
+        if (newUserError) {
+            dispatch(addNotify({
+                message: 'Nome de usuário já está em uso'
+            }))
+        }
+    }, [newUserError])
 
     return (
         <ImageBackground
@@ -152,10 +184,13 @@ export default function LoginScreen() {
                                     </View>
                                 }
                                 {showAvatarList &&
-                                    <View style={{height:200}}>
+                                    <View style={{ height: 200 }}>
                                         <ScrollView>
-                                            <View style={{gap: 2}}>
+                                            <View style={{ gap: 2 }}>
                                                 {AVATAR.map((avt, _index) => {
+                                                    if (_index === 0) {
+                                                        return null
+                                                    }
                                                     return (
                                                         <Pressable
                                                             onPress={() => {
@@ -164,7 +199,7 @@ export default function LoginScreen() {
                                                             }}
                                                             key={_index}
                                                         >
-    
+
                                                             <ThemedView style={{ flexDirection: "row", width: 150, justifyContent: "space-between", alignItems: 'center', borderWidth: 1, borderRadius: 4, paddingHorizontal: 2, borderColor: _index === myAvatar ? "green" : '' }}>
                                                                 <ThemedText style={{ fontSize: 16, paddingStart: 4 }}>{avt.name}</ThemedText>
                                                                 <Image
@@ -184,14 +219,15 @@ export default function LoginScreen() {
                     </ThemedView>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 300 }}>
                         {isCreating ? (
-                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height:50 }}>
+                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height: 50 }}>
                                 <BasicButton
+                                    disabled={userName === '' || password === ''}
                                     darkColor='#060'
                                     lightColor='#1ad81a'
                                     onPress={() => {
                                         createUser({
                                             // email: email,
-                                            real_name: realName,
+                                            first_name: realName,
                                             password: password,
                                             username: userName,
                                             avatar: myAvatar,
@@ -212,28 +248,12 @@ export default function LoginScreen() {
                                 >Cancelar</BasicButton>
                             </View>
                         ) : (
-                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height:50 }}>
-                                <BasicButton onPress={() => {
-                                    if (userName.toLowerCase() === 'fake01' && password === "") {
-                                        dispatch(login({
-                                            id: 1,
-                                            real_name: "Usuário Fake_01",
-                                            username: userName,
-                                            // email: "email01@fake.com"
-                                        }))
-                                        return
-                                    }
-                                    if (userName === '') {
-                                        window.alert("Insira um nome")
-                                    }
-                                    else if (password === '') {
-                                        window.alert('Digite uma senha')
-                                    }
-                                    else {
-                                        console.log('Logando')
+                            <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height: 50 }}>
+                                <BasicButton
+                                    disabled={userName === '' || password === ''}
+                                    onPress={() => {
                                         doLogin({ username: userName, password: password })
-                                    }
-                                }} >Logar</BasicButton>
+                                    }} >Logar</BasicButton>
                                 <BasicButton
                                     darkColor='#060'
                                     lightColor='#1ad81a'
@@ -248,7 +268,6 @@ export default function LoginScreen() {
                 <ThemedText type='defaultSemiBold' lightColor="#000" style={{ position: "absolute", bottom: 8, left: 8 }}>Não oficial</ThemedText>
             </ThemedView>
         </ImageBackground>
-
     );
 
 }

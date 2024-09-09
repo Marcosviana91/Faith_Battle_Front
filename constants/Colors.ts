@@ -6,6 +6,13 @@
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#0a7ea4';
 
+export const TEAM_COLOR = [
+  'red',
+  'green',
+  'blue',
+  'yellow',
+]
+
 export const Colors = {
   light: {
     text: '#000',

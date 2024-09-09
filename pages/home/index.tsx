@@ -10,6 +10,8 @@ import Login from '@/pages/home/login';
 import useAppWebSocket from '@/hooks/useAppWebSocket';
 
 import { setRoom, setPlayer, leaveMatch, setMatch, setCurrentSkill } from "@/store/reducers/matchReducer"
+import { logout } from "@/store/reducers/authReducer"
+import { removeData } from '@/store/database';
 
 export default function HomeScreen() {
     const dispatch = useDispatch()
@@ -41,6 +43,12 @@ export default function HomeScreen() {
             else if (data.data_type === "player_update") {
                 console.log('player_update')
                 dispatch(setPlayer(data.player_data!))
+            }
+            else if (data.data_type === "token_expired") {
+                console.log('token_expired')
+                removeData('faith_battle_user')
+                dispatch(leaveMatch())
+                dispatch(logout())
             }
             else if (data.data_type === "disconnected") {
                 console.log('disconnected')

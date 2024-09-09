@@ -1,12 +1,12 @@
 declare type MatchApiProps = {
     id?: string;
     start_match?: string;
-    match_type?: string;
+    game_type?: string;
     round_match?: number;
     player_turn?: number;
     player_focus_id?: number;
     can_others_move?: boolean;
-    players_in_match?: PlayersInMatchApiProps[];
+    players_in_match?: [PlayersInMatchApiProps[]];
     end_match?: string;
     fight_camp?: {
         player_attack_id?: number;
@@ -24,7 +24,7 @@ declare type CardProps = {
     card_type?: string,
     in_game_id?: string,
     attack_point?: number,
-    defense_points?: number,
+    defense_point?: number,
     wisdom_cost?: number,
     status?: "ready" | "not-enough" | "used",
     skill_focus_player_id?: number,
@@ -41,9 +41,9 @@ declare type APIMoveProps = {
     player_move?: number;
     card_id?: number;
     move_type?: string
-    player_target?: number
-    player_target2?: number
-    card_target?: string
+    player_target_id?: number
+    player_target2_id?: number
+    card_target_id?: string
     card_list?: CardProps[]
 }
 
@@ -67,7 +67,7 @@ declare type NotificationReducerProps = {
     notifications: NotificationProps[]
 }
 
-declare type NotificationProps ={
+declare type NotificationProps = {
     id?: string,
     title?: string,
     message?: string,
@@ -77,4 +77,20 @@ declare type NotificationProps ={
     player_target_id?: number,
     card_target_id?: string,
     stillUntilDismiss?: boolean
+}
+
+declare type ServerSettingProps = {
+    version: string,
+    active_cards: string[],
+
+}
+declare type AppSettingProps = {
+    version: string,
+
+
+}
+
+declare type AppSettingReducer = {
+    server: ServerSettingProps,
+    settings: AppSettingProps
 }

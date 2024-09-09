@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootReducer } from '@/store';
 import { login, logout } from "@/store/reducers/authReducer";
 import { leaveMatch } from "@/store/reducers/matchReducer";
+import { removeData } from '@/store/database';
 
 import { View, TouchableOpacity, Modal, Image, Pressable, ScrollView } from 'react-native';
 
@@ -87,7 +88,8 @@ export default function ProfileScreen() {
     const [showAvatarList, setShowAvatarList] = useState(false);
 
     const playerData = useSelector((state: RootReducer) => state.authReducer.user_data)
-    const [realName, setRealName] = useState(playerData?.real_name);
+    const appData = useSelector((state: RootReducer) => state.appReducer)
+    const [realName, setRealName] = useState(playerData?.first_name);
     // const [email, setEmail] = useState(playerData?.email);
     // const [email2, setEmail2] = useState(playerData?.email);
     const [password, setPassword] = useState('');
@@ -98,7 +100,7 @@ export default function ProfileScreen() {
 
     useEffect(() => {
         if (newUserData?.data_type == "user_updated" && newUserData.user_data) {
-            let data = { ...playerData, "avatar": newUserData.user_data.avatar, "real_name": newUserData.user_data.real_name }
+            let data = { ...playerData, "avatar": newUserData.user_data.avatar, "first_name": newUserData.user_data.first_name }
             dispatch(login(data))
         }
     }, [newUserData])
@@ -114,11 +116,16 @@ export default function ProfileScreen() {
                             style={{ height: 100, width: 100 }}
                             source={avatar}
                         />
-                        <ThemedText type='defaultSemiBold' style={{ position: 'absolute', bottom: 8 }}>Seu ID: {playerData.id}</ThemedText>
-                        <ThemedText type='subtitle'>Nome: {playerData.real_name}</ThemedText>
+                        <View style={{ position: 'absolute', bottom: 8, flexDirection:'row', alignItems:'flex-end', justifyContent:'space-between', width:'95%' }}>
+                            <View>
+                                <ThemedText type='defaultSemiBold'>Seu ID: {playerData.id}</ThemedText>
+                                <ThemedText type='defaultSemiBold'>Email: {playerData.email}</ThemedText>
+                            </View>
+                            <ThemedText type='defaultSemiBold'>Versão: {appData.settings.version}</ThemedText>
+                        </View>
                         {/* <ThemedText type='subtitle'>Email: {playerData.email}</ThemedText> */}
                         {/* EDITAR */}
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => {
                                 setEditting(true);
 
@@ -126,21 +133,23 @@ export default function ProfileScreen() {
                             style={{ backgroundColor: "cyan", width: 48, height: 48, justifyContent: "center", alignItems: "center", borderRadius: 16 }}
                         >
                             <MaterialIcons name="edit" size={24} color="black" />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         {/* SAIR */}
                         <TouchableOpacity
                             onPress={() => {
+                                removeData('faith_battle_user')
                                 dispatch(logout())
                                 dispatch(leaveMatch())
                                 navigation.navigate('Home' as never)
                                 // Navegar para Tela de login
                             }}
-                            style={{ width: 48, height: 48, position: "absolute", right: 8, justifyContent: "center", alignItems: "center", borderRadius: 16, backgroundColor:"red" }}
+                            style={{ width: 60, height: 60, position: "absolute", right: 8, justifyContent: "center", alignItems: "center", borderRadius: 16, backgroundColor: "#f00" }}
                         >
+                            <ThemedText style={{ color: '#000', fontWeight: 700 }}>SAIR</ThemedText>
                             <MaterialIcons name="logout" size={24} color="black" />
                         </TouchableOpacity>
                     </>
-                    <App />
+                    {/* <App /> */}
                     <Modal
                         visible={isEditting}
                         transparent
@@ -210,7 +219,7 @@ export default function ProfileScreen() {
                                             />
                                             <TouchableOpacity
                                                 onPress={() => {
-                                                    setRealName(playerData?.real_name);
+                                                    setRealName(playerData?.first_name);
                                                 }}
                                             >
                                                 <ThemedText>
@@ -306,7 +315,7 @@ export default function ProfileScreen() {
                                                 id: playerData.id,
                                                 username: playerData.username,
                                                 password: password,
-                                                real_name: realName,
+                                                first_name: realName,
                                                 avatar: myAvatar,
                                                 // email: email,
                                                 token: playerData.token,
@@ -324,10 +333,10 @@ export default function ProfileScreen() {
                                     </TouchableOpacity>
                                     {/* CANCEL AND CLOSE MODAL */}
                                     <TouchableOpacity
-                                        style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: "red", justifyContent: 'center', alignItems: 'center' }}
+                                        style={{ width: 48, height: 48, borderRadius: 16, backgroundColor: "#f00", justifyContent: 'center', alignItems: 'center' }}
                                         onPress={() => {
                                             setEditting(false);
-                                            setRealName(playerData?.real_name);
+                                            setRealName(playerData?.first_name);
                                             // setEmail(playerData?.email);
                                             // setEmail2(playerData?.email);
                                             setPassword("");

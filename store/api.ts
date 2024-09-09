@@ -7,6 +7,11 @@ const api = createApi({
         baseUrl: `http://${URI}`
     }),
     endpoints: (builder) => ({
+        getServerData: builder.query<any, void>({
+            query: () => ({
+                url: "/",
+            })
+        }),
         login: builder.mutation<TokenAuthProps, AuthProps>({// tipa o response, tipa o request
             query: userData => ({
                 url: "/auth/token",
@@ -21,7 +26,7 @@ const api = createApi({
                 body: newUserData
             })
         }),
-        getUserData: builder.mutation<APIResponseProps, number>({
+        getUserData: builder.mutation<UserProps, number>({
             query: userId => ({
                 url: `/user/${userId}`,
                 method: 'GET',
@@ -47,9 +52,7 @@ const api = createApi({
                 url: `/room/${roomData.id}/?password=${roomData.password}`,
                 method: "POST",
                 body: {
-                    "id": roomData.connected_players![0].id,
-                    "available_cards": roomData.connected_players![0].available_cards,
-                    "xp_points": roomData.connected_players![0].xp_points
+                    "id": roomData.connected_players![0][0].id,
                 }
             })
         }),
@@ -63,6 +66,7 @@ const api = createApi({
 
 
 export const {
+    useGetServerDataQuery,
     useLoginMutation,
     useNewUserMutation,
     useGetUserDataMutation,

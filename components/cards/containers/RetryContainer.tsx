@@ -5,7 +5,7 @@ import { Pressable, View } from "react-native"
 import { RootReducer } from "@/store"
 import { setPlayer } from "@/store/reducers/matchReducer"
 
-import { isSlugInCardList } from "@/hooks/useCards"
+import { isCardInList } from "@/hooks/useCards"
 
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 
@@ -49,18 +49,18 @@ export default function RetryContainer() {
                         var hand_cards: CardProps[] = []
                         var retry_cards: CardProps[] = []
 
-                        if (isSlugInCardList(props.card.slug, player.card_hand)) {
+                        if (isCardInList(props.card.in_game_id, player.card_hand)) {
                             player.card_hand!.map(card => {
-                                if (card.slug == props.card.slug) {
+                                if (card.in_game_id == props.card.in_game_id) {
                                     retry_cards = player.card_retry ? [...player.card_retry, card] : [card]
                                 } else {
                                     hand_cards = [...hand_cards, card]
                                 }
                             })
                         }
-                        else if (isSlugInCardList(props.card.slug, player.card_retry)) {
+                        else if (isCardInList(props.card.in_game_id, player.card_retry)) {
                             player.card_retry!.map(card => {
-                                if (card.slug == props.card.slug) {
+                                if (card.in_game_id == props.card.in_game_id) {
                                     hand_cards = [...player.card_hand!, card]
                                 } else {
                                     retry_cards = [...retry_cards, card]
@@ -74,10 +74,10 @@ export default function RetryContainer() {
                     setShowModal(false)
                 }}
             >
-                <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", minWidth:150, alignItems:'center' }}>
+                <ThemedView style={{ borderRadius: 8, borderWidth: 2, height: "auto", minWidth: 150, alignItems: 'center' }}>
                     <ThemedText style={{ lineHeight: 50 }}>
-                        {isSlugInCardList(props.card.slug, player?.card_hand) && <MaterialCommunityIcons name="reload-alert" size={50} />}
-                        {isSlugInCardList(props.card.slug, player?.card_retry) && <MaterialCommunityIcons name="reload" size={50} />}
+                        {isCardInList(props.card.in_game_id, player?.card_hand) && <MaterialCommunityIcons name="reload-alert" size={50} />}
+                        {isCardInList(props.card.in_game_id, player?.card_retry) && <MaterialCommunityIcons name="reload" size={50} />}
                     </ThemedText>
                 </ThemedView>
             </Pressable>

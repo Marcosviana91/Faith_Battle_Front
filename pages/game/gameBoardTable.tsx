@@ -31,13 +31,13 @@ export default function GameBoardTable() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const card_skill = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)
-    const player_focus_id = matchData?.player_focus_id
+    const player_turn = matchData?.player_focus_id
     const fight_camp = matchData?.fight_camp
 
     const player_data = usePlayerData(player?.id!)
-    const player_focus_data = usePlayerData(player_focus_id!)
+    const player_focus_data = usePlayerData(player_turn!)
 
-    function OnInvoke(props: {slug:string}) {
+    function OnInvoke(props: { slug: string }) {
         switch (props.slug) {
             case 'ester':
                 return <EsterOnInvoke />
@@ -73,7 +73,6 @@ export default function GameBoardTable() {
             {!matchData?.end_match &&
                 <ThemedView style={globalStyles.container}>
                     <TopBar />
-                    {/* Aplicar DRY */}
                     {/* Icones dos jogadores */}
                     {!fight_camp &&
                         <IconsContainer player_id={player?.id} matchData={matchData} />
@@ -83,11 +82,11 @@ export default function GameBoardTable() {
                     {/* GameBoards */}
                     <View style={[globalStyles.contentContainer]}>
                         {/* Enemy board */}
-                        {player_focus_id !== 0 && player_focus_id !== player?.id &&
-                            <GameBoard {...player_focus_data} />
+                        {player_turn && player_turn !== player?.id &&
+                            <GameBoard {...player_focus_data!} />
                         }
                         {/* Player board */}
-                        <GameBoard {...player_data} />
+                        <GameBoard {...player_data!} />
                     </View>
                     {/* Mão do jogador */}
                     <View>
@@ -108,6 +107,46 @@ export default function GameBoardTable() {
             }
         </>
     )
+    //     return (
+    //         <>
+    //             {!matchData?.end_match &&
+    //                 <ThemedView style={globalStyles.container}>
+    //                     <TopBar />
+    //                     {/* Aplicar DRY */}
+    //                     {/* Icones dos jogadores */}
+    //                     {!fight_camp &&
+    //                         <IconsContainer player_id={player?.id} matchData={matchData} />
+    //                     }
+    //                     {/* Fight Camp */}
+    //                     <FightCamp />
+    //                     {/* GameBoards */}
+    //                     <View style={[globalStyles.contentContainer]}>
+    //                         {/* Enemy board */}
+    //                         {player_focus_id !== 0 && player_focus_id !== player?.id &&
+    //                             <GameBoard {...player_focus_data} />
+    //                         }
+    //                         {/* Player board */}
+    //                         <GameBoard {...player_data} />
+    //                     </View>
+    //                     {/* Mão do jogador */}
+    //                     <View>
+    //                         <HandContainer />
+    //                     </View>
+    //                 </ThemedView>
+    //             }
+    //             {/* Modal das habilidades das cartas */}
+    //             {card_skill && card_skill.slug !== '' &&
+    //                 <OnInvoke slug={card_skill.slug} />
+    //             }
+    //             {/* Tela de Statisticas // falta fazer */}
+    //             {matchData?.end_match &&
+    //                 <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    //                     <TopBar />
+    //                     <ThemedText>A partida acabou: {matchData.end_match}</ThemedText>
+    //                 </ThemedView>
+    //             }
+    //         </>
+    //     )
 }
 
 const styles = StyleSheet.create({

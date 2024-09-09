@@ -9,7 +9,7 @@ const _initialState: UserStoreProps = {
         id: 1,
         username: "user_test",
         // email: "teste@teste.com",
-        real_name: "Teste da Silva",
+        first_name: "Teste da Silva",
         avatar:0
     },
 }

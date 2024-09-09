@@ -35,9 +35,8 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
     return (
         <ThemedModal presentationStyle='overFullScreen' transparent title={"ID: " + props.id} closeModal={props.onClose} >
             {/* Content */}
-            <View style={{ width:'100%', minHeight: 150 }}>
+            <View style={{ width: '100%', minHeight: 150 }}>
                 <ThemedText >Nome: {props.name}</ThemedText>
-                <ThemedText >Tipo da partida: {props.match_type}</ThemedText>
                 <ThemedText >Jogadores: {props.connected_players?.length} / {props.max_players}</ThemedText>
                 {/* Senhas */}
                 {props.has_password && (
@@ -63,11 +62,11 @@ export default function ConnectBoxDialog(props: ModalProps & RoomApiProps) {
                                 id: props.id,
                                 password: roomPass,
                                 connected_players: [
-                                    {
-                                        id: userData?.id,
-                                        available_cards: userData?.available_cards,
-                                        xp_points: 200
-                                    }
+                                    [
+                                        {
+                                            id: userData?.id,
+                                        }
+                                    ]
                                 ]
                             })
                         }

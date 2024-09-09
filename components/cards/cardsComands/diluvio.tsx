@@ -45,7 +45,7 @@ export function OnInvoke() {
                             "player_move": player?.id,
                             "card_id": restauracao_de_fe_id,// Restauração de Fé
                             "move_type": "card_skill",
-                            "player_target": selectedPlayerId,
+                            "player_target_id": selectedPlayerId,
                         }
                     })
                     dispatch(setCurrentSkill(undefined))

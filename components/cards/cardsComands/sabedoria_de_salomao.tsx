@@ -47,7 +47,7 @@ export function OnInvoke() {
                             "player_move": player?.id,
                             "card_id": sabedoria_de_salomao_id,// Sabedoria de Salomão
                             "move_type": "card_skill",
-                            "player_target": selectedPlayerId,
+                            "player_target_id": selectedPlayerId,
                         }
                     })
                     dispatch(setCurrentSkill(undefined))

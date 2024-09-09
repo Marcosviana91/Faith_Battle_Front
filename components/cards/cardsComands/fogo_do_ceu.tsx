@@ -69,8 +69,8 @@ export function OnInvoke() {
                                         "player_move": player?.id,
                                         "card_id": fogo_do_ceu_id,//Fogo do Céu
                                         "move_type": "card_skill",
-                                        "player_target": selectedPlayerId,
-                                        "card_target": cards_whitout_noe[selectedCardIndex!].in_game_id, //Carta para destruir
+                                        "player_target_id": selectedPlayerId,
+                                        "card_target_id": cards_whitout_noe[selectedCardIndex!].in_game_id, //Carta para destruir
                                     }
                                 })
                                 dispatch(setCurrentSkill(undefined))

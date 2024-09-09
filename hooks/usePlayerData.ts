@@ -3,6 +3,10 @@ import { useSelector } from "react-redux"
 
 export const AVATAR = [
     {
+        name: "Faith_Battle",
+        path: require("@/assets/images/Avatar/0.png"),
+    },
+    {
         name: "Abraão",
         path: require("@/assets/images/Avatar/1.png"),
     },
@@ -50,9 +54,17 @@ export function useAvatar(
     return AVATAR[props.avatar_index].path
 }
 
-export function usePlayerData(player_id: number) {
+export function usePlayerData(player_id: number): PlayersInMatchApiProps | undefined {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
-    
-    const _data = matchData!.players_in_match!.filter((player) => player.id === player_id)
-    return _data[0]
+
+    let player_data = undefined
+    matchData!.players_in_match!.map((_team, _team_index) => {
+        _team.map(player => {
+            if (player.id === player_id) {
+                player_data = player;
+            }
+        })
+    })
+
+    return player_data
 }
