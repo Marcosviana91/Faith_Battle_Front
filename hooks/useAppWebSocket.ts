@@ -27,9 +27,9 @@ export default function useAppWebSocket() {
                 }
             )
         },
-        // shouldReconnect: () => Boolean(userData?.token),
+        shouldReconnect: () => Boolean(userData?.token),
         reconnectInterval: 50,
-        // retryOnError: true,
+        retryOnError: true,
     })
 
     useEffect(() => {
