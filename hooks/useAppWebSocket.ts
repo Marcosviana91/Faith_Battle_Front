@@ -10,13 +10,13 @@ export default function useAppWebSocket() {
     const WS = useWebSocket(ws_url, {
         share: true,
         onOpen: () => {
-            console.log({
-                "data_type": "create_connection",
-                "player_data": {
-                    "id": userData?.id,
-                    "token": userData?.token
-                }
-            })
+            // console.log({
+            //     "data_type": "create_connection",
+            //     "player_data": {
+            //         "id": userData?.id,
+            //         "token": userData?.token
+            //     }
+            // })
             WS.sendJsonMessage(
                 {
                     "data_type": "create_connection",
@@ -28,7 +28,7 @@ export default function useAppWebSocket() {
             )
         },
         // shouldReconnect: () => Boolean(userData?.token),
-        // reconnectInterval: 50,
+        reconnectInterval: 50,
         // retryOnError: true,
     })
 

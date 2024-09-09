@@ -21,15 +21,17 @@ export default function SearchRoom() {
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const [createRoom, { data: createdRoomData }] = useCreateRoomsMutation();
 
-    const gameTypesList = ['survival', 'cooperative']
+    const gameTypesList = ['Sem time', '2 times', '4 times']
     // Create new room 'form' values
     const [newRoomName, setNewRoomName] = useState(`Sala de ${userData!.username}`)
-    const [newRoomGameType, setNewRoomGameType] = useState('survival')
-    const [newRoomPlayerQtd, setNewRoomPlayerQtd] = useState('2')
+    const [newRoomPlayerQtd, setNewRoomPlayerQtd] = useState(2)
+    const [newRoomTeamsQtd, setNewRoomTeamsQtd] = useState(0)
     const [newRoomPassword, setNewRoomPassword] = useState('')
 
     const buttons = ['Entrar', 'Criar']
     const [table, setTable] = useState(0)
+
+    const newRoomPlayerQtdOK = (newRoomPlayerQtd >= 2 && (newRoomPlayerQtd) <= 8)
 
     useEffect(() => {
         if (createdRoomData?.room_data) {
@@ -62,7 +64,7 @@ export default function SearchRoom() {
 
 
     return (
-        <View style={[styles.container, { backgroundColor: "#000000b3", justifyContent: keyboardIsShow[0] ? 'flex-start' : 'center', paddingTop: keyboardIsShow[0] ? 16: 0 }]}>
+        <View style={[styles.container, { backgroundColor: "#000000b3", justifyContent: keyboardIsShow[0] ? 'flex-start' : 'center', paddingTop: keyboardIsShow[0] ? 16 : 0 }]}>
             <View style={styles.searchRoomContainer} >
                 <View style={{ flexDirection: "row", width: '95%' }}>
                     <View style={{ width: '100%', padding: 10, flexDirection: "row" }}>
@@ -84,12 +86,12 @@ export default function SearchRoom() {
                             />
                         </View>
                         <View style={styles.container}>
-                            <Text>Estilo de Jogo</Text>
+                            <Text>Quantidade de Times</Text>
                             <ToggleButton
+                                height={30}
                                 disabled
-                               
                                 values={gameTypesList}
-                                onPress={setNewRoomGameType}
+                                onPress={setNewRoomTeamsQtd}
                             />
                         </View>
                         <View style={[styles.container, { flexDirection: 'row', gap: 15 }]}>
@@ -97,8 +99,10 @@ export default function SearchRoom() {
                             <ThemedTextInput
                                 inputMode='numeric'
                                 placeholder='2 - 8'
-                                value={newRoomPlayerQtd}
-                                onChangeText={setNewRoomPlayerQtd}
+                                value={String(newRoomPlayerQtd)}
+                                onChangeText={(val)=>{
+                                    setNewRoomPlayerQtd(Number(val));val
+                                }}
                             />
                         </View>
                         <View style={[styles.container, { flexDirection: 'row', gap: 15 }]}>
@@ -109,21 +113,21 @@ export default function SearchRoom() {
                             />
                         </View>
                         <BasicButton
-                           
+                            disabled={
+                                !newRoomPlayerQtdOK || newRoomName ===''
+                            }
                             onPress={() => {
                                 createRoom({
                                     name: newRoomName,
                                     created_by: {
-                                        id: userData?.id,
-                                        available_cards: userData?.available_cards,
-                                        xp_points: 0
+                                        id: userData?.id
                                     },
-                                    match_type: newRoomGameType,
-                                    max_players: Number(newRoomPlayerQtd),
+                                    max_players: newRoomPlayerQtd,
+                                    teams: Number(newRoomTeamsQtd)*2,
                                     password: newRoomPassword
                                 })
                             }}>
-                            Criar
+                            Criar Sala
                         </BasicButton>
                     </View>
                 )}

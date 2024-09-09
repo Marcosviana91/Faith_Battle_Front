@@ -15,6 +15,7 @@ import { useGetUserDataMutation } from '@/store/api'
 import { useAvatar } from "@/hooks/usePlayerData";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedView } from "../themed/ThemedView";
+import { TEAM_COLOR } from "@/constants/Colors";
 
 type Props = {
     id: number
@@ -68,6 +69,8 @@ export function PlayerIcon(props: Props) {
             paddingBottom: 12,
         },
     })
+
+
     useEffect(() => {
         if (props.id > 0) {
             if (_PlayerData) {
@@ -78,12 +81,13 @@ export function PlayerIcon(props: Props) {
             )
         }
     }, [])
+
     useEffect(() => {
         if (userData) {
-            setPlayerDataCurrent(userData.user_data)
-            setAvatar(useAvatar({ avatar_index: userData.user_data?.avatar! }))
-            if (userData.user_data) {
-                dispatch(addPlayersData(userData.user_data))
+            setPlayerDataCurrent(userData)
+            setAvatar(useAvatar({ avatar_index: userData.avatar! }))
+            if (userData) {
+                dispatch(addPlayersData(userData))
 
             }
         }
@@ -173,42 +177,63 @@ export function IconsContainer(props: ContainerProps) {
                 </Pressable>
             </View>
             {showPlayers &&
-                <ThemedView style={{ width: windowWidth * 0.8 }}>
+                <ThemedView style={{ maxWidth: windowWidth - 64 }}>
                     <ScrollView horizontal contentContainerStyle={{
                         flex: 1,
                         flexDirection: "row",
-                        columnGap: 16,
-                        paddingHorizontal: 8,
+                        columnGap: 8,
                     }}>
-                        {props.matchData?.players_in_match?.map((_player) => {
-                            if (props.hideCurrentPlayer && _player.id === props.player_id) {
-                                return null
-                            }
+                        {props.matchData?.players_in_match?.map((_team, _index) => {
                             return (
-                                <View key={_player.id} style={{
-                                    height: 100
+                                <View
+                                key={_index}
+                                style={{
+                                    flex: 1,
+                                    flexDirection: "row",
+                                    columnGap: 16,
+                                    paddingHorizontal: 8,
+                                    borderWidth: 2,
+                                    borderColor: TEAM_COLOR[_index],
+                                    borderRadius: 12,
+                                    padding: 2,
                                 }}>
-                                    <Pressable
-                                        onPress={() => {
-                                            if (playerData?.id !== _player.id) {
-                                                dispatch(setPlayerFocus(_player.id))
-                                            }
-                                        }}
-                                        style={{
-                                            height: '100%',
-                                        }}
-                                    >
+                                    {_team.map(_player => {
+                                        return (
+                                            <View key={_player.id} style={{
+                                                height: 100
+                                            }}>
+                                                <Pressable
+                                                    onPress={() => {
+                                                        if (playerData?.id !== _player.id) {
+                                                            dispatch(setPlayerFocus(_player.id))
+                                                        }
+                                                    }}
+                                                    style={{
+                                                        height: '100%',
+                                                    }}
+                                                >
 
-                                        <PlayerIcon id={_player.id} isCurrent={(_player.id == props.matchData!.player_turn)} isTarget={(_player.id == props.matchData!.player_focus_id)} type='mini' />
-                                        <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
-                                            <ThemedText>
-                                                <MaterialCommunityIcons name="shield-cross" size={24} />
-                                            </ThemedText>
-                                            <ThemedText type='defaultSemiBold'>{_player.faith_points}</ThemedText>
-                                        </ThemedView>
-                                    </Pressable>
+                                                    <PlayerIcon id={_player.id} isCurrent={(_player.id == props.matchData!.player_turn)} isTarget={(_player.id == props.matchData!.player_focus_id)} type='mini' />
+                                                    <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
+                                                        <ThemedText>
+                                                            <MaterialCommunityIcons name="shield-cross" size={24} />
+                                                        </ThemedText>
+                                                        <ThemedText type='defaultSemiBold'>{_player.faith_points}</ThemedText>
+                                                        <Image
+                                                            source={require('@/assets/images/Icons/wisdon.png')}
+                                                            style={{height:20, width:20, margin:4}}
+                                                        />
+                                                        <ThemedText type='defaultSemiBold'>{_player.wisdom_available}</ThemedText>
+                                                    </ThemedView>
+                                                </Pressable>
+                                            </View>
+                                        )
+                                    })}
                                 </View>
                             )
+                            // if (props.hideCurrentPlayer && _player.id === props.player_id) {
+                            //     return null
+                            // }
                         })}
                     </ScrollView>
                 </ThemedView>
@@ -239,7 +264,7 @@ export function SelectEnemyIconsContainer(props: ContainerProps) {
             paddingHorizontal: 8,
             justifyContent: "center",
         }}>
-            {props.matchData?.players_in_match?.map((_player) => {
+            {props.matchData?.players_in_match![0].map((_player) => {
                 if (_player.id === player?.id) {
                     return null
                 }
@@ -281,7 +306,7 @@ export function SelectFriendsIconsContainer(props: ContainerProps) {
             paddingHorizontal: 8,
             justifyContent: "center",
         }}>
-            {props.matchData?.players_in_match?.map((_player) => {
+            {props.matchData?.players_in_match![0].map((_player) => {
                 if (_player.id === player?.id && props.hideCurrentPlayer) {
                     return null
                 }

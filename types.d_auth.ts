@@ -6,7 +6,9 @@ declare type AuthProps = {
 declare type TokenAuthProps = {
     access_token: string,
     token_type: string,
-    sub: number,
+    id: number,
+    status_code?: number,
+    detail?: string,
 }
 
 declare type TokenProps = {

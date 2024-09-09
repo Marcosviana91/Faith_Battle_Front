@@ -3,6 +3,7 @@ import { View } from "react-native"
 
 import { RootReducer } from "@/store"
 import { clearCardsToFight, leaveMatch } from '@/store/reducers/matchReducer';
+import { addNotify } from "@/store/reducers/notificationReducer"
 
 import BasicButton from '@/components/button/basic';
 
@@ -54,10 +55,19 @@ export default function ActionButtons() {
                     <View>
                         <BasicButton
                             height={30}
-                            disabled={(!player_focus || player_focus == player?.id)}
+                            disabled={(
+                                !player_focus ||
+                                player_focus == player?.id
+                            )}
                             onPress={() => {
                                 if (!player_focus || player_focus == player?.id) {
                                     console.log("Escolha um oponente")
+                                } else if ( typeof((player?.ja_atacou?.find((_id) => _id === player_focus))) === 'number'){
+                                    dispatch(addNotify({
+                                        title: "Já atacou este oponente.",
+                                        message: "Escolha outro oponente ou remova suas cartas do modo de ataque para finalizar seu turno.",
+                                        stillUntilDismiss:true
+                                    }))
                                 } else {
                                     const data: APIResponseProps = {
                                         "data_type": "match_move",
@@ -72,7 +82,7 @@ export default function ActionButtons() {
                                             "round_match": matchData?.round_match,
                                             "player_move": player?.id,
                                             "move_type": "attack",
-                                            "player_target": player_focus,
+                                            "player_target_id": player_focus,
                                             "card_list": player_match_settings?.cards_to_fight!,
                                         }
                                     }
@@ -81,7 +91,13 @@ export default function ActionButtons() {
                                 }
                             }}
                         >
-                            {(!player_focus || player_focus == player?.id) ? 'Escolha um oponente' : 'Atacar'}
+                            {(!player_focus || player_focus == player?.id) ? 'Escolha um oponente' : <>
+                                {
+                                    (player?.ja_atacou?.find((_id) => _id === player_focus)) ?
+                                        'Já atacou este oponente' :
+                                        'Atacar'
+                                }
+                            </>}
                         </BasicButton>
                     </View>
                 }

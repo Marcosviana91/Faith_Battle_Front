@@ -56,8 +56,8 @@ export function OnInvoke() {
                             "player_move": player?.id,
                             "card_id": saraca_ardente_id,// Sarça Ardente
                             "move_type": "card_skill",
-                            "player_target": selectedPlayerId,
-                            "player_target2": selectedPlayer2Id,
+                            "player_target_id": selectedPlayerId,
+                            "player_target2_id": selectedPlayer2Id,
                         }
                     })
                     dispatch(setCurrentSkill(undefined))

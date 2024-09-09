@@ -94,7 +94,7 @@ export function OnAttach(props: Props) {
                             "player_move": player.id,
                             "card_id": props.card.in_game_id,
                             "move_type": "attach",
-                            "card_target": selectedCard?.in_game_id
+                            "card_target_id": selectedCard?.in_game_id
                         }
                     })
                     props.setShowModal(false)

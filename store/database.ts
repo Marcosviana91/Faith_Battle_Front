@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// key_name user_data, player_data
+// key_name faith_battle_user
 
-const storeData = async ( key_name: string, value: UserProps) => {
+const storeData = async (key_name: string, value: UserProps) => {
     console.log(`Armazenando ${key_name}: ${value}`);
     try {
         const jsonValue = JSON.stringify(value);
@@ -18,7 +18,16 @@ const getData = async (key_name: string) => {
         return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
         // error reading value
+        return null;
     }
 };
 
-export { storeData, getData}
+const removeData = async (key_name: string) => {
+    try {
+        await AsyncStorage.removeItem(key_name)
+    } catch (e) {
+        // remove error
+    }
+}
+
+export { storeData, getData, removeData }

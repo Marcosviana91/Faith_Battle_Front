@@ -7,7 +7,7 @@ import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { SimpleCard } from "@/components/cards/containers/DefaultContainer";
 import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { isSlugInCardList } from '@/hooks/useCards';
+import { isSlugInSlugList } from '@/hooks/useCards';
 
 // import { card_list } from "@/components/cards/index";
 
@@ -113,7 +113,7 @@ export default function CardScreen() {
                         <ScrollView>
                             <View style={[styles.container, { backgroundColor: card_list.color }]}>
                                 {card_list.list.map((card_slug, index) => (
-                                    <SimpleCard key={index} size="medium" card={card_slug} unavailable={!isSlugInCardList(card_slug.slug, cards_available)} />
+                                    <SimpleCard key={index} size="medium" card={card_slug} unavailable={!isSlugInSlugList(card_slug.slug, cards_available)} />
                                 ))}
                             </View>
                         </ScrollView>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-evenly",
         flexWrap: 'wrap',
-        gap: 10,
+        gap: 4,
         padding: 12,
     }
 })

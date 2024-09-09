@@ -1,10 +1,15 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Animated, StyleSheet, View, PanResponder } from 'react-native';
+
+import { useGetServerDataQuery } from '@/store/api'
+import { setServerSettings } from '@/store/reducers/appReducer';
 
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 
 import { HelloWave } from '@/components/HelloWave';
+import { SlideUp } from '@/components/cards/motions/moveCard';
 
 import HeaderBar from "@/components/HeaderBar";
 import FooterBar from "@/components/FooterBar";
@@ -13,6 +18,16 @@ import { globalStyles } from '@/constants/Styles';
 
 
 export default function HomeScreen() {
+    const dispatch = useDispatch();
+    const serverData = useGetServerDataQuery()
+    const [onUp, setOnUp] = useState(false)
+
+
+    useEffect(() => {
+        if (serverData.data) {
+            dispatch(setServerSettings(serverData.data))
+        }
+    }, [serverData])
 
     const pan = useRef(new Animated.ValueXY()).current;
 
@@ -22,8 +37,8 @@ export default function HomeScreen() {
             // onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
             onPanResponderMove: (e, state) => {
                 // console.log({...state})
-                pan.x.setValue( state.dx)
-                pan.y.setValue( state.dy)
+                pan.x.setValue(state.dx)
+                pan.y.setValue(state.dy)
             },
             onPanResponderRelease: () => {
                 pan.extractOffset();
@@ -31,13 +46,17 @@ export default function HomeScreen() {
         }),
     ).current;
 
+    useEffect(() => {
+        onUp? console.log('Está em cima') : console.log("Está em baixo");
+    }, [onUp])
+
     return (
 
         <ThemedView style={globalStyles.container}>
             <View style={[globalStyles.headerContainer, { flexBasis: 150 }]}>
                 <Animated.View
                     style={{
-                        transform: [{ translateX: pan.x }, { translateY: pan.y }], zIndex:999
+                        transform: [{ translateX: pan.x }, { translateY: pan.y }], zIndex: 999
                     }}
                     {...panResponder.panHandlers}
                 >
@@ -47,7 +66,14 @@ export default function HomeScreen() {
             <View style={globalStyles.contentContainer} >
                 <HelloWave />
                 <ThemedText >Bem-Vindo!</ThemedText>
-                <ThemedText >Novo jogo</ThemedText>
+                <ThemedText style={{maxWidth:'60%', textAlign:'center'}} >Aqui aparecerão suas estatisticas e anúncios sobre eventos do jogo.</ThemedText>
+                {/* <View style={{position:'absolute', bottom:0, flexDirection:'row', gap:8, width:'100%', alignItems:'flex-start', backgroundColor:'green'}}>
+                    <SlideUp
+                        up_action={setOnUp}
+                    >
+                        <View style={{width:75, height:100}} />
+                    </SlideUp>
+                </View> */}
             </View>
             <View style={[globalStyles.footerContainer, { flexBasis: 100 }]}>
                 <FooterBar />

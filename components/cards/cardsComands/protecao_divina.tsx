@@ -75,7 +75,7 @@ type Props = {
 //                         "player_move": player?.id,
 //                         "card_id": props.card,//Elias
 //                         "move_type": "card_skill",
-//                         "player_target": player_focus,
+//                         "player_target_id": player_focus,
 //                         "card_target": props.card_target, //Carta para destruir
 //                     }
 //                 })

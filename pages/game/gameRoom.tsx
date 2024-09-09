@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable, ScrollView } from "react-native";
+import { View, StyleSheet, Pressable, ScrollView, Text } from "react-native";
 
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
@@ -32,25 +32,37 @@ export default function GameRoom() {
         return null
     }
 
-    const open_player_slot = []
-    for (let index = 0; index < room.max_players! - room.connected_players!.length; index++) {
+    var open_player_slot = []
+    for (let index = 0; index < room.max_players! - room.connected_players![0].length; index++) {
         open_player_slot.push(<PlayerIcon type="normal" key={index} id={0} />)
     }
+
+
+    var connected_players = 0
+    room.connected_players!.forEach(team => {
+        team.forEach(player => {
+            connected_players += 1
+        })
+    });
 
     return (
         <ThemedView style={{ flex: 1, margin: 8 }}>
             {/* Header */}
             {room.room_stage === 0 && (
-                <View style={{ height: 120, padding: 8 }}>
-                    <ThemedText>ID: {room.id}</ThemedText>
-                    <ThemedText>Nome: {room.name}</ThemedText>
-                    <ThemedText>Tipo de partida: {room.match_type}</ThemedText>
-                    <ThemedText>Jogadores na sala: {room.connected_players?.length}</ThemedText>
+                <View style={{ height: 120, padding: 8, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View>
+                        <ThemedText type="defaultSemiBold">ID: {room.id}</ThemedText>
+                        <ThemedText type="defaultSemiBold">Nome: {room.name}</ThemedText>
+                    </View>
+                    <View>
+                        <ThemedText type="defaultSemiBold">Times: {room.teams}</ThemedText>
+                        <ThemedText type="defaultSemiBold">Jogadores na sala: {connected_players}</ThemedText>
+
+                    </View>
                     {/* Botão de sair */}
                     <Pressable
                         style={{
                             backgroundColor: '#f00',
-                            position: "absolute", right: 8, top: 8,
                             height: 60, width: 60,
                             justifyContent: "center", alignItems: "center",
                             borderRadius: 16, borderWidth: 2,
@@ -73,12 +85,18 @@ export default function GameRoom() {
                     </Pressable>
                 </View>
             )}
+
             {/* Slots */}
+            {/* Teams */}
             <View style={{ flex: 1, padding: 8, }}>
                 <ScrollView>
                     <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-evenly' }}>
-                        {room.connected_players?.map(_player => (
-                            <PlayerIcon type="normal" key={_player.id} id={_player.id!} isReady={_player.ready} />
+                        {room.connected_players?.map((_team, _t_index) => (
+                            <View key={_t_index} style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-evenly' }}>
+                                {_team.map((_player) => (
+                                    <PlayerIcon type="normal" key={_player.id} id={_player.id!} isReady={_player.ready} />
+                                ))}
+                            </View>
                         ))}
                         {open_player_slot.map(player => { return player })}
                     </View>
@@ -86,9 +104,9 @@ export default function GameRoom() {
 
             </View>
             {/* Botão de ficar pronto */}
-            {room.room_stage === 0 && (
+            {room.room_stage === 0 && !player?.ready && (
                 <BasicButton
-                   
+                    disabled={!(connected_players > 1)}
                     onPress={() => {
                         WS.sendJsonMessage({
                             data_type: 'ready',
@@ -116,7 +134,7 @@ export default function GameRoom() {
                 </View>
                 <View style={{ flexDirection: 'row', gap: 8, paddingTop: 24 }}>
                     <BasicButton
-                       
+
                         disabled={player.card_retry?.length! > 0}
                         onPress={() => {
                             WS.sendJsonMessage({
@@ -133,7 +151,7 @@ export default function GameRoom() {
                         OK
                     </BasicButton>
                     <BasicButton
-                       
+
                         disabled={!(player.card_retry?.length! > 0)}
                         onPress={() => {
                             WS.sendJsonMessage({
