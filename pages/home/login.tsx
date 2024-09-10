@@ -95,6 +95,13 @@ export default function LoginScreen() {
                     }
 
                 }
+            } else if (tokenAuthData.status_code === 400) {
+                if (Platform.OS === "android") {
+                    ToastAndroid.show('usuário não encontrado.', ToastAndroid.SHORT);
+                }
+                else {
+                    window.alert('usuário não encontrado.')
+                }
             }
         }
     }, [authError, tokenAuthData])
