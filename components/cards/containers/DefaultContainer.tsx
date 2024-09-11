@@ -8,12 +8,14 @@ import { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, Pressable, Modal, Image } from "react-native"
 import { useSelector } from "react-redux";
 import { SelectableCardsContainer } from "./SelectableCardsContainer";
+import BasicButton from "@/components/button/basic";
+import useAppWebSocket from "@/hooks/useAppWebSocket";
 
 
 type DefaultContainerProps = {
     cards: CardProps[],
     card_size?: "normal" | "medium" | "small" | "minimum";
-    card_action_component: React.ReactNode;
+    card_action_component?: React.ReactNode;
     get_selected_card?: (card: CardProps) => void;
     show_action_in_bottom?: boolean;
     show_modal?: boolean;
@@ -26,10 +28,10 @@ export default function DefaultContainer(props: DefaultContainerProps) {
     const [selectedCard, setSelectedCard] = useState<CardProps>()
     const [selectedSubCard, setSelectedSubCard] = useState<CardProps>()
     const [showSubCardDescription, setShowSubCardDescription] = useState(false)
-
-    // Gambiarra pra esconder itens que não pertencem a esta carta, enquanto o backend não resolve
-    // const my_id = selectedCard?.in_game_id?.split('_')[0]
-    // const my_itens = selectedCard?.attached_cards?.filter(card => card.in_game_id?.split('_')[0] === my_id)
+    // Send remove
+    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
+    const WS = useAppWebSocket()
 
     useEffect(() => {
         if (showSubCardDescription) {
@@ -38,6 +40,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
             }, 5000)
         }
     }, [showSubCardDescription])
+
 
     return (
         <>
@@ -79,6 +82,8 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     if (props.set_show_modal) {
                                         props.set_show_modal(false)
                                     }
+                                    setShowSubCardDescription(false)
+                                    setSelectedSubCard(undefined)
                                 }}
                                 style={{ width: "90%", height: "60%", position: "relative" }}>
                                 <Image
@@ -109,6 +114,39 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                             setShowSubCardDescription(true)
                                         }} selected_card={selectedSubCard} card_size="minimum" />
                                     </View>
+                                    {selectedSubCard?.status == 'ready' &&
+                                        <BasicButton
+                                            disabled={!Boolean(selectedSubCard)}
+                                            onPress={() => {
+                                                console.log(`Remover ${selectedSubCard.in_game_id} do herói ${selectedCard.in_game_id}`)
+                                                if (props.set_show_modal) {
+                                                    props.set_show_modal(false)
+                                                }
+
+                                                WS.sendJsonMessage({
+                                                        "data_type": "match_move",
+                                                    "user_data": {
+                                                            "id": player.id
+                                                        },
+                                                        "room_data": {
+                                                                "id": matchData.id
+                                                    },
+                                                    "match_move": {
+                                                        "match_id": matchData?.id,
+                                                        "round_match": matchData.round_match,
+                                                        "player_move": player.id,
+                                                        "card_id": selectedCard.in_game_id, // HEROI
+                                                        "move_type": "dettach",
+                                                        "card_target_id": selectedSubCard.in_game_id // EQUIPAMENTO
+                                                    }
+                                                })
+                                                setShowSubCardDescription(false)
+                                                setSelectedSubCard(undefined)
+                                            }}
+                                        >
+                                            REMOVER
+                                        </BasicButton>
+                                    }
                                     {showSubCardDescription &&
                                         <Pressable
                                             style={{ position: 'absolute', width: '90%', }}

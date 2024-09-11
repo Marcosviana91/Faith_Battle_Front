@@ -24,9 +24,15 @@ export default function PrepareContainer(props: { cards: CardProps[] }) {
                     <HeroOnMoveToBattle card={selectedCard!} setShowModal={setShowModal} />
                 )
             case "artifact":
-                return (
-                    <ArtifacOnAttach card={selectedCard!} setShowModal={setShowModal} />
-                )
+                if (selectedCard?.attachable) {
+                    return (
+                        <ArtifacOnAttach card={selectedCard!} setShowModal={setShowModal} />
+                    )
+                } else {
+                    return (
+                        <HeroOnMoveToBattle card={selectedCard!} setShowModal={setShowModal} />
+                    )
+                }
         }
     }
     return (

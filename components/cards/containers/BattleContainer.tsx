@@ -81,6 +81,10 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
             return null
         }
 
+        if (selectedCard!.card_type!=='hero' && selectedCard!.card_type!=='legendary') {
+            return null
+        }
+
         if (selectedCard!.slug === 'davi' && !isCardInList(selectedCard!.in_game_id, cards_to_fight)) {
             return <DaviToggleAttack card={selectedCard!} setShowModal={setShowModal} />
         }

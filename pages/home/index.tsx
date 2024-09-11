@@ -9,7 +9,7 @@ import Login from '@/pages/home/login';
 
 import useAppWebSocket from '@/hooks/useAppWebSocket';
 
-import { setRoom, setPlayer, leaveMatch, setMatch, setCurrentSkill } from "@/store/reducers/matchReducer"
+import { setRoom, setPlayer, leaveMatch, setMatch, setCurrentSkill, setPlayerFocus } from "@/store/reducers/matchReducer"
 import { logout } from "@/store/reducers/authReducer"
 import { removeData } from '@/store/database';
 
@@ -56,8 +56,15 @@ export default function HomeScreen() {
             }
             else if (data.data_type === "match_update") {
                 console.log('match_update')
+                console.log(data.match_data?.player_turn)
                 dispatch(setRoom(undefined))
                 dispatch(setMatch({ ...data.match_data!, player_focus_id: data.match_data?.player_focus_id }))
+                if (data.match_data?.player_turn && data.match_data?.player_turn === userData?.id) {
+                    dispatch(setPlayerFocus(data.match_data?.player_turn))
+                }
+                else if (data.match_data?.player_turn && data.match_data?.player_focus_id && data.match_data?.player_turn !== userData?.id) {
+                    dispatch(setPlayerFocus(data.match_data?.player_focus_id))
+                }
             }
             else if (data.data_type === "card_skill") {
                 console.log('card_skill')

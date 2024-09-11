@@ -31,7 +31,7 @@ const CARD_LIST: CardProps[] = [
     {
         slug: "cinturao-da-verdade",
         path: require("@/assets/images/Cards/Artefatos/Cinturão da Verdade.png"),
-        description: "Quando o Herói equipado atacar, o jogador revela a carta do topo do seu deck e perde pontos de Fé igual ao custo de sabedoria desta carta.",
+        description: "Quando o Herói equipado atacar, o jogador alvo revela a carta do topo do seu deck e perde pontos de Fé igual ao custo de sabedoria desta carta.",
     },
     {
         slug: "couraca-da-justica",

@@ -5,6 +5,7 @@ import { View, Image, StyleSheet } from "react-native";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import PrepareContainer from "../cards/containers/PrepareContainer";
 import BattleContainer from "../cards/containers/BattleContainer";
+import { ForgottenContainer } from "../cards/containers/ForgottenContainer";
 
 
 export default function GameBoard(props: PlayersInMatchApiProps) {
@@ -29,10 +30,13 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
             zIndex: 1
         },
         forgotten: {
+            width: 75,
+            height: 85,
             position: "absolute",
-            right: windowWidth * 0,
-            bottom: windowHeight * 0.04,
-            zIndex: 1
+            right: 8,
+            bottom: windowHeight * 0.03,
+            zIndex: 1,
+            borderRadius: 8
         },
         zonaPreparacao: {
             position: "absolute",
@@ -67,8 +71,9 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
             <View style={styles.deck}>
                 {/* <Card size="minimum" /> */}
             </View>
+
             <View style={styles.forgotten}>
-                {/* <Card size="minimum" /> */}
+                <ForgottenContainer  card_list={props.card_in_forgotten_sea}/>
             </View>
             {/* Zona de Batalha */}
             <View style={styles.zonaBatalha}>
