@@ -9,14 +9,15 @@ type Props = ModalProps & {
     title?: string;
     hideCloseButton?: boolean
     closeModal?: () => void;
+    backgroundTransparent?: boolean
 }
 
 export function ThemedModal(props : Props) {
     const {width} = useScreenSizes();
     return (
         <Modal transparent visible={props.visible}>
-            <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: "center", maxWidth:width }} lightColor='#ffffffef' darkColor='#000000ef'>
-                <ThemedView style={{ width: "90%", minHeight: "25%", maxHeight:'100%', borderWidth: 1, borderRadius: 8, padding: 8, justifyContent: "space-between", alignItems: "center", gap:8  }}>
+            <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: "center", maxWidth:width }} lightColor={props.backgroundTransparent ? '#ffffff83' : '#ffffffef' } darkColor={props.backgroundTransparent ? '#00000083' : '#000000ef' }>
+                <ThemedView style={{ width: "90%", minHeight: "25%", maxHeight:'100%', borderWidth: 1, borderRadius: 8, padding: 8, justifyContent: "space-between", alignItems: "center", gap:8, marginBottom:'25%'  }}>
                     {/* Header */}
                     <View style={{ height: 30, width: "100%", flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", marginBottom: 12 }}>
                         <ThemedText type='subtitle'>{props.title}</ThemedText>

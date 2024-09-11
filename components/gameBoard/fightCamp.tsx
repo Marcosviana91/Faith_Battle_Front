@@ -68,6 +68,7 @@ export default function FightCamp() {
                             setShowModal(false)
                         }}
                         visible={showModal}
+                        backgroundTransparent
                     >
                         {/* Header */}
                         <ShowFightersIconsContainer matchData={matchData} />
