@@ -26,7 +26,7 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
 
     function actionFunction() {
         const not_defense = { slug: 'not-defense' }
-        const sub_card = player_in_match.card_battle_camp![selectedSubCardIndex!]
+        const sub_card = player_in_match!.card_battle_camp![selectedSubCardIndex!]
 
         let __temp_list = cards_to_fight!.map(_card => _card)
         const target_index = fight_camp?.attack_cards?.findIndex(_card => _card.in_game_id === selectedCard!.in_game_id)
@@ -49,7 +49,7 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
         <DefaultContainer
             card_size="medium"
             cards={props.cards}
-            card_action_component={[props.attacking && <OnCardToggleDefense player_in_match={player_in_match} get_selected_card_index={setSelectedSubCardIndex} dispatchCardAction={actionFunction} style={{ maxWidth: windowsWidth * 0.95 }} />]}
+            card_action_component={[props.attacking && <OnCardToggleDefense player_in_match={player_in_match!} get_selected_card_index={setSelectedSubCardIndex} dispatchCardAction={actionFunction} style={{ maxWidth: windowsWidth * 0.95 }} />]}
             get_selected_card={setSelectedCard}
             show_action_in_bottom
             show_modal={showModal}
@@ -63,7 +63,11 @@ function OnCardToggleDefense(props: { player_in_match: PlayersInMatchApiProps, g
 
     return (
         <View style={props.style}>
-            <SubCardsContainer cards={_card_in_battle_camp_without_artifacts} get_selected_card={props.get_selected_card_index} cards_action={<Pressable onPress={() => props.dispatchCardAction()}>
+            <SubCardsContainer cards={_card_in_battle_camp_without_artifacts} get_selected_card={(_index) =>{
+                const _selected_card_id = _card_in_battle_camp_without_artifacts![_index].in_game_id
+                const _battle_card_id = props.player_in_match.card_battle_camp?.findIndex(card => card.in_game_id === _selected_card_id)
+                props.get_selected_card_index(_battle_card_id!)
+            }} cards_action={<Pressable onPress={() => props.dispatchCardAction()}>
                 <MaterialCommunityIcons name="shield-sword" size={80} color="black" />
             </Pressable>} />
         </View>
