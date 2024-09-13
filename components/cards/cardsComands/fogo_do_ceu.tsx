@@ -21,12 +21,12 @@ export function OnInvoke() {
     const player_in_match_data = usePlayerData(player?.id!)
     const player_target_data = usePlayerData(selectedPlayerId!)
 
-    const fogo_do_ceu_id = getCardInListBySlug('fogo-do-ceu', player_in_match_data.card_prepare_camp)?.in_game_id
+    const fogo_do_ceu_id = getCardInListBySlug('fogo-do-ceu', player_in_match_data!.card_prepare_camp)?.in_game_id
 
     const WS = useAppWebSocket();
     const dispatch = useDispatch()
 
-    const [cards_whitout_noe, set_cards_whitout_noe] = useState<CardProps[]>([])
+    var cards_whitout_noe: CardProps[] = []
 
     useEffect(() => {
         if (player_target_data) {
@@ -34,10 +34,12 @@ export function OnInvoke() {
 
             player_target_data.card_battle_camp?.map((_card) => {
                 if (_card.slug !== 'noe') {
-                    __temp_array.push(_card)
+                    if (!_card.indestrutivel) {
+                        __temp_array.push(_card)
+                    }
                 }
             })
-            set_cards_whitout_noe(__temp_array)
+            cards_whitout_noe = __temp_array
         }
     }, [player_target_data])
 
