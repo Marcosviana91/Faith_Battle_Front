@@ -8,7 +8,8 @@ import { useState, useEffect } from "react"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { setCardsToFight, toggleCardsToFight } from "@/store/reducers/matchReducer"
 import { SubCardsContainer } from "@/components/cards/containers/subContainer";
-import { Pressable, StyleProp, View, ViewStyle } from "react-native";
+import { Platform, Pressable, StyleProp, ToastAndroid, View, ViewStyle } from "react-native";
+import { ThemedText } from "@/components/themed/ThemedText";
 
 
 export default function FightContainer(props: { cards: CardProps[], attacking?: Boolean }) {
@@ -25,6 +26,15 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
     const [showModal, setShowModal] = useState(false)
 
     function actionFunction() {
+        if (selectedCard?.imbloqueavel) {
+            if (Platform.OS === "android") {
+                ToastAndroid.show('Este herói não pode ser bloqueado!', ToastAndroid.SHORT);
+            }
+            else {
+                window.alert('Este herói não pode ser bloqueado!')
+            }
+            return
+        }
         const not_defense = { slug: 'not-defense' }
         const sub_card = player_in_match!.card_battle_camp![selectedSubCardIndex!]
 
@@ -49,7 +59,7 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
         <DefaultContainer
             card_size="medium"
             cards={props.cards}
-            card_action_component={[props.attacking && <OnCardToggleDefense player_in_match={player_in_match!} get_selected_card_index={setSelectedSubCardIndex} dispatchCardAction={actionFunction} style={{ maxWidth: windowsWidth * 0.95 }} />]}
+            card_action_component={[props.attacking && <OnCardToggleDefense parent_card={selectedCard!} player_in_match={player_in_match!} get_selected_card_index={setSelectedSubCardIndex} dispatchCardAction={actionFunction} style={{ maxWidth: windowsWidth * 0.95 }} />]}
             get_selected_card={setSelectedCard}
             show_action_in_bottom
             show_modal={showModal}
@@ -58,11 +68,13 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
     )
 }
 
-function OnCardToggleDefense(props: { player_in_match: PlayersInMatchApiProps, get_selected_card_index: (card_index: number) => void, dispatchCardAction: () => void, style?: StyleProp<ViewStyle> }) {
+function OnCardToggleDefense(props: {parent_card: CardProps, player_in_match: PlayersInMatchApiProps, get_selected_card_index: (card_index: number) => void, dispatchCardAction: () => void, style?: StyleProp<ViewStyle> }) {
     const _card_in_battle_camp_without_artifacts = props.player_in_match.card_battle_camp?.filter(card => (card.card_type !== "artifact"))
 
     return (
         <View style={props.style}>
+            {props.parent_card.imbloqueavel ?
+            <ThemedText type="subtitle">Este herói não pode ser bloqueado!</ThemedText>:
             <SubCardsContainer cards={_card_in_battle_camp_without_artifacts} get_selected_card={(_index) =>{
                 const _selected_card_id = _card_in_battle_camp_without_artifacts![_index].in_game_id
                 const _battle_card_id = props.player_in_match.card_battle_camp?.findIndex(card => card.in_game_id === _selected_card_id)
@@ -70,6 +82,8 @@ function OnCardToggleDefense(props: { player_in_match: PlayersInMatchApiProps, g
             }} cards_action={<Pressable onPress={() => props.dispatchCardAction()}>
                 <MaterialCommunityIcons name="shield-sword" size={80} color="black" />
             </Pressable>} />
+            
+            }
         </View>
 
     )
