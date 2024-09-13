@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { SelectableCardsContainer } from "./SelectableCardsContainer";
 import BasicButton from "@/components/button/basic";
 import useAppWebSocket from "@/hooks/useAppWebSocket";
+import CardTag from "../tags";
 
 
 type DefaultContainerProps = {
@@ -85,7 +86,28 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     setShowSubCardDescription(false)
                                     setSelectedSubCard(undefined)
                                 }}
-                                style={{ width: "90%", height: "60%", position: "relative" }}>
+                                style={{ width: "90%", height: "60%", position: "relative" }}
+                            >
+                                {/* Card status */}
+                                <View
+                                    style={{
+                                        position: "absolute",
+                                        zIndex: 1,
+                                        top: '5%',
+                                        right: 10,
+                                        gap: 4,
+                                    }}
+                                >
+                                    {selectedCard.incorruptivel &&
+                                        <CardTag tag="Incorruptível" />
+                                    }
+                                    {selectedCard.indestrutivel &&
+                                        <CardTag tag="Indestrutível" />
+                                    }
+                                    {selectedCard.imbloqueavel &&
+                                        <CardTag tag="Imbloqueável" />
+                                    }
+                                </View>
                                 <Image
                                     resizeMode="stretch"
                                     style={[{ width: "100%", height: "100%" }]}
@@ -124,12 +146,12 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                                 }
 
                                                 WS.sendJsonMessage({
-                                                        "data_type": "match_move",
+                                                    "data_type": "match_move",
                                                     "user_data": {
-                                                            "id": player.id
-                                                        },
-                                                        "room_data": {
-                                                                "id": matchData.id
+                                                        "id": player.id
+                                                    },
+                                                    "room_data": {
+                                                        "id": matchData.id
                                                     },
                                                     "match_move": {
                                                         "match_id": matchData?.id,
@@ -408,13 +430,13 @@ export function Card(props: Props) {
                 </ThemedText>
             }
             {/* Overlay para cartas não ready */}
-            {props.card?.status !== 'ready' && String(player.id) === current_card_id && <View style={{ width: '100%', height: '100%', backgroundColor: '#000a', position: 'absolute', zIndex: 1, borderRadius: 10 }} />}
+            {props.card?.status !== 'ready' && String(player.id) === current_card_id && <View style={{ width: '100%', height: '100%', backgroundColor: '#000a', position: 'absolute', zIndex: 2, borderRadius: 10 }} />}
             <Image
                 resizeMode="stretch"
                 style={[cardSize, borderColor]}
                 source={useCards({ card_slug: props.card?.slug })}
             />
-            {/* Pontos de Ataque e Defesa */}
+            {/* Custo de Sabedoria */}
             {props.card?.in_game_id &&
                 <View style={{ height: 30, width: '100%', position: 'absolute', top: 2, alignItems: 'flex-start', paddingHorizontal: 2 }}>
                     <View style={{ height: 30, width: '30%' }}>
@@ -424,9 +446,30 @@ export function Card(props: Props) {
                     </View>
                 </View>
             }
+            {/* Card status */}
+            <View
+                style={{
+                    position: "absolute",
+                    zIndex: 1,
+                    top: 10,
+                    right: 4,
+                    paddingLeft: 4,
+                    gap: 1,
+                    width: '30%'
+                }}
+            >
+                {props.card?.incorruptivel &&
+                    <View style={{width:16, height:8, borderRadius:4,  backgroundColor:'#f00'}} />
+                }
+                {props.card?.indestrutivel &&
+                    <View style={{width:16, height:8, borderRadius:4, backgroundColor:'#ff0'}} />
+                }
+                {props.card?.imbloqueavel &&
+                    <View style={{width:16, height:8, borderRadius:4, backgroundColor:'#0f0'}} />
+                }
+            </View>
             {/* Pontos de Ataque e Defesa */}
             {props.card?.in_game_id && (props.card?.card_type === 'hero' || props.card?.card_type === 'legendary') &&
-
                 <View style={{ height: 30, width: '100%', position: 'absolute', bottom: 2, alignItems: 'center' }}>
                     <View style={{ height: 30, width: '95%', flexDirection: 'row', justifyContent: 'space-between' }}>
 
