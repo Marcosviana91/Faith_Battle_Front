@@ -8,6 +8,9 @@ declare type MatchApiProps = {
     can_others_move?: boolean;
     players_in_match?: [PlayersInMatchApiProps[]];
     end_match?: string;
+    card_stack?: {
+        cards: CardProps[];
+    }
     fight_camp?: {
         player_attack_id?: number;
         attack_cards?: CardProps[];

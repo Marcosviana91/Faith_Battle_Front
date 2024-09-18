@@ -10,6 +10,7 @@ import { ThemedText } from '@/components/themed/ThemedText';
 import GameBoard from "@/components/gameBoard";
 import { IconsContainer } from "@/components/player_user/playerIcon";
 import FightCamp from '@/components/gameBoard/fightCamp';
+import CardStack from '@/components/gameBoard/cardStack';
 import TopBar from '@/components/gameBoard/topBar';
 import { usePlayerData } from '@/hooks/usePlayerData';
 import HandContainer from '@/components/cards/containers/HandContainer';
@@ -20,6 +21,7 @@ import { OnInvoke as MariaOnInvoke } from '@/components/cards/cardsComands/maria
 import { OnInvoke as MoisesOnInvoke } from '@/components/cards/cardsComands/moises';
 import { OnInvoke as DiluvioOnInvoke } from '@/components/cards/cardsComands/diluvio';
 import { OnInvoke as FogoDoCeuOnInvoke } from '@/components/cards/cardsComands/fogo_do_ceu';
+import { OnInvoke as ForcaDeSansaoOnInvoke } from '@/components/cards/cardsComands/forca_de_sansao';
 import { OnInvoke as NoCeuTemPaoOnInvoke } from '@/components/cards/cardsComands/no_ceu_tem_pao';
 import { OnInvoke as RestauracaoDeFeOnInvoke } from '@/components/cards/cardsComands/restauracao_de_fe';
 import { OnInvoke as SabedoriaDeSalomaoOnInvoke } from '@/components/cards/cardsComands/sabedoria_de_salomao';
@@ -51,6 +53,8 @@ export default function GameBoardTable() {
                 return <MoisesOnInvoke />
             case 'fogo-do-ceu':
                 return <FogoDoCeuOnInvoke />
+            case 'forca-de-sansao':
+                return <ForcaDeSansaoOnInvoke />
             case 'restauracao-de-fe':
                 return <RestauracaoDeFeOnInvoke />
             case 'diluvio':
@@ -79,6 +83,8 @@ export default function GameBoardTable() {
                     }
                     {/* Fight Camp */}
                     <FightCamp />
+                    {/* Card Stack */}
+                    <CardStack />
                     {/* GameBoards */}
                     <View style={[globalStyles.contentContainer]}>
                         {/* Enemy board */}
@@ -107,46 +113,6 @@ export default function GameBoardTable() {
             }
         </>
     )
-    //     return (
-    //         <>
-    //             {!matchData?.end_match &&
-    //                 <ThemedView style={globalStyles.container}>
-    //                     <TopBar />
-    //                     {/* Aplicar DRY */}
-    //                     {/* Icones dos jogadores */}
-    //                     {!fight_camp &&
-    //                         <IconsContainer player_id={player?.id} matchData={matchData} />
-    //                     }
-    //                     {/* Fight Camp */}
-    //                     <FightCamp />
-    //                     {/* GameBoards */}
-    //                     <View style={[globalStyles.contentContainer]}>
-    //                         {/* Enemy board */}
-    //                         {player_focus_id !== 0 && player_focus_id !== player?.id &&
-    //                             <GameBoard {...player_focus_data} />
-    //                         }
-    //                         {/* Player board */}
-    //                         <GameBoard {...player_data} />
-    //                     </View>
-    //                     {/* Mão do jogador */}
-    //                     <View>
-    //                         <HandContainer />
-    //                     </View>
-    //                 </ThemedView>
-    //             }
-    //             {/* Modal das habilidades das cartas */}
-    //             {card_skill && card_skill.slug !== '' &&
-    //                 <OnInvoke slug={card_skill.slug} />
-    //             }
-    //             {/* Tela de Statisticas // falta fazer */}
-    //             {matchData?.end_match &&
-    //                 <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-    //                     <TopBar />
-    //                     <ThemedText>A partida acabou: {matchData.end_match}</ThemedText>
-    //                 </ThemedView>
-    //             }
-    //         </>
-    //     )
 }
 
 const styles = StyleSheet.create({
