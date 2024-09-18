@@ -40,6 +40,10 @@ export default function HandContainer() {
                 return (
                     <ArtifactOnInvoke card={selectedCard!} setShowModal={setShowModal} />
                 )
+            case "sin":
+                return (
+                    <ThemedText style={{textAlign:'center'}} type="title">Esta carta só pode ser usada durante um combate.</ThemedText>
+                )
         }
     }
 
