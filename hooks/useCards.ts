@@ -131,6 +131,7 @@ const CARD_LIST: CardProps[] = [
     {
         slug: "cordeiro-de-deus",
         path: require("@/assets/images/Cards/Milagres/Cordeiro de Deus.png"),
+        description: "Até o seu próximo turno, o jogador alvo não perde pontos de fé, pecados não o afetam, e suas cartas são indestrutíveis.",
     },
     {
         slug: "diluvio",
@@ -143,6 +144,7 @@ const CARD_LIST: CardProps[] = [
     {
         slug: "forca-de-sansao",
         path: require("@/assets/images/Cards/Milagres/Força de Sansão.png"),
+        description: "O Herói alvo ganha +3/+3 até o final do turno. Se o alvo é Sansão, ele se torna imbloqueável até o final do turno.",
     },
     {
         slug: "liberacao-celestial",
@@ -155,10 +157,12 @@ const CARD_LIST: CardProps[] = [
     {
         slug: "passagem-segura",
         path: require("@/assets/images/Cards/Milagres/Passagem Segura.png"),
+        description: "Os Heróis do jogador alvo são imbloqueáveis neste turno.",
     },
     {
         slug: "protecao-divina",
         path: require("@/assets/images/Cards/Milagres/Proteção Divina.png"),
+        description: "O jogador alvo não sofre dano de efeitos ou ataques de Heróis neste turno.",
     },
     {
         slug: "ressurreicao",
