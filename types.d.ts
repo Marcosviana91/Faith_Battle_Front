@@ -33,6 +33,7 @@ declare type CardProps = {
     skill_focus_player_id?: number,
     attachable?: boolean,
     attached_cards?: CardProps[],
+    attached_effects?: CardProps[],
     imbloqueavel?: boolean,
     indestrutivel?: boolean,
     incorruptivel?: boolean,

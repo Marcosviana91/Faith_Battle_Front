@@ -51,12 +51,15 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                         <Pressable
                             key={_index}
                             onPress={() => {
-                                setSelectedCard(card)
-                                if (props.set_show_modal) {
-                                    props.set_show_modal(true)
-                                }
-                                if (props.get_selected_card) {
-                                    props.get_selected_card(card)
+                                if (card.slug !== 'not-defense') {
+
+                                    setSelectedCard(card)
+                                    if (props.set_show_modal) {
+                                        props.set_show_modal(true)
+                                    }
+                                    if (props.get_selected_card) {
+                                        props.get_selected_card(card)
+                                    }
                                 }
                             }}
                         >
@@ -70,7 +73,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                     <ThemedView
                         style={{ flex: 1, maxWidth: windowWidth }}
                     >
-                        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", flexDirection: props.show_action_in_bottom ? "column-reverse" : 'column' }}>
+                        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", flexDirection: props.show_action_in_bottom ? "column-reverse" : 'column', position: 'relative' }}>
                             {/* Card Commands */}
                             {selectedCard.status === 'ready' &&
                                 <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: props.show_action_in_bottom ? 0 : 24, marginTop: props.show_action_in_bottom ? 24 : 0 }}>
@@ -113,6 +116,17 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     style={[{ width: "100%", height: "100%" }]}
                                     source={useCards({ card_slug: selectedCard.slug })}
                                 />
+                                {/* Efeitos Equipados */}
+                                {selectedCard?.attached_effects &&
+                                    <View style={{ position: 'absolute', top: -20, width: '100%', alignItems: 'center' }}>
+                                        <View style={{ width: '65%' }}>
+                                            <SelectableCardsContainer cards={selectedCard?.attached_effects} set_selected_card={(param) => {
+                                                setSelectedSubCard(param)
+                                                setShowSubCardDescription(true)
+                                            }} selected_card={selectedSubCard} card_size="minimum" />
+                                        </View>
+                                    </View>
+                                }
                                 {/* Pontos de Ataque e Defesa */}
                                 {selectedCard.in_game_id && (selectedCard.card_type === 'hero' || selectedCard.card_type === 'legendary') &&
                                     <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 20, alignItems: 'center' }}>
@@ -136,7 +150,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                             setShowSubCardDescription(true)
                                         }} selected_card={selectedSubCard} card_size="minimum" />
                                     </View>
-                                    {selectedSubCard?.status == 'ready' &&
+                                    {selectedSubCard?.status == 'ready' && selectedSubCard.card_type == 'artifact' &&
                                         <BasicButton
                                             disabled={!Boolean(selectedSubCard)}
                                             onPress={() => {
@@ -459,13 +473,13 @@ export function Card(props: Props) {
                 }}
             >
                 {props.card?.incorruptivel &&
-                    <View style={{width:16, height:8, borderRadius:4,  backgroundColor:'#f00'}} />
+                    <View style={{ width: 16, height: 8, borderRadius: 4, backgroundColor: '#f00' }} />
                 }
                 {props.card?.indestrutivel &&
-                    <View style={{width:16, height:8, borderRadius:4, backgroundColor:'#ff0'}} />
+                    <View style={{ width: 16, height: 8, borderRadius: 4, backgroundColor: '#ff0' }} />
                 }
                 {props.card?.imbloqueavel &&
-                    <View style={{width:16, height:8, borderRadius:4, backgroundColor:'#0f0'}} />
+                    <View style={{ width: 16, height: 8, borderRadius: 4, backgroundColor: '#0f0' }} />
                 }
             </View>
             {/* Pontos de Ataque e Defesa */}
