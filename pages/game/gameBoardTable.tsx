@@ -23,9 +23,11 @@ import { OnInvoke as DiluvioOnInvoke } from '@/components/cards/cardsComands/dil
 import { OnInvoke as FogoDoCeuOnInvoke } from '@/components/cards/cardsComands/fogo_do_ceu';
 import { OnInvoke as ForcaDeSansaoOnInvoke } from '@/components/cards/cardsComands/forca_de_sansao';
 import { OnInvoke as NoCeuTemPaoOnInvoke } from '@/components/cards/cardsComands/no_ceu_tem_pao';
+import { OnInvoke as RessurreicaoOnInvoke } from '@/components/cards/cardsComands/ressurreicao';
 import { OnInvoke as RestauracaoDeFeOnInvoke } from '@/components/cards/cardsComands/restauracao_de_fe';
 import { OnInvoke as SabedoriaDeSalomaoOnInvoke } from '@/components/cards/cardsComands/sabedoria_de_salomao';
 import { OnInvoke as SarcaArdenteOnInvoke } from '@/components/cards/cardsComands/sarca_ardente';
+import Stats from '@/components/gameBoard/stats';
 // import { OnInvoke as ProtecaoDivinaOnInvoke } from '@/components/cards/cardsComands/protecao_divina';
 
 
@@ -51,16 +53,18 @@ export default function GameBoardTable() {
                 return <EliasOnInvoke />
             case 'moises':
                 return <MoisesOnInvoke />
+            case 'diluvio':
+                return <DiluvioOnInvoke />
             case 'fogo-do-ceu':
                 return <FogoDoCeuOnInvoke />
             case 'forca-de-sansao':
                 return <ForcaDeSansaoOnInvoke />
             case 'restauracao-de-fe':
                 return <RestauracaoDeFeOnInvoke />
-            case 'diluvio':
-                return <DiluvioOnInvoke />
             case 'no-ceu-tem-pao':
                 return <NoCeuTemPaoOnInvoke />
+            case 'ressurreicao':
+                return <RessurreicaoOnInvoke />
             case 'sabedoria-de-salomao':
                 return <SabedoriaDeSalomaoOnInvoke />
             // case 'protecao-divina':
@@ -106,10 +110,7 @@ export default function GameBoardTable() {
             }
             {/* Tela de Statisticas // falta fazer */}
             {matchData?.end_match &&
-                <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                    <TopBar />
-                    <ThemedText>A partida acabou: {matchData.end_match}</ThemedText>
-                </ThemedView>
+                <Stats />
             }
         </>
     )
