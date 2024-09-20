@@ -12,14 +12,18 @@ import BasicButton from '@/components/button/basic';
 import { setCurrentSkill } from '@/store/reducers/matchReducer';
 import useAppWebSocket from '@/hooks/useAppWebSocket';
 import ToggleButton from '@/components/button/toggle';
+import { usePlayerData } from '@/hooks/usePlayerData';
+import { getCardInListBySlug } from '@/hooks/useCards';
 
 export function OnInvoke() {
+
     const cardListDeck = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.deck
     const cardListSea = useSelector((state: RootReducer) => state.matchReducer.player_match_settings?.current_skill)?.forgotten_sea
     const [cardList, setCardList] = useState<CardProps[]>(cardListDeck!)
 
     const [selectedOption, setSelectedOption] = useState<number>(0)
     const [selectedCard, setSelectedCard] = useState<number>()
+
 
     useEffect(() => {
         if (cardList?.length! < 1) {
@@ -43,7 +47,7 @@ export function OnInvoke() {
                 <SubCardsContainer
                     cards={cardList}
                     cards_action={<ChooseCard list={cardList as []} selectedCard={selectedCard} />}
-                    get_selected_card={(ind) => { setSelectedCard(ind) }}
+                    get_selected_card={(index) => { setSelectedCard(index) }}
                 />
             </View>
 
@@ -59,8 +63,11 @@ type ChangeCardOrderProps = {
 function ChooseCard(props: ChangeCardOrderProps) {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    const player_in_match_data = usePlayerData(player?.id!)
     const WS = useAppWebSocket()
     const dispatch = useDispatch()
+
+    const moises_id = getCardInListBySlug('moises', player_in_match_data!.card_prepare_camp)?.in_game_id
 
     return (
         <>
@@ -81,7 +88,7 @@ function ChooseCard(props: ChangeCardOrderProps) {
                                 "player_move": player?.id,
                                 "card_list": [props.list![props.selectedCard!]],
                                 "move_type": "card_skill",
-                                "card_id": "moises"
+                                "card_id": moises_id
                             }
                         })
                         dispatch(setCurrentSkill(undefined))
