@@ -18,7 +18,7 @@ export function OnInvoke() {
     const [selectedPlayerId, setSelectedPlayerId] = useState<number>()
     const player_in_match_data = usePlayerData(player?.id!)
 
-    const no_ceu_tem_pao_id = getCardInListBySlug('no-ceu-tem-pao', player_in_match_data.card_prepare_camp)?.in_game_id
+    const no_ceu_tem_pao_id = getCardInListBySlug('no-ceu-tem-pao', player_in_match_data!.card_prepare_camp)?.in_game_id
 
     const WS = useAppWebSocket();
     const dispatch = useDispatch()

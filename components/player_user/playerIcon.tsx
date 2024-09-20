@@ -269,7 +269,8 @@ export function SelectEnemyIconsContainer(props: ContainerProps) {
             justifyContent: "center",
         }}>
             {props.matchData?.players_in_match![0].map((_player) => {
-                if (_player.id === player?.id) {
+                // DRY user props player_id
+                if (_player.id === player?.id && props.hideCurrentPlayer === true) {
                     return null
                 }
                 return (

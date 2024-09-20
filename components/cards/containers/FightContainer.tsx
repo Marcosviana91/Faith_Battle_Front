@@ -57,7 +57,7 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
     }
     return (
         <DefaultContainer
-            card_size="medium"
+            card_size="small"
             cards={props.cards}
             card_action_component={[props.attacking && <OnCardToggleDefense parent_card={selectedCard!} player_in_match={player_in_match!} get_selected_card_index={setSelectedSubCardIndex} dispatchCardAction={actionFunction} style={{ maxWidth: windowsWidth * 0.95 }} />]}
             get_selected_card={setSelectedCard}
