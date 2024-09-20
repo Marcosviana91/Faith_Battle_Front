@@ -26,7 +26,7 @@ export function OnInvoke() {
     const WS = useAppWebSocket();
     const dispatch = useDispatch()
 
-    var cards_whitout_noe: CardProps[] = []
+    const [cards_whitout_noe, set_cards_whitout_noe] = useState<CardProps[]>([])
 
     useEffect(() => {
         if (player_target_data) {
@@ -39,7 +39,7 @@ export function OnInvoke() {
                     }
                 }
             })
-            cards_whitout_noe = __temp_array
+            set_cards_whitout_noe(__temp_array)
         }
     }, [player_target_data])
 
