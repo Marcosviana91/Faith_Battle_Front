@@ -21,7 +21,7 @@ export function OnInvoke() {
     const [selectedPlayer2Id, setSelectedPlayer2Id] = useState<number>()
     const player_in_match_data = usePlayerData(player?.id!)
 
-    const saraca_ardente_id = getCardInListBySlug('sarca-ardente', player_in_match_data.card_prepare_camp)?.in_game_id
+    const saraca_ardente_id = getCardInListBySlug('sarca-ardente', player_in_match_data!.card_prepare_camp)?.in_game_id
 
     const WS = useAppWebSocket();
     const dispatch = useDispatch()
@@ -36,7 +36,7 @@ export function OnInvoke() {
 
             <ThemedView style={{alignItems:"center", padding:4, borderWidth:2, borderRadius:8, minWidth: "70%", height:150}}>
                 <ThemedText>Oponente para perder 2 de fé</ThemedText>
-                <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayer2Id} selected_player_id={selectedPlayer2Id} />
+                <SelectEnemyIconsContainer hideCurrentPlayer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayer2Id} selected_player_id={selectedPlayer2Id} />
             </ThemedView>
             <BasicButton
                 disabled={selectedPlayerId === undefined || selectedPlayer2Id === undefined}

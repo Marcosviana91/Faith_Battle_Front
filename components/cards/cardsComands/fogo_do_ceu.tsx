@@ -46,7 +46,7 @@ export function OnInvoke() {
 
     return (
         <ThemedModal title='Escolha um oponente e um uma carta.' hideCloseButton closeModal={() => { }} >
-            <SelectEnemyIconsContainer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
+            <SelectEnemyIconsContainer hideCurrentPlayer matchData={matchData} player_id={player?.id} get_selected_player_id={setSelectedPlayerId} selected_player_id={selectedPlayerId} />
             {/* Cartas no campo de batalha */}
             {selectedPlayerId !== player?.id && player_target_data &&
                 <>
