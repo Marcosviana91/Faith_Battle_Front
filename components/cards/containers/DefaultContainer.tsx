@@ -89,7 +89,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     setShowSubCardDescription(false)
                                     setSelectedSubCard(undefined)
                                 }}
-                                style={{ width: "90%", height: "60%", position: "relative" }}
+                                style={{ width: windowWidth/2, height: windowWidth/3*2, position: "relative" }}
                             >
                                 {/* Card status */}
                                 <View
