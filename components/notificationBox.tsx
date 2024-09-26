@@ -10,7 +10,7 @@ import { useEffect } from "react"
 import useAppWebSocket from "@/hooks/useAppWebSocket"
 
 const NOTIFICATION_WIDTH = 300
-const NOTIFICATION_TIMEOUT = 3000
+const NOTIFICATION_TIMEOUT = 5000
 
 
 export function NotificationBox() {
