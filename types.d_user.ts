@@ -47,5 +47,20 @@ declare type PlayersInMatchApiProps = {
     incorruptivel?: boolean
     nao_sofre_danos_de_efeitos?: boolean,
     nao_sofre_ataque_de_herois?: boolean,
-    ja_atacou?: number[]
+    ja_atacou?: number[],
+    usou_pecados?: string[],
+    usou_milagres?: string[],
+    round_eliminado?: number,
+    fe_recebida?: number,
+    dano_em_fe?: {
+        total_aplicado: number,
+        total_recebido: number,
+        oponentes:{
+            [key:number]: {
+                dano_aplicado: number,
+                dano_recebido: number,
+            },
+        }
+    },
+
 }
