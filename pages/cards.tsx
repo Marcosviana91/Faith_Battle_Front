@@ -84,10 +84,10 @@ const ALL_CARDS = [
 ]
 
 export default function CardScreen() {
-    const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
+    const serverData = useSelector((state: RootReducer) => state.appReducer.server)
     const [indexToShow, setIndexToShow] = useState(0)
 
-    const cards_available = userData?.available_cards
+    const cards_available = serverData?.active_cards
 
     return (
         <ThemedView style={{ height: '100%' }}>
