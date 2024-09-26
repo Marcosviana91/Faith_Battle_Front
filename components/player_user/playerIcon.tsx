@@ -30,6 +30,7 @@ type Props = {
 export function PlayerIcon(props: Props) {
     const dispatch = useDispatch()
     const playersData = useSelector((state: RootReducer) => state.matchReducer.players_data)
+    const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
     const [getUser, { data: userData, error: userError }] = useGetUserDataMutation();
     const [avatar, setAvatar] = useState()
     const _PlayerData = playersData?.filter((player) => player.id === props.id)[0]
@@ -140,11 +141,8 @@ export function PlayerIcon(props: Props) {
                 <Text style={{ fontSize: 14, fontWeight: "700" }}>{playerDataCurrent?.username}</Text>
             </View>
             <View style={styles.playerIconMini}>
-                {_PlayerInMatchData && _PlayerInMatchData.faith_points! < 1 &&
-                    <ThemedView lightColor="#ffffffc5" darkColor="#000000c5" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1 }}>
-                        <ThemedText style={{ lineHeight: props.size ? props.size / 5 * 4 : 40 }}>
-                            <MaterialCommunityIcons name="skull-outline" size={props.size ? props.size / 5 * 4 : 40} />
-                        </ThemedText>
+                {!matchData.end_match && _PlayerInMatchData && _PlayerInMatchData.faith_points! < 1 &&
+                    <ThemedView lightColor="#ffffff9d" darkColor="#0000009d" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1 }}>
                     </ThemedView>
                 }
                 <Image
