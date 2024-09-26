@@ -58,8 +58,8 @@ export default function HomeScreen() {
             else if (data.data_type === "match_update") {
                 console.log('match_update')
                 dispatch(setRoom(undefined))
-                if (data.match_data?.player_focus_id === userData?.id) {
-                    dispatch(setMatch({ ...data.match_data!, player_focus_id: data.match_data?.player_focus_id }))
+                if (data.match_data?.player_turn === userData?.id && matchData?.player_focus_id) {
+                    dispatch(setMatch({ ...data.match_data!, player_focus_id: matchData!.player_focus_id }))
                 } else {
                     dispatch(setMatch({ ...data.match_data!, player_focus_id: data.match_data?.player_turn }))
                 }
@@ -67,7 +67,6 @@ export default function HomeScreen() {
             else if (data.data_type === "card_skill") {
                 console.log('card_skill')
                 dispatch(setCurrentSkill(data.card_data!))
-
             }
         }
     }, [WS.lastJsonMessage])
