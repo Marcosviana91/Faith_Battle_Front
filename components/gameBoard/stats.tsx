@@ -41,18 +41,27 @@ export default function Stats() {
             <ThemedText type="title">A partida acabou!</ThemedText>
             <ThemedText type="link">ID: {matchData.id}</ThemedText>
             <ThemedText>{duracao_partida} <AntDesign name="clockcircleo" size={18} /> ROUND: {matchData.round_match}</ThemedText>
-            <ThemedView style={{gap:16, marginVertical:32, borderWidth:2, padding:4, borderRadius:8, width:'90%' }}>
-                <ThemedView style={{flexDirection:'row', gap:16}}>
+            <ThemedView style={{ gap: 16, marginVertical: 32, borderWidth: 2, padding: 4, borderRadius: 8, width: '90%' }}>
+                <ThemedView style={{ flexDirection: 'row', gap: 16 }}>
                     <ThemedText>JOGADOR:</ThemedText>
-                    <ThemedText>Pontos de Fé</ThemedText>
+                    <ThemedText>Round eliminado:</ThemedText>
+                    <ThemedText>Pontos de Fé:</ThemedText>
+                    <ThemedText>Total de Dano causado:</ThemedText>
+                    <ThemedText>Total de Dano recebido:</ThemedText>
                 </ThemedView>
                 {matchData.players_in_match?.map(_team =>
                 (
                     _team.map(_player => {
+                        console.log(Object.entries(_player.dano_em_fe?.oponentes!))
                         return (
-                            <ThemedView style={{flexDirection:'row', gap:16}}>
+                            <ThemedView style={{ flexDirection: 'row', gap: 16 }}>
                                 <PlayerIcon id={_player.id} type="mini" />
+                                <ThemedText>{_player.round_eliminado}º</ThemedText>
                                 <ThemedText>{_player.faith_points}</ThemedText>
+                                <ThemedText>{_player.dano_em_fe?.total_aplicado}</ThemedText>
+                                <ThemedText>{_player.dano_em_fe?.total_recebido}</ThemedText>
+                                
+
                             </ThemedView>
                         )
                     })
