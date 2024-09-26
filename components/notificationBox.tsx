@@ -18,13 +18,22 @@ export function NotificationBox() {
     const navBarHeight = useNavBarDimension()
     const dispatch = useDispatch()
     const WS = useAppWebSocket()
+    const playersData = useSelector((state: RootReducer) => state.matchReducer.players_data)
 
     useEffect(() => {
         if (WS.lastJsonMessage) {
             const data = WS.lastJsonMessage as APIResponseProps
             if (data.data_type === "notification") {
                 console.log('<<< NOTIFICATION: ', data.notification)
-                dispatch(addNotify(data.notification!))
+                let notification = data.notification!
+                if (notification?.message && notification.message.includes('%PLAYER_NAME')) {
+                    const name_index_start = notification.message.indexOf('%PLAYER_NAME')
+                    const name_index_end = notification.message.indexOf('%',name_index_start+1)
+                    const player_id = notification.message.substring(name_index_start+1, name_index_end).split(":")[1]
+                    const username = playersData?.filter((player) => player.id === Number(player_id))[0].username!
+                    notification.message = notification.message.replace(`%PLAYER_NAME:${player_id}%`, username)
+                }
+                dispatch(addNotify(notification))
             }
         }
     }, [WS.lastJsonMessage])
