@@ -8,6 +8,7 @@ import { addNotify } from "@/store/reducers/notificationReducer"
 import BasicButton from '@/components/button/basic';
 
 import useAppWebSocket from "@/hooks/useAppWebSocket";
+import { usePlayerData } from "@/hooks/usePlayerData";
 
 export default function ActionButtons() {
     const dispatch = useDispatch()
@@ -17,6 +18,7 @@ export default function ActionButtons() {
     const player_match_settings = useSelector((state: RootReducer) => state.matchReducer.player_match_settings)
     const player_focus = matchData?.player_focus_id
     const fight_camp = matchData?.fight_camp
+    const playerFocusInMatchData = usePlayerData(player_focus!)
 
     const WS = useAppWebSocket();
 
@@ -62,11 +64,16 @@ export default function ActionButtons() {
                             onPress={() => {
                                 if (!player_focus || player_focus == player?.id) {
                                     console.log("Escolha um oponente")
-                                } else if ( typeof((player?.ja_atacou?.find((_id) => _id === player_focus))) === 'number'){
+                                } else if (typeof ((player?.ja_atacou?.find((_id) => _id === player_focus))) === 'number') {
                                     dispatch(addNotify({
                                         title: "Já atacou este oponente.",
                                         message: "Escolha outro oponente ou remova suas cartas do modo de ataque para finalizar seu turno.",
-                                        stillUntilDismiss:true
+                                        stillUntilDismiss: true
+                                    }))
+                                } else if (playerFocusInMatchData?.faith_points! < 1){
+                                    dispatch(addNotify({
+                                        title: "Oponente Eliminado.",
+                                        message: "Este oponente ja foi eliminado, escolha outro.",
                                     }))
                                 } else {
                                     const data: APIResponseProps = {
@@ -91,13 +98,19 @@ export default function ActionButtons() {
                                 }
                             }}
                         >
-                            {(!player_focus || player_focus == player?.id) ? 'Escolha um oponente' : <>
-                                {
-                                    (player?.ja_atacou?.find((_id) => _id === player_focus)) ?
-                                        'Já atacou este oponente' :
-                                        'Atacar'
-                                }
-                            </>}
+                            {(!player_focus || player_focus == player?.id) ?
+                                'Escolha um oponente' :
+                                <>
+                                    {
+                                        (player?.ja_atacou?.find((_id) => _id === player_focus)) ?
+                                            'Já atacou este oponente' :
+                                            <>
+                                                {playerFocusInMatchData && playerFocusInMatchData.faith_points! < 1 ?
+                                                    'Eliminado' :
+                                                    'Atacar'}
+                                            </>
+                                    }
+                                </>}
                         </BasicButton>
                     </View>
                 }
