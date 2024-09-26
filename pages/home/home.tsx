@@ -21,7 +21,6 @@ export default function HomeScreen() {
     const dispatch = useDispatch();
     const serverData = useGetServerDataQuery()
 
-
     useEffect(() => {
         if (serverData.data) {
             dispatch(setServerSettings(serverData.data))
@@ -61,7 +60,7 @@ export default function HomeScreen() {
             <View style={globalStyles.contentContainer} >
                 <HelloWave />
                 <ThemedText >Bem-Vindo!</ThemedText>
-                <ThemedText style={{maxWidth:'60%', textAlign:'center'}} >Aqui aparecerão suas estatisticas e anúncios sobre eventos do jogo.</ThemedText>
+                <ThemedText style={{ maxWidth: '60%', textAlign: 'center' }} >Aqui aparecerão suas estatisticas e anúncios sobre eventos do jogo.</ThemedText>
             </View>
             <View style={[globalStyles.footerContainer, { flexBasis: 100 }]}>
                 <FooterBar />
