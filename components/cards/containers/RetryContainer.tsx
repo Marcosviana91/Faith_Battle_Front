@@ -13,6 +13,7 @@ import DefaultContainer from "./DefaultContainer"
 
 import { ThemedText } from "@/components/themed/ThemedText"
 import { ThemedView } from "@/components/themed/ThemedView"
+import { useScreenSizes } from "@/hooks/useScreenSizes"
 
 export default function RetryContainer() {
     const dispatch = useDispatch()
@@ -20,6 +21,7 @@ export default function RetryContainer() {
     const [selectedCard, setSelectedCard] = useState<CardProps>()
     const [selectedCardRetry, setSelectedCardRetry] = useState<CardProps>()
     const [showModal, setShowModal] = useState(false)
+    const { width: windowWidth, height: windowHeight } = useScreenSizes();
 
     useEffect(() => {
         setSelectedCardRetry(undefined)
@@ -86,7 +88,7 @@ export default function RetryContainer() {
 
     return (
         <View style={{ gap: 2 }}>
-            <View style={{ borderColor: 'red', borderWidth: 1, height: 160, borderRadius: 8, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ borderColor: 'red', borderWidth: 1, height: windowHeight/5, borderRadius: 8, alignItems: 'center', justifyContent: 'center' }}>
                 {!player.card_retry ?
                     <ThemedText style={{ lineHeight: 60, fontSize: 32 }}>Cartas para trocar</ThemedText> :
                     <DefaultContainer
@@ -99,7 +101,7 @@ export default function RetryContainer() {
                     />
                 }
             </View>
-            <View style={{ borderColor: 'green', borderWidth: 1, height: 160, borderRadius: 8, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ borderColor: 'green', borderWidth: 1, height: windowHeight/5, borderRadius: 8, alignItems: 'center', justifyContent: 'center' }}>
                 {player!.card_hand!.length < 1 ?
                     <ThemedText style={{ lineHeight: 60, fontSize: 32 }}>Sem cartas na mão</ThemedText> :
                     <DefaultContainer

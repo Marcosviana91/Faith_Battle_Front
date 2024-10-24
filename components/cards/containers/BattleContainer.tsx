@@ -36,6 +36,9 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
         if (String(player.id) !== selectedCard!.in_game_id!.split('_')[0]) {
             return null
         }
+        if (!selectedCard!.can_move) {
+            return null
+        }
         return (
             <Pressable
                 onPress={() => {
@@ -82,6 +85,10 @@ export default function BattleContainer(props: { cards: CardProps[] }) {
         }
 
         if (selectedCard!.card_type!=='hero' && selectedCard!.card_type!=='legendary') {
+            return null
+        }
+
+        if (!selectedCard!.can_attack) {
             return null
         }
 

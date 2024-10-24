@@ -9,7 +9,7 @@ import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 
 import { HelloWave } from '@/components/HelloWave';
-import { SlideUp } from '@/components/cards/motions/moveCard';
+
 
 import HeaderBar from "@/components/HeaderBar";
 import FooterBar from "@/components/FooterBar";

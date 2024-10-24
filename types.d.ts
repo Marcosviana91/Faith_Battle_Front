@@ -37,6 +37,8 @@ declare type CardProps = {
     imbloqueavel?: boolean,
     indestrutivel?: boolean,
     incorruptivel?: boolean,
+    can_attack?: boolean,
+    can_move?: boolean,
 }
 
 declare type APIMoveProps = {

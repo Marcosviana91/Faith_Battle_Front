@@ -11,8 +11,12 @@ import { SubCardsContainer } from "@/components/cards/containers/subContainer";
 import { Platform, Pressable, StyleProp, ToastAndroid, View, ViewStyle } from "react-native";
 import { ThemedText } from "@/components/themed/ThemedText";
 
+import { OnInvoke as HeroOnInvoke } from "../cardsComands/heros"
+import { OnInvoke as MiracleOnInvoke } from "../cardsComands/miracles"
+import { OnInvoke as SinOnInvoke } from "../cardsComands/sins"
 
-export default function FightContainer(props: { cards: CardProps[], attacking?: Boolean }) {
+
+export default function FightContainer(props: { cards: CardProps[], attacking?: Boolean, defensing?: Boolean }) {
     const dispatch = useDispatch()
     const player = useSelector((state: RootReducer) => state.matchReducer.player_data)!
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
@@ -55,13 +59,34 @@ export default function FightContainer(props: { cards: CardProps[], attacking?: 
         setShowModal(false)
 
     }
+
+    function OnInvoke() {
+        if ( selectedCard!.status !== 'ready') {
+            return null
+        }
+
+        switch (selectedCard!.card_type) {
+            case "hero":
+                return (
+                    <HeroOnInvoke card={selectedCard!} setShowModal={setShowModal} />
+                )
+            case "miracle":
+                return (
+                    <MiracleOnInvoke card={selectedCard!} setShowModal={setShowModal} />
+                )
+            case "sin":
+                return (
+                    <SinOnInvoke card={selectedCard!} setShowModal={setShowModal} />
+                )
+        }
+    }
     return (
         <DefaultContainer
             card_size="small"
             cards={props.cards}
-            card_action_component={[props.attacking && <OnCardToggleDefense parent_card={selectedCard!} player_in_match={player_in_match!} get_selected_card_index={setSelectedSubCardIndex} dispatchCardAction={actionFunction} style={{ maxWidth: windowsWidth * 0.95 }} />]}
+            card_action_component={[props.attacking && <OnCardToggleDefense parent_card={selectedCard!} player_in_match={player_in_match!} get_selected_card_index={setSelectedSubCardIndex} dispatchCardAction={actionFunction} style={{ maxWidth: windowsWidth * 0.95 }} />, props.defensing && <OnInvoke/>]}
             get_selected_card={setSelectedCard}
-            show_action_in_bottom
+            show_action_in_bottom={props.defensing? false: true}
             show_modal={showModal}
             set_show_modal={setShowModal}
         />

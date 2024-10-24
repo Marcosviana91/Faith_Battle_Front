@@ -35,7 +35,7 @@ export default function FightCamp() {
         }
     }, [fight_camp])
 
-    const card_defense = player!.card_hand?.filter(card => (card.card_type === "sin" || card.card_type === "miracle"))
+    const card_defense = player!.card_hand?.filter(card => (card.card_type === "sin" || card.card_type === "miracle" || card.slug === 'sansao' || card.slug === "elias"))
 
     return (
         <>
@@ -145,7 +145,13 @@ export default function FightCamp() {
                         {player?.id === fight_camp.player_defense_id && fight_camp.fight_stage === 0 &&
                             <View>
                                 {/* Cartas da Mão do Jogador - Filtrar cartas jogáveis (milagres, pacados, ect) */}
-                                <FightContainer cards={card_defense!} />
+                                <FightContainer cards={card_defense!} defensing/>
+                            </View>
+                        }
+                        {player?.id === fight_camp.player_attack_id && fight_camp.fight_stage === 1 &&
+                            <View>
+                                {/* Cartas da Mão do Jogador - Filtrar cartas jogáveis (milagres, pacados, ect) */}
+                                <FightContainer cards={card_defense!} defensing/>
                             </View>
                         }
                     </ThemedModal>
