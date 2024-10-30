@@ -56,9 +56,7 @@ export default function GameRoom() {
                     <View>
                         <ThemedText type="defaultSemiBold">ID: {room.id}</ThemedText>
                         <ThemedText type="defaultSemiBold">Nome: {room.name}</ThemedText>
-                    </View>
-                    <View>
-                        <ThemedText type="defaultSemiBold">Times: {room.teams}</ThemedText>
+                        {/* <ThemedText type="defaultSemiBold">Times: {room.teams}</ThemedText> */}
                         <ThemedText type="defaultSemiBold">Jogadores na sala: {connected_players}</ThemedText>
 
                     </View>
@@ -69,6 +67,9 @@ export default function GameRoom() {
                             height: 60, width: 60,
                             justifyContent: "center", alignItems: "center",
                             borderRadius: 16, borderWidth: 2,
+                            position: "absolute",
+                            top:8,
+                            right:8,
                         }}
                         onPress={
                             () => {
