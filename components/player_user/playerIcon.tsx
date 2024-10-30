@@ -43,13 +43,16 @@ export function IconsContainer(props: ContainerProps) {
                     onPress={() => { setShowPlayers(!showPlayers) }}
                     style={{ flexDirection: 'row' }}
                 >
-                    <FontAwesome5 name={showPlayers ? "users-slash" : "users"} size={32} color="black" />
+                    <ThemedText style={{ height: 40, lineHeight: 40 }}>
+                        <FontAwesome5 name={showPlayers ? "users-slash" : "users"} size={30} />
+                    </ThemedText>
                 </Pressable>
             </View>
             {showPlayers ?
                 <ThemedView style={{
                     width: window.width - 60,
-                    maxWidth: windowWidth - 60
+                    maxWidth: windowWidth - 60,
+                    borderRadius: 12,
                 }}>
                     {props.matchData?.players_in_match?.map((_team, _index) => {
                         return (
