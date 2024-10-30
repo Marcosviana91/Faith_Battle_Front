@@ -24,7 +24,7 @@ export default function PlayerIcon64(props: Props) {
     const playersData = useSelector((state: RootReducer) => state.matchReducer.players_data)
     const _PlayerData = playersData?.filter((player) => player.id === props.id)[0]
     const [getUser, { data: userData, error: userError }] = useGetUserDataMutation();
-    console.log("props", props)
+    // console.log("props", props)
 
     useEffect(() => {
         if (props.id > 0) {

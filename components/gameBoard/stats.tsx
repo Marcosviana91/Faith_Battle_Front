@@ -52,7 +52,7 @@ export default function Stats() {
                     </ThemedView>
                     {matchData.players_in_match?.map(_team => (
                         _team.map(_player => {
-                            console.log(Object.entries(_player.dano_em_fe?.oponentes!))
+                            // console.log(Object.entries(_player.dano_em_fe?.oponentes!))
                             return (
                                 <ThemedView style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
                                     <PlayerIcon64 id={_player.id} type="mini" />
@@ -74,7 +74,7 @@ export default function Stats() {
                                 {matchData.players_in_match?.map(_team =>
                                 (
                                     _team.map(_player => {
-                                        console.log(Object.entries(_player.dano_em_fe?.oponentes!))
+                                        // console.log(Object.entries(_player.dano_em_fe?.oponentes!))
                                         return (
                                             <ThemedView style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
                                                 <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.round_eliminado}º</ThemedText>
