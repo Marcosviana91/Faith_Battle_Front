@@ -226,8 +226,8 @@ export function getCardDescription(
 export function useCards(
     props: { card_slug: string | undefined }
 ) {
-    var default_card = require('@/assets/images/Cards/Card.png')
-    var not_defense = require('@/assets/images/Cards/not-defense.png')
+    var default_card = require('@/assets/images/Cards/carta_verso.jpg')
+    var not_defense = require('@/assets/images/Cards/sabedoria_verso.jpg')
 
     if (!props.card_slug) {
         return default_card

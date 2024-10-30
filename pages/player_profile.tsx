@@ -87,7 +87,7 @@ export default function ProfileScreen() {
 
                         </ThemedView>
                         <View style={{ flexDirection: 'row', columnGap: 8, padding: 8 }}>
-                            <PlayerAvatar64 file_name={playerData?.avatar!} size={150} style={{borderWidth:2, borderColor:'white'}} />
+                            <PlayerAvatar64 file_name={playerData?.avatar!} size={150} style={{ borderWidth: 2, borderColor: 'white' }} />
                             <View style={{ flex: 1, gap: 8 }}>
                                 <ThemedText type='subtitle' >Nome completo:</ThemedText>
                                 <ThemedText type='defaultSemiBold' style={{ backgroundColor: 'white', paddingStart: 8, width: '100%' }}>{realName ? realName : 'Cadastre seu nome'}</ThemedText>
@@ -95,7 +95,10 @@ export default function ProfileScreen() {
                                 <ThemedText type='defaultSemiBold' style={{ backgroundColor: 'white', paddingStart: 8, width: '100%' }}>{playerData.email ? playerData.email : 'Cadastre seu email'}</ThemedText>
                             </View>
                         </View>
-
+                        <View style={{ flex: 1, alignItems:'center', justifyContent:'center'}}>
+                            <ThemedText>Acesse o site do projeto para editar seu perfil.</ThemedText>
+                            <ThemedText>http://marcosvianadev2.ddns.net:3111/</ThemedText>
+                        </View>
                         <View style={{ position: 'absolute', bottom: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', width: '95%' }}>
                             <View>
                                 <ThemedText type='defaultSemiBold'>Seu ID: {playerData.id}</ThemedText>
@@ -336,9 +339,9 @@ export default function ProfileScreen() {
                                         setShowLogoutModal(false)
                                     }}
                                     lightColor='#ff9898'
-                                    
+
                                 >
-                                    <View style={{ flex:1, flexDirection:'row' }}>
+                                    <View style={{ flex: 1, flexDirection: 'row' }}>
                                         <MaterialIcons name="logout" size={24} color="red" />
                                         <ThemedText style={{ color: 'red', fontWeight: 700, fontSize: 18 }}>Sair</ThemedText>
 
