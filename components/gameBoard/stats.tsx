@@ -5,7 +5,11 @@ import { RootReducer } from "@/store";
 import { AntDesign } from "@expo/vector-icons";
 import BasicButton from "../button/basic";
 import { leaveMatch } from "@/store/reducers/matchReducer";
-import { PlayerIcon } from "../player_user/playerIcon";
+import PlayerIcon64 from "../player_user/PlayerIcon64";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { ScrollView, View } from "react-native";
+// import { PlayerIcon } from "../player_user/playerIcon";
 
 function contaTempo(tempoInicial: number, tempoFinal: number) {
     const medidas = {
@@ -41,32 +45,51 @@ export default function Stats() {
             <ThemedText type="title">A partida acabou!</ThemedText>
             <ThemedText type="link">ID: {matchData.id}</ThemedText>
             <ThemedText>{duracao_partida} <AntDesign name="clockcircleo" size={18} /> ROUND: {matchData.round_match}</ThemedText>
-            <ThemedView style={{ gap: 16, marginVertical: 32, borderWidth: 2, padding: 4, borderRadius: 8, width: '90%' }}>
-                <ThemedView style={{ flexDirection: 'row', gap: 16 }}>
-                    <ThemedText>JOGADOR:</ThemedText>
-                    <ThemedText>Round eliminado:</ThemedText>
-                    <ThemedText>Pontos de Fé:</ThemedText>
-                    <ThemedText>Total de Dano causado:</ThemedText>
-                    <ThemedText>Total de Dano recebido:</ThemedText>
+            <ThemedView style={{ width: '90%', borderWidth: 2, borderBottomWidth: 0, flexDirection: 'row', marginVertical:32 }}>
+                <ThemedView style={{ maxWidth: 75, alignItems: 'center', borderEndWidth: 1 }}>
+                    <ThemedView style={{ height: 60, borderBottomWidth: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                        <ThemedText><FontAwesome name="user" size={24} /></ThemedText>
+                    </ThemedView>
+                    {matchData.players_in_match?.map(_team => (
+                        _team.map(_player => {
+                            console.log(Object.entries(_player.dano_em_fe?.oponentes!))
+                            return (
+                                <ThemedView style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
+                                    <PlayerIcon64 id={_player.id} type="mini" />
+                                </ThemedView>
+                            )
+                        })
+                    ))}
                 </ThemedView>
-                {matchData.players_in_match?.map(_team =>
-                (
-                    _team.map(_player => {
-                        console.log(Object.entries(_player.dano_em_fe?.oponentes!))
-                        return (
-                            <ThemedView style={{ flexDirection: 'row', gap: 16 }}>
-                                <PlayerIcon id={_player.id} type="mini" />
-                                <ThemedText>{_player.round_eliminado}º</ThemedText>
-                                <ThemedText>{_player.faith_points}</ThemedText>
-                                <ThemedText>{_player.dano_em_fe?.total_aplicado}</ThemedText>
-                                <ThemedText>{_player.dano_em_fe?.total_recebido}</ThemedText>
-                                
-
+                <View style={{ flex: 1 }}>
+                    <ScrollView horizontal>
+                        <View>
+                            <ThemedView style={{ flexDirection: 'row', gap: 16, paddingStart: 4, height: 60, borderBottomWidth: 1 }}>
+                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="skull" size={24} /></ThemedText>
+                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="shield-cross" size={24} /></ThemedText>
+                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="sword" size={24} /></ThemedText>
+                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="shield-sword" size={24} /></ThemedText>
                             </ThemedView>
-                        )
-                    })
-                )
-                )}
+                            <View>
+                                {matchData.players_in_match?.map(_team =>
+                                (
+                                    _team.map(_player => {
+                                        console.log(Object.entries(_player.dano_em_fe?.oponentes!))
+                                        return (
+                                            <ThemedView style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
+                                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.round_eliminado}º</ThemedText>
+                                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.faith_points}</ThemedText>
+                                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.dano_em_fe?.total_aplicado}</ThemedText>
+                                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.dano_em_fe?.total_recebido}</ThemedText>
+                                            </ThemedView>
+                                        )
+                                    })
+                                )
+                                )}
+                            </View>
+                        </View>
+                    </ScrollView>
+                </View>
             </ThemedView>
             <BasicButton
                 onPress={() => {
