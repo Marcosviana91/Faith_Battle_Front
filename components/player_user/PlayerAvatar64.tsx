@@ -1,7 +1,7 @@
 import { getAvatarBase64 } from "@/utils/FileSystem/Avatar"
 import { useEffect, useState } from "react"
 import { ThemedText } from "../themed/ThemedText"
-import { View, Image, type ViewProps, ImageProps } from "react-native"
+import { View, Image, type ImageProps, Platform } from "react-native"
 
 type Props = { file_name: string, size?: number, style?: ImageProps['style'] }
 
@@ -15,7 +15,9 @@ export default function PlayerAvatar64(props: Props) {
     }
 
     useEffect(() => {
-        getAvatarBase64(props.file_name).then(file => setBase64_avatar_string(file))
+        if (Platform.OS === 'android') {
+            getAvatarBase64(props.file_name).then(file => setBase64_avatar_string(file))
+        }
     }, [])
 
     return (
