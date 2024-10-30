@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Image, StyleSheet, View, TouchableOpacity, ImageBackground, Pressable, ScrollView, ToastAndroid, Platform } from 'react-native';
 import { ThemedText } from '@/components/themed/ThemedText'
@@ -8,7 +8,6 @@ import { ThemedTextInput } from '@/components/themed/ThemedTextInput'
 import BasicButton from '@/components/button/basic';
 
 import { Ionicons } from '@expo/vector-icons';
-
 
 import { globalStyles } from '@/constants/Styles';
 
@@ -19,10 +18,14 @@ import { login } from "@/store/reducers/authReducer";
 import { addNotify } from "@/store/reducers/notificationReducer"
 
 import { useKeyboard } from "@/hooks/useKeyboard";
-import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
+// import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
+import { RootReducer } from '@/store';
+import PlayerAvatar64 from '@/components/player_user/PlayerAvatar64';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
+  const currentServerData = useSelector((state: RootReducer) => state.appReducer.server)
+
   const [backGroundImage, setBackGroundImage] = useState(0)
   const [userToken, setUserToken] = useState('')
 
@@ -37,7 +40,8 @@ export default function LoginScreen() {
   const [realName, setRealName] = useState('')
   // const [email, setEmail] = useState('')
   const [showAvatarList, setShowAvatarList] = useState(false);
-  const [myAvatar, setMyAvatar] = useState(1);
+
+  const [myAvatar, setMyAvatar] = useState(currentServerData.avatar_list![0]);
 
 
   const backGroun_list = [
@@ -139,7 +143,7 @@ export default function LoginScreen() {
           />
         </View>}
         <View style={{ flexBasis: 500, justifyContent: ((keyboardIsShow[0] && isCreating) ? "center" : "flex-start"), alignItems: "center" }}>
-          <ThemedView lightColor='#b4b4b4d5' darkColor='#242424d3' style={{ padding: 16, borderRadius: 8, borderColor: "#000", borderWidth: 1 }}>
+          <ThemedView lightColor='#b4b4b4d5' darkColor='#242424d3' style={{ padding: 8, borderRadius: 8, borderColor: "#000", borderWidth: 1 }}>
             {!showAvatarList &&
               <>
                 <ThemedText>Usuário:</ThemedText>
@@ -182,37 +186,28 @@ export default function LoginScreen() {
                       }}
                     >
                       <ThemedView>
-                        <Image
-                          style={{ height: 40, width: 40, borderWidth: 2 }}
-                          source={useAvatar({ avatar_index: myAvatar! })}
-                        />
+                        <PlayerAvatar64 size={40} file_name={myAvatar} />
                       </ThemedView>
                     </Pressable>
                   </View>
                 }
                 {showAvatarList &&
-                  <View style={{ height: 200 }}>
+                  <View style={{ height: 250, maxWidth:'90%' }}>
                     <ScrollView>
-                      <View style={{ gap: 2 }}>
-                        {AVATAR.map((avt, _index) => {
-                          if (_index === 0) {
-                            return null
-                          }
+                      <View style={{ gap: 2, flex:1, flexDirection:'row', flexWrap:'wrap', justifyContent:'space-between' }}>
+                        {currentServerData.avatar_list!.map((avt) => {
                           return (
                             <Pressable
                               onPress={() => {
-                                setMyAvatar(_index);
+                                setMyAvatar(avt);
                                 setShowAvatarList(false)
                               }}
-                              key={_index}
+                              key={avt}
                             >
-
-                              <ThemedView style={{ flexDirection: "row", width: 150, justifyContent: "space-between", alignItems: 'center', borderWidth: 1, borderRadius: 4, paddingHorizontal: 2, borderColor: _index === myAvatar ? "green" : '' }}>
-                                <ThemedText style={{ fontSize: 16, paddingStart: 4 }}>{avt.name}</ThemedText>
-                                <Image
-                                  style={{ height: 30, width: 30, borderWidth: 2 }}
-                                  source={useAvatar({ avatar_index: _index })}
-                                />
+                              {/* TODO: componentizar avatar card para usar na edição de perfil */}
+                              <ThemedView style={{ flexDirection: "row", width: 170, justifyContent: "space-between", alignItems: 'center', borderWidth: 1, borderRadius: 4, paddingStart: 2, borderColor: avt === myAvatar ? "green" : '' }}>
+                                <ThemedText style={{ fontSize: 16, paddingStart: 4 }}>{avt.split('.')[0]}</ThemedText>
+                                <PlayerAvatar64 size={40} file_name={avt} />
                               </ThemedView>
                             </Pressable>
                           )
@@ -226,34 +221,38 @@ export default function LoginScreen() {
           </ThemedView>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 300 }}>
             {isCreating ? (
-              <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height: 50 }}>
-                <BasicButton
-                  disabled={userName === '' || password === ''}
-                  darkColor='#060'
-                  lightColor='#1ad81a'
-                  onPress={() => {
-                    createUser({
-                      // email: email,
-                      first_name: realName,
-                      password: password,
-                      username: userName,
-                      avatar: myAvatar,
-                    })
-                    setRealName('')
-                    // setEmail('')
-                    setCreating(false)
-                  }}>Criar</BasicButton>
-                <BasicButton
-                  darkColor='#770000'
-                  lightColor='#ff6161'
-                  onPress={() => {
-                    setRealName('')
-                    // setEmail('')
-                    setCreating(false)
-                    setShowAvatarList(false)
-                  }}
-                >Cancelar</BasicButton>
-              </View>
+              <>
+                {!showAvatarList && (
+                  <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height: 50 }}>
+                    <BasicButton
+                      disabled={userName === '' || password === ''}
+                      darkColor='#060'
+                      lightColor='#1ad81a'
+                      onPress={() => {
+                        createUser({
+                          // email: email,
+                          first_name: realName,
+                          password: password,
+                          username: userName,
+                          avatar: myAvatar,
+                        })
+                        setRealName('')
+                        // setEmail('')
+                        setCreating(false)
+                      }}>Criar</BasicButton>
+                    <BasicButton
+                      darkColor='#770000'
+                      lightColor='#ff6161'
+                      onPress={() => {
+                        setRealName('')
+                        // setEmail('')
+                        setCreating(false)
+                        setShowAvatarList(false)
+                      }}
+                    >Cancelar</BasicButton>
+                  </View>
+                )}
+              </>
             ) : (
               <View style={{ marginTop: 20, flexDirection: "row", justifyContent: "space-between", minWidth: 200, columnGap: 10, height: 50 }}>
                 <BasicButton

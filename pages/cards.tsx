@@ -1,13 +1,14 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { SimpleCard } from "@/components/cards/containers/DefaultContainer";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { isSlugInSlugList } from '@/hooks/useCards';
+import { addNotify } from '@/store/reducers/notificationReducer';
 
 // import { card_list } from "@/components/cards/index";
 
@@ -83,11 +84,21 @@ const ALL_CARDS = [
     },
 ]
 
+
 export default function CardScreen() {
+    const dispatch = useDispatch();
     const serverData = useSelector((state: RootReducer) => state.appReducer.server)
     const [indexToShow, setIndexToShow] = useState(0)
 
     const cards_available = serverData?.active_cards
+
+
+    useEffect(() => {
+        dispatch(addNotify({
+            title: "Cartas Indiponíveis",
+            message: 'As cartas escurecidas estão indisponíveis para o jogo.',
+        }))
+    }, [])
 
     return (
         <ThemedView style={{ height: '100%' }}>

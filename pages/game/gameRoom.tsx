@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable, ScrollView, Text } from "react-native";
+import { View, Pressable, ScrollView } from "react-native";
 
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
@@ -12,7 +12,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import useAppWebSocket from "@/hooks/useAppWebSocket";
 
-import { PlayerIcon } from "@/components/player_user/playerIcon";
+import PlayerIcon64 from "@/components/player_user/PlayerIcon64";
 import { ThemedModal } from "@/components/themed/ThemedModal";
 import RetryContainer from "@/components/cards/containers/RetryContainer";
 
@@ -22,29 +22,32 @@ export default function GameRoom() {
     const navigation = useNavigation()
 
     const room = useSelector((state: RootReducer) => state.matchReducer.room_data)
-    const player = useSelector((state: RootReducer) => state.matchReducer.player_data)
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
+    const playersData = room?.connected_players![0]
+    const player_ = playersData?.filter((player) => player.id === userData!.id)[0]
+    const player_data = useSelector((state: RootReducer) => state.matchReducer.player_data)
+
+    console.log("player_data", player_data);
 
     const WS = useAppWebSocket();
 
     if (!room || !userData) {
-        // navigation.navigate("Home" as never)
+        navigation.navigate("Home" as never)
         return null
     }
 
     var open_player_slot = []
     for (let index = 0; index < room.max_players! - room.connected_players![0].length; index++) {
-        open_player_slot.push(<PlayerIcon type="normal" key={index} id={0} />)
+        open_player_slot.push(<PlayerIcon64 type="normal" key={index} id={0} />)
     }
 
 
     var connected_players = 0
     room.connected_players!.forEach(team => {
-        team.forEach(player => {
+        team.forEach(__player => {
             connected_players += 1
         })
     });
-
     return (
         <ThemedView style={{ flex: 1, margin: 8 }}>
             {/* Header */}
@@ -94,17 +97,19 @@ export default function GameRoom() {
                         {room.connected_players?.map((_team, _t_index) => (
                             <View key={_t_index} style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-evenly' }}>
                                 {_team.map((_player) => (
-                                    <PlayerIcon type="normal" key={_player.id} id={_player.id!} isReady={_player.ready} />
+                                    <PlayerIcon64 type="normal" key={_player.id} id={_player.id!} isReady={_player.ready} />
                                 ))}
                             </View>
                         ))}
-                        {open_player_slot.map(player => { return player })}
+                        <View>
+                            {open_player_slot.map(player => { return player })}
+                        </View>
                     </View>
                 </ScrollView>
 
             </View>
             {/* Botão de ficar pronto */}
-            {room.room_stage === 0 && !player?.ready && (
+            {room.room_stage === 0 && !player_?.ready && (
                 <BasicButton
                     disabled={!(connected_players > 1)}
                     onPress={() => {
@@ -122,9 +127,8 @@ export default function GameRoom() {
                     Ficar Pronto
                 </BasicButton>
             )}
-
-            {player && <ThemedModal
-                visible={room.room_stage == 1 && !player?.ready}
+            {player_data && <ThemedModal
+                visible={room.room_stage == 1 && !player_data?.ready}
                 transparent
                 presentationStyle='overFullScreen'
                 hideCloseButton
@@ -135,7 +139,7 @@ export default function GameRoom() {
                 <View style={{ flexDirection: 'row', gap: 8, paddingTop: 24 }}>
                     <BasicButton
 
-                        disabled={player.card_retry?.length! > 0}
+                        disabled={player_data.card_retry?.length! > 0}
                         onPress={() => {
                             WS.sendJsonMessage({
                                 data_type: 'ready',
@@ -152,7 +156,7 @@ export default function GameRoom() {
                     </BasicButton>
                     <BasicButton
 
-                        disabled={!(player.card_retry?.length! > 0)}
+                        disabled={!(player_data.card_retry?.length! > 0)}
                         onPress={() => {
                             WS.sendJsonMessage({
                                 data_type: 'retry_cards',
@@ -162,7 +166,7 @@ export default function GameRoom() {
                                 room_data: {
                                     id: room.id,
                                 },
-                                retry_cards: player.card_retry
+                                retry_cards: player_data.card_retry
                             })
                         }}
                     >

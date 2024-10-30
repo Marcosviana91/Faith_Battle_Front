@@ -86,6 +86,7 @@ declare type NotificationProps = {
 }
 
 declare type ServerSettingProps = {
+    avatar_list?: string[],
     version: string,
     active_cards: string[],
 

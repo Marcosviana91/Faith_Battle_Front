@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialState: AppSettingReducer = {
     server: {
+        avatar_list:[],
         version: '',
         active_cards: []
     },

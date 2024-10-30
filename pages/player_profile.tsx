@@ -1,83 +1,26 @@
 import { useState, useEffect } from 'react';
+import { View, TouchableOpacity, Modal, Image, Pressable, ScrollView, TextInput } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { RootReducer } from '@/store';
 import { login, logout } from "@/store/reducers/authReducer";
 import { leaveMatch } from "@/store/reducers/matchReducer";
 import { removeData } from '@/store/database';
+import { useEditUserMutation } from '@/store/api'
 
-import { View, TouchableOpacity, Modal, Image, Pressable, ScrollView } from 'react-native';
-
-import { MaterialIcons } from '@expo/vector-icons';
-
-import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
-
+import PlayerAvatar64 from '@/components/player_user/PlayerAvatar64';
 import { ThemedView } from "@/components/themed/ThemedView";
 import { ThemedText } from "@/components/themed/ThemedText";
 import { ThemedTextInput } from '@/components/themed/ThemedTextInput'
+
+import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
+
 import { globalStyles } from '@/constants/Styles';
+import { ThemedModal } from '@/components/themed/ThemedModal';
+import BasicButton from '@/components/button/basic';
 
-import { useEditUserMutation } from '@/store/api'
-
-//////////////////////////////////////
-
-import { StyleSheet } from 'react-native';
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import Animated, {
-    useSharedValue,
-    withTiming,
-    useAnimatedStyle,
-} from 'react-native-reanimated';
-
-const END_POSITION = 100;
-
-function App() {
-    const onLeft = useSharedValue(true);
-    const position = useSharedValue(0);
-
-    const panGesture = Gesture.Pan()
-        .onUpdate((e) => {
-            if (onLeft.value) {
-                position.value = e.translationX;
-            } else {
-                position.value = END_POSITION + e.translationX;
-            }
-        })
-        .onEnd((e) => {
-            if (position.value > END_POSITION / 2) {
-                position.value = withTiming(END_POSITION, { duration: 100 });
-                onLeft.value = false;
-            } else {
-                position.value = withTiming(0, { duration: 100 });
-                onLeft.value = true;
-            }
-        });
-
-    const animatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateX: position.value }],
-    }));
-
-    return (
-        <GestureHandlerRootView style={{ flex: 1, justifyContent: "center", alignItems: "flex-start", padding: "25%" }}>
-            <GestureDetector gesture={panGesture}>
-                <Animated.View style={[styles.box, animatedStyle]} />
-            </GestureDetector>
-        </GestureHandlerRootView>
-    );
-}
-
-const styles = StyleSheet.create({
-    box: {
-        height: 50,
-        width: 50,
-        backgroundColor: '#b58df1',
-        borderRadius: 20,
-        marginBottom: 30,
-    },
-});
-
-/////////////////////////////
 
 export default function ProfileScreen() {
     const dispatch = useDispatch();
@@ -86,9 +29,12 @@ export default function ProfileScreen() {
     const [sendUserData, { data: newUserData }] = useEditUserMutation();
     const [isEditting, setEditting] = useState(false);
     const [showAvatarList, setShowAvatarList] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const playerData = useSelector((state: RootReducer) => state.authReducer.user_data)
-    const appData = useSelector((state: RootReducer) => state.appReducer)
+    const currentServerData = useSelector((state: RootReducer) => state.appReducer.server)
+    const appData = useSelector((state: RootReducer) => state.appReducer.settings)
+
     const [realName, setRealName] = useState(playerData?.first_name);
     // const [email, setEmail] = useState(playerData?.email);
     // const [email2, setEmail2] = useState(playerData?.email);
@@ -96,7 +42,7 @@ export default function ProfileScreen() {
     const [password2, setPassword2] = useState('');
     const [myAvatar, setMyAvatar] = useState(playerData?.avatar);
 
-    const avatar = useAvatar({ avatar_index: playerData?.avatar! })
+
 
     useEffect(() => {
         if (newUserData?.data_type == "user_updated" && newUserData.user_data) {
@@ -111,43 +57,55 @@ export default function ProfileScreen() {
             {playerData && (
                 <>
                     <>
-                        <ThemedText type='title'>Olá {playerData.username}!</ThemedText>
-                        <Image
-                            style={{ height: 100, width: 100 }}
-                            source={avatar}
-                        />
-                        <View style={{ position: 'absolute', bottom: 8, flexDirection:'row', alignItems:'flex-end', justifyContent:'space-between', width:'95%' }}>
+                        {/* Header */}
+                        <ThemedView style={{ width: '100%', height: 48, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, marginBottom: 4 }}>
+                            <ThemedText type='title'>Olá {playerData.username}!</ThemedText>
+                            <View style={{ flexDirection: 'row', columnGap: 8 }}>
+                                {/* EDITAR */}
+                                <TouchableOpacity
+                                    disabled
+                                    onPress={() => {
+                                        setEditting(true);
+
+                                    }}
+                                    style={{ backgroundColor: "gray", width: 90, justifyContent: "center", alignItems: "center", flexDirection: 'row', borderRadius: 8 }}
+                                >
+                                    <MaterialIcons name="edit" size={24} color="white" />
+                                    <ThemedText style={{ color: 'white', fontWeight: 700 }}>Editar</ThemedText>
+                                </TouchableOpacity>
+                                {/* OPEN MODAL - SAIR */}
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setShowLogoutModal(true)
+                                    }}
+                                    style={{ width: 90, justifyContent: "center", alignItems: "center", borderRadius: 8, padding: 2, flexDirection: 'row', borderWidth: 1, borderColor: 'red' }}
+                                >
+                                    <MaterialIcons name="logout" size={24} color="red" />
+                                    <ThemedText style={{ color: 'red', fontWeight: 700 }}>Sair</ThemedText>
+                                </TouchableOpacity>
+                            </View>
+
+                        </ThemedView>
+                        <View style={{ flexDirection: 'row', columnGap: 8, padding: 8 }}>
+                            <PlayerAvatar64 file_name={playerData?.avatar!} size={150} style={{borderWidth:2, borderColor:'white'}} />
+                            <View style={{ flex: 1, gap: 8 }}>
+                                <ThemedText type='subtitle' >Nome completo:</ThemedText>
+                                <ThemedText type='defaultSemiBold' style={{ backgroundColor: 'white', paddingStart: 8, width: '100%' }}>{realName ? realName : 'Cadastre seu nome'}</ThemedText>
+                                <ThemedText type='subtitle'>Email:</ThemedText>
+                                <ThemedText type='defaultSemiBold' style={{ backgroundColor: 'white', paddingStart: 8, width: '100%' }}>{playerData.email ? playerData.email : 'Cadastre seu email'}</ThemedText>
+                            </View>
+                        </View>
+
+                        <View style={{ position: 'absolute', bottom: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', width: '95%' }}>
                             <View>
                                 <ThemedText type='defaultSemiBold'>Seu ID: {playerData.id}</ThemedText>
                                 <ThemedText type='defaultSemiBold'>Email: {playerData.email}</ThemedText>
                             </View>
-                            <ThemedText type='defaultSemiBold'>Versão: {appData.settings.version}</ThemedText>
+                            <ThemedText type='defaultSemiBold'>Versão: {appData.version}</ThemedText>
                         </View>
                         {/* <ThemedText type='subtitle'>Email: {playerData.email}</ThemedText> */}
-                        {/* EDITAR */}
-                        {/* <TouchableOpacity
-                            onPress={() => {
-                                setEditting(true);
 
-                            }}
-                            style={{ backgroundColor: "cyan", width: 48, height: 48, justifyContent: "center", alignItems: "center", borderRadius: 16 }}
-                        >
-                            <MaterialIcons name="edit" size={24} color="black" />
-                        </TouchableOpacity> */}
-                        {/* SAIR */}
-                        <TouchableOpacity
-                            onPress={() => {
-                                removeData('faith_battle_user')
-                                dispatch(logout())
-                                dispatch(leaveMatch())
-                                navigation.navigate('Home' as never)
-                                // Navegar para Tela de login
-                            }}
-                            style={{ width: 60, height: 60, position: "absolute", right: 8, justifyContent: "center", alignItems: "center", borderRadius: 16, backgroundColor: "#f00" }}
-                        >
-                            <ThemedText style={{ color: '#000', fontWeight: 700 }}>SAIR</ThemedText>
-                            <MaterialIcons name="logout" size={24} color="black" />
-                        </TouchableOpacity>
+
                     </>
                     {/* <App /> */}
                     <Modal
@@ -174,10 +132,10 @@ export default function ProfileScreen() {
                                                 }}
                                             >
                                                 <ThemedView>
-                                                    <Image
+                                                    {/* <Image
                                                         style={{ height: 40, width: 40, borderWidth: 2 }}
                                                         source={useAvatar({ avatar_index: myAvatar! })}
-                                                    />
+                                                    /> */}
                                                 </ThemedView>
 
                                             </Pressable>
@@ -188,6 +146,7 @@ export default function ProfileScreen() {
                                                     <View style={{ gap: 2 }}>
                                                         {AVATAR.map((avt, _index) => {
                                                             return (
+                                                                // TODO: editar perfil
                                                                 <Pressable
                                                                     onPress={() => {
                                                                         setMyAvatar(_index);
@@ -351,6 +310,44 @@ export default function ProfileScreen() {
                             </ThemedView>
                         </ThemedView>
                     </Modal>
+                    {/* Modal Sair */}
+                    {showLogoutModal &&
+                        <ThemedModal
+                            hideCloseButton
+                            title='Deseja mesmo sair?'
+                            backgroundTransparent
+                        >
+                            <View style={{ flex: 1, flexDirection: 'row', width: '100%', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                                {/* Cancelar */}
+                                <BasicButton
+                                    onPress={() => {
+                                        setShowLogoutModal(false)
+                                    }}>
+                                    <ThemedText style={{ fontWeight: 700, fontSize: 18 }}>Não</ThemedText>
+                                </BasicButton>
+                                {/* SAIR */}
+                                <BasicButton
+                                    onPress={() => {
+                                        removeData('faith_battle_user')
+                                        dispatch(logout())
+                                        dispatch(leaveMatch())
+                                        // Navegar para Tela de login
+                                        navigation.navigate('Home' as never)
+                                        setShowLogoutModal(false)
+                                    }}
+                                    lightColor='#ff9898'
+                                    
+                                >
+                                    <View style={{ flex:1, flexDirection:'row' }}>
+                                        <MaterialIcons name="logout" size={24} color="red" />
+                                        <ThemedText style={{ color: 'red', fontWeight: 700, fontSize: 18 }}>Sair</ThemedText>
+
+                                    </View>
+                                </BasicButton>
+
+                            </View>
+                        </ThemedModal>
+                    }
                 </>
             )}
         </ThemedView>

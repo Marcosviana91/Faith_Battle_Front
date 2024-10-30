@@ -4,7 +4,7 @@ declare type UserProps = {
     password?: string,
     first_name?: string,
     email?: string,
-    avatar?: number,
+    avatar?: string,
     token?: string,
     xp_points?: number;
     available_cards?: string[];

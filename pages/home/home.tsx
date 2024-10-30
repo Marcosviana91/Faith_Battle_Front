@@ -1,9 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useRef } from 'react';
 import { Animated, StyleSheet, View, PanResponder } from 'react-native';
 
-import { useGetServerDataQuery } from '@/store/api'
-import { setServerSettings } from '@/store/reducers/appReducer';
 
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
@@ -18,15 +15,6 @@ import { globalStyles } from '@/constants/Styles';
 
 
 export default function HomeScreen() {
-    const dispatch = useDispatch();
-    const serverData = useGetServerDataQuery()
-
-    useEffect(() => {
-        if (serverData.data) {
-            dispatch(setServerSettings(serverData.data))
-        }
-    }, [serverData])
-
     const pan = useRef(new Animated.ValueXY()).current;
 
     const panResponder = useRef(

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native';
 
@@ -7,11 +7,16 @@ import { RootReducer } from '@/store';
 import Home from '@/pages/home/home';
 import Login from '@/pages/home/login';
 
+import { setRoom, setPlayer, leaveMatch, setMatch, setCurrentSkill } from "@/store/reducers/matchReducer"
+import { logout } from "@/store/reducers/authReducer"
+import { setServerSettings } from '@/store/reducers/appReducer';
+import { removeData } from '@/store/database';
+import { useGetServerDataQuery } from '@/store/api'
+
 import useAppWebSocket from '@/hooks/useAppWebSocket';
 
-import { setRoom, setPlayer, leaveMatch, setMatch, setCurrentSkill, setPlayerFocus } from "@/store/reducers/matchReducer"
-import { logout } from "@/store/reducers/authReducer"
-import { removeData } from '@/store/database';
+import { getAvatarFromServer } from '@/utils/FileSystem/Avatar';
+
 
 export default function HomeScreen() {
     const dispatch = useDispatch()
@@ -19,9 +24,27 @@ export default function HomeScreen() {
     const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
     const roomData = useSelector((state: RootReducer) => state.matchReducer.room_data)
+    const currentServerData = useSelector((state: RootReducer) => state.appReducer.server)
 
-
+    const serverData = useGetServerDataQuery()
     const WS = useAppWebSocket()
+
+    useEffect(()=>{
+        serverData.refetch()
+    }, [])
+
+    useEffect(() => {
+        if (serverData.data) {
+            dispatch(setServerSettings(serverData.data))
+        }
+    }, [serverData])
+
+    useEffect(() => {
+        if (currentServerData.avatar_list && currentServerData.avatar_list.length > 0) {
+            getAvatarFromServer(currentServerData.avatar_list)
+        }
+    }, [currentServerData.avatar_list])
+
 
     useEffect(() => {
         if (userData) {
@@ -76,3 +99,4 @@ export default function HomeScreen() {
     }
     return < Login />
 }
+

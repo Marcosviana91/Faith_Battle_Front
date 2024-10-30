@@ -1,5 +1,5 @@
 import useWebSocket from 'react-use-websocket';
-import { URI } from "@/store/server_urls";
+import { API } from "@/store/server_urls";
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootReducer } from '@/store';
@@ -34,7 +34,7 @@ export default function useAppWebSocket() {
 
     useEffect(() => {
         if (userData) {
-            setWsUrl(`ws://${URI}/ws/`)
+            setWsUrl(`ws://${API}/ws/`)
         }
         else {
             setWsUrl('ws://localhost')
