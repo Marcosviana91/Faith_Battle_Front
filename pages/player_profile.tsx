@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Modal, Image, Pressable, ScrollView, TextInput } from 'react-native';
+import { View, TouchableOpacity, Modal, Image, Pressable, ScrollView, TextInput, Linking } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -20,6 +20,10 @@ import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
 import { globalStyles } from '@/constants/Styles';
 import { ThemedModal } from '@/components/themed/ThemedModal';
 import BasicButton from '@/components/button/basic';
+
+import { SITE } from "@/store/server_urls";
+
+const FULL_URI = `http://${SITE}`
 
 
 export default function ProfileScreen() {
@@ -59,7 +63,7 @@ export default function ProfileScreen() {
                     <>
                         {/* Header */}
                         <ThemedView style={{ width: '100%', height: 48, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, marginBottom: 4 }}>
-                            <ThemedText type='title'>Olá {playerData.username}!</ThemedText>
+                            <ThemedText type='subtitle'>{playerData.username}</ThemedText>
                             <View style={{ flexDirection: 'row', columnGap: 8 }}>
                                 {/* EDITAR */}
                                 <TouchableOpacity
@@ -95,16 +99,25 @@ export default function ProfileScreen() {
                                 <ThemedText type='defaultSemiBold' style={{ backgroundColor: 'white', paddingStart: 8, width: '100%' }}>{playerData.email ? playerData.email : 'Cadastre seu email'}</ThemedText>
                             </View>
                         </View>
-                        <View style={{ flex: 1, alignItems:'center', justifyContent:'center'}}>
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                             <ThemedText>Acesse o site do projeto para editar seu perfil.</ThemedText>
-                            <ThemedText>http://marcosvianadev2.ddns.net:3111/</ThemedText>
+                            <View style={{ height: 20 }} />
+                            <BasicButton
+                                height={40}
+                                onPress={() => {
+                                    Linking.canOpenURL(FULL_URI).then(() => {
+                                        Linking.openURL(FULL_URI)
+                                    })
+                                }}
+                            >
+                                Visitar
+                            </BasicButton>
                         </View>
                         <View style={{ position: 'absolute', bottom: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', width: '95%' }}>
                             <View>
                                 <ThemedText type='defaultSemiBold'>Seu ID: {playerData.id}</ThemedText>
-                                <ThemedText type='defaultSemiBold'>Email: {playerData.email}</ThemedText>
+                                <ThemedText type='defaultSemiBold'>Versão: {appData.version}</ThemedText>
                             </View>
-                            <ThemedText type='defaultSemiBold'>Versão: {appData.version}</ThemedText>
                         </View>
                         {/* <ThemedText type='subtitle'>Email: {playerData.email}</ThemedText> */}
 
