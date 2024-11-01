@@ -18,7 +18,6 @@ import { login } from "@/store/reducers/authReducer";
 import { addNotify } from "@/store/reducers/notificationReducer"
 
 import { useKeyboard } from "@/hooks/useKeyboard";
-// import { useAvatar, AVATAR } from '@/hooks/usePlayerData';
 import { RootReducer } from '@/store';
 import PlayerAvatar64 from '@/components/player_user/PlayerAvatar64';
 
