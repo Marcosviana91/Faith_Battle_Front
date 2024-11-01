@@ -29,6 +29,11 @@ const card_hero_list: CardProps[] = [
     { "slug": "salomao" },
     { "slug": "sansao" },
 ]
+const card_hero_legendary_list: CardProps[] = [
+    { "slug": 'davi_legendary' },
+    { "slug": 'josue_legendary' },
+    { "slug": "moises_legendary" },
+]
 const card_miracle_list: CardProps[] = [
     { "slug": 'cordeiro-de-deus' },
     { "slug": 'diluvio' },
@@ -60,27 +65,50 @@ const card_sins_list: CardProps[] = [
     { "slug": 'idolatria' },
     { "slug": 'traicao' },
 ]
+const card_wisdom_list: CardProps[] = [
+    { "slug": 'wisdom_card_0' },
+    { "slug": 'wisdom_card_1' },
+    { "slug": 'wisdom_card_2' },
+    { "slug": 'wisdom_card_3' },
+    { "slug": 'wisdom_card_4' },
+    { "slug": 'wisdom_card_5' },
+    { "slug": 'wisdom_card_6' },
+    { "slug": 'wisdom_card_7' },
+    { "slug": 'wisdom_card_8' },
+    { "slug": 'wisdom_card_9' },
+
+]
 
 const ALL_CARDS = [
     {
         "title": "Standard Heróis",
         "list": card_hero_list,
-        color: "#6fabfa"
+        color: "#29E9F8"
+    },
+    {
+        "title": "Standard Heróis",
+        "list": card_hero_legendary_list,
+        color: "#F834FF"
     },
     {
         "title": "Standard Milagres",
         "list": card_miracle_list,
-        color: "#9ffc8d"
+        color: "#6BFF3A"
     },
     {
         "title": "Standard Artefatos",
         "list": card_artfacts_list,
-        color: "#fdfd93"
+        color: "#FFFA34"
     },
     {
         "title": "Standard Pecados",
         "list": card_sins_list,
-        color: "#fd8d8d"
+        color: "#FF433D"
+    },
+    {
+        "title": "Standard Sabedorias",
+        "list": card_wisdom_list,
+        color: "#D1CFD0"
     },
 ]
 

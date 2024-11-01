@@ -116,15 +116,15 @@ const CARD_LIST: CardProps[] = [
     },
     // Lendárias
     {
-        slug: "davi-lendario",
+        slug: "davi_legendary",
         path: require("@/assets/images/Cards/Lendárias/Davi.jpg"),
     },
     {
-        slug: "josue-lendario",
+        slug: "josue_legendary",
         path: require("@/assets/images/Cards/Lendárias/Josué.jpg"),
     },
     {
-        slug: "moises-lendario",
+        slug: "moises_legendary",
         path: require("@/assets/images/Cards/Lendárias/Moisés.jpg"),
     },
     // Milagres
@@ -197,6 +197,42 @@ const CARD_LIST: CardProps[] = [
     {
         slug: "wisdom_card_0",
         path: require("@/assets/images/Cards/Sabedoria/wisdom_card_0.jpg")
+    },
+    {
+        slug: "wisdom_card_1",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_1.jpg")
+    },
+    {
+        slug: "wisdom_card_2",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_2.jpg")
+    },
+    {
+        slug: "wisdom_card_3",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_3.jpg")
+    },
+    {
+        slug: "wisdom_card_4",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_4.jpg")
+    },
+    {
+        slug: "wisdom_card_5",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_5.jpg")
+    },
+    {
+        slug: "wisdom_card_6",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_6.jpg")
+    },
+    {
+        slug: "wisdom_card_7",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_7.jpg")
+    },
+    {
+        slug: "wisdom_card_8",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_8.jpg")
+    },
+    {
+        slug: "wisdom_card_9",
+        path: require("@/assets/images/Cards/Sabedoria/wisdom_card_9.jpg")
     },
 
 ]
