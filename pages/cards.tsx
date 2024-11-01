@@ -1,14 +1,15 @@
+import { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView, Pressable } from "react-native";
+
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
-import { View, StyleSheet, ScrollView, Pressable } from "react-native";
-import { SimpleCard } from "@/components/cards/containers/DefaultContainer";
-import { useEffect, useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { isSlugInSlugList } from '@/hooks/useCards';
 import { addNotify } from '@/store/reducers/notificationReducer';
+import { Card, CardCarousel } from '@/components/cards/motions/cardSlider';
 
 // import { card_list } from "@/components/cards/index";
 
@@ -86,7 +87,7 @@ const ALL_CARDS = [
         color: "#123051"
     },
     {
-        "title": "Standard Heróis",
+        "title": "Standard Heróis Lendários",
         "list": card_hero_legendary_list,
         color: "#620C7B"
     },
@@ -117,6 +118,10 @@ export default function CardScreen() {
     const dispatch = useDispatch();
     const serverData = useSelector((state: RootReducer) => state.appReducer.server)
     const [indexToShow, setIndexToShow] = useState(0)
+    const [cardSelected, setCardSelected] = useState<CardProps>()
+    const [cardSelectedbgColor, setCardSelectedbgColor] = useState<string>('')
+    const [cardSelectedSiblingsList, setCardSelectedSiblingsList] = useState<CardProps[]>([])
+    const [showModal, setShowModal] = useState(false)
 
     const cards_available = serverData?.active_cards
 
@@ -124,7 +129,7 @@ export default function CardScreen() {
     useEffect(() => {
         dispatch(addNotify({
             title: "Cartas Indiponíveis",
-            message: 'As cartas escurecidas estão indisponíveis para o jogo.',
+            message: 'As cartas com a borda vermelha estão indisponíveis para o jogo.',
         }))
     }, [])
 
@@ -152,13 +157,26 @@ export default function CardScreen() {
                         <ScrollView>
                             <View style={[styles.container, { backgroundColor: card_list.color }]}>
                                 {card_list.list.map((card_slug, index) => (
-                                    <SimpleCard key={index} size="medium" card={card_slug} unavailable={!isSlugInSlugList(card_slug.slug, cards_available)} />
+                                    <Card key={index} card={card_slug} unavailable={!isSlugInSlugList(card_slug.slug, cards_available)} setCard={() => {
+                                        setCardSelected(card_slug)
+                                        setCardSelectedbgColor(card_list.color)
+                                        setCardSelectedSiblingsList(card_list.list)
+                                    }} setShowModal={setShowModal} />
                                 ))}
                             </View>
                         </ScrollView>
                     }
                 </View>
             ))}
+            {showModal &&
+                <CardCarousel
+                    card={cardSelected}
+                    bgColor={cardSelectedbgColor}
+                    cardList={cardSelectedSiblingsList}
+                    setShowModal={setShowModal}
+                    setCard={setCardSelected}
+                />
+            }
         </ThemedView >
     )
 }
