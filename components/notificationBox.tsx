@@ -5,7 +5,7 @@ import { useNavBarDimension } from "@/hooks/useScreenSizes"
 import { PlayerIcon } from "./player_user/playerIcon"
 import { NotifyCard } from "./cards/containers/DefaultContainer"
 import { addNotify, rmvNotify } from "@/store/reducers/notificationReducer"
-import Animated, { BounceInDown, Easing, LinearTransition, SlideOutRight, useSharedValue, withTiming } from "react-native-reanimated"
+import Animated, { BounceInDown, Easing, LinearTransition, SlideOutDown, useSharedValue, withTiming } from "react-native-reanimated"
 import { useEffect } from "react"
 import useAppWebSocket from "@/hooks/useAppWebSocket"
 
@@ -78,7 +78,7 @@ function Notification(props: NotificationProps) {
                 width.value = 0
             }}
         >
-            <Animated.View entering={BounceInDown} exiting={SlideOutRight} layout={LinearTransition}
+            <Animated.View entering={BounceInDown} exiting={SlideOutDown} layout={LinearTransition}
                 style={{ backgroundColor: '#fffb', minHeight: 90, paddingBottom:8, width: NOTIFICATION_WIDTH, borderTopStartRadius: 8, borderBottomStartRadius: 8 }}
             >
                 {!props.stillUntilDismiss && <View style={{ width: '100%', height: 8, position: 'absolute' }}>
