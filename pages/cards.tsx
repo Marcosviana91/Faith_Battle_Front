@@ -83,32 +83,32 @@ const ALL_CARDS = [
     {
         "title": "Standard Heróis",
         "list": card_hero_list,
-        color: "#29E9F8"
+        color: "#123051"
     },
     {
         "title": "Standard Heróis",
         "list": card_hero_legendary_list,
-        color: "#F834FF"
+        color: "#620C7B"
     },
     {
         "title": "Standard Milagres",
         "list": card_miracle_list,
-        color: "#6BFF3A"
+        color: "#185712"
     },
     {
         "title": "Standard Artefatos",
         "list": card_artfacts_list,
-        color: "#FFFA34"
+        color: "#AA8319"
     },
     {
         "title": "Standard Pecados",
         "list": card_sins_list,
-        color: "#FF433D"
+        color: "#791708"
     },
     {
         "title": "Standard Sabedorias",
         "list": card_wisdom_list,
-        color: "#D1CFD0"
+        color: "#656565"
     },
 ]
 
