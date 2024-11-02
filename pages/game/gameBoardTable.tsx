@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ImageBackground } from "react-native";
 import { globalStyles } from "@/constants/Styles";
 
 import { ThemedView } from '@/components/themed/ThemedView';
@@ -29,6 +29,8 @@ import { OnInvoke as SabedoriaDeSalomaoOnInvoke } from '@/components/cards/cards
 import { OnInvoke as SarcaArdenteOnInvoke } from '@/components/cards/cardsComands/sarca_ardente';
 import Stats from '@/components/gameBoard/stats';
 // import { OnInvoke as ProtecaoDivinaOnInvoke } from '@/components/cards/cardsComands/protecao_divina';
+
+const background = require('@/assets/images/mesa_0.jpg')
 
 
 export default function GameBoardTable() {
@@ -80,28 +82,35 @@ export default function GameBoardTable() {
         <>
             {!matchData?.end_match &&
                 <ThemedView style={globalStyles.container}>
-                    <TopBar />
-                    {/* Icones dos jogadores */}
-                    {!fight_camp &&
-                        <IconsContainer player_id={player?.id} matchData={matchData} />
-                    }
-                    {/* Fight Camp */}
-                    <FightCamp />
-                    {/* Card Stack */}
-                    <CardStack />
-                    {/* GameBoards */}
-                    <View style={[globalStyles.contentContainer]}>
-                        {/* Enemy board */}
-                        {player_turn && player_turn !== player?.id &&
-                            <GameBoard {...player_focus_data!} />
+                    <ImageBackground
+                        source={background}
+                        style={{ flex: 1, }}
+                        imageStyle={{ width: "100%", height: "100%" }}
+                        resizeMode='stretch'
+                    >
+                        <TopBar />
+                        {/* Icones dos jogadores */}
+                        {!fight_camp &&
+                            <IconsContainer player_id={player?.id} matchData={matchData} />
                         }
-                        {/* Player board */}
-                        <GameBoard {...player_data!} />
-                    </View>
-                    {/* Mão do jogador */}
-                    <View>
-                        <HandContainer />
-                    </View>
+                        {/* Fight Camp */}
+                        <FightCamp />
+                        {/* Card Stack */}
+                        <CardStack />
+                        {/* GameBoards */}
+                        <View style={[globalStyles.contentContainer]}>
+                            {/* Enemy board */}
+                            {player_turn && player_turn !== player?.id &&
+                                <GameBoard {...player_focus_data!} />
+                            }
+                            {/* Player board */}
+                            <GameBoard {...player_data!} />
+                        </View>
+                        {/* Mão do jogador */}
+                        <View>
+                            <HandContainer />
+                        </View>
+                    </ImageBackground>
                 </ThemedView>
             }
             {/* Modal das habilidades das cartas */}

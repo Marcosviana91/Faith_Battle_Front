@@ -8,7 +8,7 @@ import { leaveMatch } from "@/store/reducers/matchReducer";
 import PlayerIcon64 from "../player_user/PlayerIcon64";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { ScrollView, View } from "react-native";
+import { ImageBackground, ScrollView, View } from "react-native";
 // import { PlayerIcon } from "../player_user/playerIcon";
 
 function contaTempo(tempoInicial: number, tempoFinal: number) {
@@ -31,6 +31,7 @@ function contaTempo(tempoInicial: number, tempoFinal: number) {
     }
     return `${horasPercorrido}:${stringMinuto}:${stringSegundo}`
 }
+const background = require('@/assets/images/mesa.jpg')
 
 export default function Stats() {
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)!
@@ -41,63 +42,74 @@ export default function Stats() {
     const dispatch = useDispatch()
 
     return (
-        <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <ThemedText type="title">A partida acabou!</ThemedText>
-            <ThemedText type="link">ID: {matchData.id}</ThemedText>
-            <ThemedText>{duracao_partida} <AntDesign name="clockcircleo" size={18} /> ROUND: {matchData.round_match}</ThemedText>
-            <ThemedView style={{ width: '90%', borderWidth: 2, borderBottomWidth: 0, flexDirection: 'row', marginVertical:32 }}>
-                <ThemedView style={{ maxWidth: 75, alignItems: 'center', borderEndWidth: 1 }}>
-                    <ThemedView style={{ height: 60, borderBottomWidth: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                        <ThemedText><FontAwesome name="user" size={24} /></ThemedText>
-                    </ThemedView>
-                    {matchData.players_in_match?.map(_team => (
-                        _team.map(_player => {
-                            // console.log(Object.entries(_player.dano_em_fe?.oponentes!))
-                            return (
-                                <ThemedView style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
-                                    <PlayerIcon64 id={_player.id} type="mini" />
-                                </ThemedView>
-                            )
-                        })
-                    ))}
+        <ImageBackground
+            source={background}
+            style={{ flex: 1, }}
+            imageStyle={{ width: "100%", height: "100%" }}
+            resizeMode='stretch'
+            blurRadius={12}
+        >
+            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                <ThemedView style={{ width: '90%', borderWidth: 2, borderRadius: 16, alignItems: 'center', paddingVertical: 12 }}>
+                    <ThemedText type="title">A partida acabou!</ThemedText>
+                    <ThemedText type="link">ID: {matchData.id}</ThemedText>
+                    <ThemedText>{duracao_partida} <AntDesign name="clockcircleo" size={18} /> ROUND: {matchData.round_match}</ThemedText>
+
                 </ThemedView>
-                <View style={{ flex: 1 }}>
-                    <ScrollView horizontal>
-                        <View>
-                            <ThemedView style={{ flexDirection: 'row', gap: 16, paddingStart: 4, height: 60, borderBottomWidth: 1 }}>
-                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="skull" size={24} /></ThemedText>
-                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="shield-cross" size={24} /></ThemedText>
-                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="sword" size={24} /></ThemedText>
-                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="shield-sword" size={24} /></ThemedText>
-                            </ThemedView>
-                            <View>
-                                {matchData.players_in_match?.map(_team =>
-                                (
-                                    _team.map(_player => {
-                                        // console.log(Object.entries(_player.dano_em_fe?.oponentes!))
-                                        return (
-                                            <ThemedView style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
-                                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.round_eliminado}º</ThemedText>
-                                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.faith_points}</ThemedText>
-                                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.dano_em_fe?.total_aplicado}</ThemedText>
-                                                <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.dano_em_fe?.total_recebido}</ThemedText>
-                                            </ThemedView>
-                                        )
-                                    })
+                <ThemedView style={{ width: '90%', borderWidth: 2, borderBottomWidth: 0, flexDirection: 'row', marginVertical: 32 }}>
+                    <ThemedView style={{ maxWidth: 75, alignItems: 'center', borderEndWidth: 1 }}>
+                        <ThemedView style={{ height: 60, borderBottomWidth: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                            <ThemedText><FontAwesome name="user" size={24} /></ThemedText>
+                        </ThemedView>
+                        {matchData.players_in_match?.map(_team => (
+                            _team.map(_player => {
+                                // console.log(Object.entries(_player.dano_em_fe?.oponentes!))
+                                return (
+                                    <ThemedView key={_player.id} style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
+                                        <PlayerIcon64 id={_player.id} type="mini" />
+                                    </ThemedView>
                                 )
-                                )}
+                            })
+                        ))}
+                    </ThemedView>
+                    <View style={{ flex: 1 }}>
+                        <ScrollView horizontal>
+                            <View>
+                                <ThemedView style={{ flexDirection: 'row', gap: 16, paddingStart: 4, height: 60, borderBottomWidth: 1 }}>
+                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="skull" size={24} /></ThemedText>
+                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="shield-cross" size={24} /></ThemedText>
+                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="sword" size={24} /></ThemedText>
+                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}><MaterialCommunityIcons name="shield-sword" size={24} /></ThemedText>
+                                </ThemedView>
+                                <View>
+                                    {matchData.players_in_match?.map(_team =>
+                                    (
+                                        _team.map(_player => {
+                                            // console.log(Object.entries(_player.dano_em_fe?.oponentes!))
+                                            return (
+                                                <ThemedView key={_player.id} style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
+                                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.round_eliminado}º</ThemedText>
+                                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.faith_points}</ThemedText>
+                                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.dano_em_fe?.total_aplicado}</ThemedText>
+                                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.dano_em_fe?.total_recebido}</ThemedText>
+                                                </ThemedView>
+                                            )
+                                        })
+                                    )
+                                    )}
+                                </View>
                             </View>
-                        </View>
-                    </ScrollView>
-                </View>
-            </ThemedView>
-            <BasicButton
-                onPress={() => {
-                    dispatch(leaveMatch())
-                }}
-            >
-                Sair
-            </BasicButton>
-        </ThemedView>
+                        </ScrollView>
+                    </View>
+                </ThemedView>
+                <BasicButton
+                    onPress={() => {
+                        dispatch(leaveMatch())
+                    }}
+                >
+                    Sair
+                </BasicButton>
+            </View>
+        </ImageBackground>
     )
 }

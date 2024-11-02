@@ -65,7 +65,7 @@ export default function TopBar() {
     }, [matchData])
 
     return (
-        <View style={{ flexDirection: "row", justifyContent: "space-between", padding: 4, borderBottomWidth: 1, borderColor: "white" }}>
+        <ThemedView style={{ flexDirection: "row", justifyContent: "space-between", padding: 4, borderBottomWidth: 1, borderColor: "white" }}>
             {/* Relógio */}
             <View style={{ flexDirection: "row", gap: 4, alignItems: 'center', zIndex: 1 }}>
                 <ThemedText>{tempoPercorrido}</ThemedText>
@@ -88,7 +88,7 @@ export default function TopBar() {
                     <ThemedText>{player?.wisdom_points}</ThemedText>
                 </ThemedView>
             </Pressable>
-            <ThemedModal visible={showMenu} title='Opções' closeModal={() => setShowMenu(false)} >
+            <ThemedModal transparent visible={showMenu} title='Opções' closeModal={() => setShowMenu(false)} >
                 <View style={{ width: '30%' }}>
                     {/* Botão de se render */}
                     {player?.faith_points! > 0 && !matchData?.end_match &&
@@ -127,6 +127,6 @@ export default function TopBar() {
                     }
                 </View>
             </ThemedModal>
-        </View>
+        </ThemedView>
     )
 }

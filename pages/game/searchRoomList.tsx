@@ -71,7 +71,6 @@ export default function SearchRoomList() {
 
 const styles = StyleSheet.create({
     roomListContainer: {
-        backgroundColor: "red",
         flex: 1,
         rowGap: 4,
     }
