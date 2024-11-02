@@ -9,7 +9,9 @@ import BasicButton from "./button/basic";
 export default function FooterBar() {
     const navigation = useNavigation()
     const appData = useSelector((state: RootReducer) => state.appReducer)
-    const need_update = (appData.server.version !== appData.settings.version)
+    const server_versions = appData.server.version.split('.')
+    const appversions = appData.settings.version.split('.')
+    const need_update = (server_versions[0]!==appversions[0] || server_versions[1]!==appversions[1])
     
     return (
         <View style={styles.container}>
