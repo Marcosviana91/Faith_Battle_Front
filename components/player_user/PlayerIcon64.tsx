@@ -57,13 +57,13 @@ export default function PlayerIcon64(props: Props) {
 
     return (<>{_PlayerData &&
         <View style={{ alignItems: 'center' }}>
-            <View style={{width:'100%', overflow:'hidden'}}>
+            <View style={{ width: '100%', overflow: 'hidden' }}>
                 <ThemedText style={{ width: '100%', textAlign: 'center', fontSize: props.type == 'normal' ? 20 : 14 }}>{_PlayerData?.username}</ThemedText>
 
             </View>
             <PlayerAvatar64 file_name={_PlayerData?.avatar!} size={props.type == 'normal' ? props.size : 40}
                 style={{
-                    borderWidth: 2,
+                    borderWidth: props.type === "mini" ? 1 : 2,
                     // borderColor: 'red',
                     borderColor: props.isCurrent ? 'green' : props.isTarget ? 'red' : 'black',
                 }}
