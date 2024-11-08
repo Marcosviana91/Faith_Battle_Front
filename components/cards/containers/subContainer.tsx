@@ -165,12 +165,12 @@ function SubCard(props: Props) {
                             />
                             {/* Pontos de Ataque e Defesa */}
                             {props.card && props.card.in_game_id &&
-                                <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 20, alignItems: 'center' }}>
+                                <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 0, alignItems: 'center' }}>
                                     <View style={{ height: 60, width: '90%', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <ThemedView lightColor="#ffe600" darkColor="#585000" style={{ width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                        <ThemedView lightColor="#ffe600" darkColor="#585000" style={{ width: 60, height: 40, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
                                             <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{props.card.attack_point}</ThemedText>
                                         </ThemedView>
-                                        <ThemedView lightColor="#ff3838" darkColor="#421313" style={{ width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                        <ThemedView lightColor="#ff3838" darkColor="#421313" style={{ width: 60, height: 40, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
                                             <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{props.card.defense_point}</ThemedText>
                                         </ThemedView>
                                     </View>
