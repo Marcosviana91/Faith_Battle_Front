@@ -23,9 +23,6 @@ import BasicButton from '@/components/button/basic';
 
 import { SITE } from "@/store/server_urls";
 
-const FULL_URI = `http://${SITE}`
-
-
 export default function ProfileScreen() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -105,8 +102,8 @@ export default function ProfileScreen() {
                             <BasicButton
                                 height={40}
                                 onPress={() => {
-                                    Linking.canOpenURL(FULL_URI).then(() => {
-                                        Linking.openURL(FULL_URI)
+                                    Linking.canOpenURL(SITE).then(() => {
+                                        Linking.openURL(SITE)
                                     })
                                 }}
                             >

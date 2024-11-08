@@ -4,7 +4,7 @@ import { SITE } from "@/store/server_urls";
 
 const avatarDir = FileSystem.documentDirectory + 'avatars/';
 const avatarFileUri = (avatarFile: string) => avatarDir + `${avatarFile}`;
-const avatarUrl = (avatarFile: string) => `http://${SITE}/static/general/img/Avatar/${avatarFile}`;
+const avatarUrl = (avatarFile: string) => `${SITE}/static/general/img/Avatar/${avatarFile}`;
 
 
 export const getAvatarFromServer = async (avatarList: string[]) => {
