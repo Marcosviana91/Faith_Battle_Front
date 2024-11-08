@@ -26,6 +26,7 @@ export default function SearchRoomList() {
             <View style={{ marginBottom: 12 }}>
                 <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
                     <Pressable
+                        style={{ backgroundColor: '#27419B', borderRadius: 8 }}
                         onPress={() => {
                             setShowFilter(!showFilter)
                         }}
@@ -34,6 +35,7 @@ export default function SearchRoomList() {
                     </Pressable>
                     <ThemedTextInput style={{ flex: 1 }} onChangeText={setFilterText} placeholder='filtrar por id ou nome' />
                     <Pressable
+                        style={{ backgroundColor: '#27419B', borderRadius: 8 }}
                         onPress={dataRoomList.refetch}
                     >
                         <MaterialCommunityIcons name="reload" size={32} color="black" />
@@ -49,7 +51,7 @@ export default function SearchRoomList() {
             {roomList && (
                 <>
                     <View >
-                        <Text style={{alignSelf:'center'}}>{roomList.length} salas encontradas</Text>
+                        <Text style={{ alignSelf: 'center' }}>{roomList.length} salas encontradas</Text>
                         <SearchRoomRow id={'0'} />
                     </View>
                     <ScrollView style={{ height: 270 }}>
