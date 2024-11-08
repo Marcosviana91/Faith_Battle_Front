@@ -89,7 +89,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                     setShowSubCardDescription(false)
                                     setSelectedSubCard(undefined)
                                 }}
-                                style={{ width: windowWidth/2, height: windowWidth/3*2, position: "relative" }}
+                                style={{ width: windowWidth / 2, height: windowWidth / 3 * 2, position: "relative" }}
                             >
                                 {/* Card status */}
                                 <View
@@ -129,13 +129,13 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                                 }
                                 {/* Pontos de Ataque e Defesa */}
                                 {selectedCard.in_game_id && (selectedCard.card_type === 'hero' || selectedCard.card_type === 'legendary') &&
-                                    <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 20, alignItems: 'center' }}>
+                                    <View style={{ height: 60, width: '100%', position: 'absolute', bottom: 0, alignItems: 'center' }}>
                                         <View style={{ height: 60, width: '90%', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <ThemedView lightColor="#ffe600" darkColor="#585000" style={{ width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
-                                                <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{selectedCard.attack_point}</ThemedText>
+                                            <ThemedView lightColor="#ffe600" darkColor="#585000" style={{ width: 60, height: 40, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                                <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 32, fontWeight: 700, lineHeight: 40 }}>{selectedCard.attack_point}</ThemedText>
                                             </ThemedView>
-                                            <ThemedView lightColor="#ff3838" darkColor="#421313" style={{ width: 60, height: 60, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
-                                                <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 32, fontWeight: 700, lineHeight: 60 }}>{selectedCard.defense_point}</ThemedText>
+                                            <ThemedView lightColor="#ff3838" darkColor="#421313" style={{ width: 60, height: 40, borderRadius: 40, alignItems: "center", justifyContent: "center" }}>
+                                                <ThemedText lightColor="black" darkColor="#9BA1A6" style={{ fontSize: 32, fontWeight: 700, lineHeight: 40 }}>{selectedCard.defense_point}</ThemedText>
                                             </ThemedView>
                                         </View>
                                     </View>
