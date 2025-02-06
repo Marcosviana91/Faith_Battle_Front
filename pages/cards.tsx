@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable } from "react-native";
+import { View, StyleSheet, ScrollView, Pressable, useColorScheme } from "react-native";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '@/store';
 
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { isSlugInSlugList } from '@/hooks/useCards';
 import { addNotify } from '@/store/reducers/notificationReducer';
 import { Card, CardCarousel } from '@/components/cards/motions/cardSlider';
@@ -82,49 +82,43 @@ const card_wisdom_list: CardProps[] = [
 
 const ALL_CARDS = [
     {
-        "title": "Standard Heróis",
+        "title": "Heróis",
         "list": card_hero_list,
         color: "#123051"
     },
     {
-        "title": "Standard Heróis Lendários",
+        "title": "Heróis Lendários",
         "list": card_hero_legendary_list,
         color: "#620C7B"
     },
     {
-        "title": "Standard Milagres",
+        "title": "Milagres",
         "list": card_miracle_list,
         color: "#185712"
     },
     {
-        "title": "Standard Artefatos",
+        "title": "Artefatos",
         "list": card_artfacts_list,
         color: "#AA8319"
     },
     {
-        "title": "Standard Pecados",
+        "title": "Pecados",
         "list": card_sins_list,
         color: "#791708"
     },
     {
-        "title": "Standard Sabedorias",
+        "title": "Sabedorias",
         "list": card_wisdom_list,
         color: "#656565"
     },
 ]
-
 
 export default function CardScreen() {
     const dispatch = useDispatch();
     const serverData = useSelector((state: RootReducer) => state.appReducer.server)
     const [indexToShow, setIndexToShow] = useState(0)
     const [cardSelected, setCardSelected] = useState<CardProps>()
-    const [cardSelectedbgColor, setCardSelectedbgColor] = useState<string>('')
-    const [cardSelectedSiblingsList, setCardSelectedSiblingsList] = useState<CardProps[]>([])
     const [showModal, setShowModal] = useState(false)
-
-    const cards_available = serverData?.active_cards
-
 
     useEffect(() => {
         dispatch(addNotify({
@@ -133,46 +127,60 @@ export default function CardScreen() {
         }))
     }, [])
 
+    useEffect(() => {
+
+    }, [indexToShow])
+
     return (
-        <ThemedView style={{ height: '100%' }}>
-            {ALL_CARDS.map((card_list, _index) => (
-                <View key={_index} style={{ flexShrink: indexToShow === _index ? 1 : 0 }}>
-                    <Pressable
-                        key={_index}
-                        style={{ padding: 8, borderBottomWidth: 1, flexDirection: "row", gap: 8 }}
-                        onPress={() => {
-                            if (indexToShow === _index) {
-                                setIndexToShow(-1)
-                            } else {
-                                setIndexToShow(_index)
-                            }
-                        }}
-                    >
-                        <ThemedText>
-                            <AntDesign name={indexToShow !== _index ? "caretdown" : "caretup"} size={24} />
-                        </ThemedText>
-                        <ThemedText>{card_list.title}</ThemedText>
-                    </Pressable>
-                    {indexToShow == _index &&
-                        <ScrollView>
-                            <View style={[styles.container, { backgroundColor: card_list.color }]}>
-                                {card_list.list.map((card_slug, index) => (
-                                    <Card key={index} card={card_slug} unavailable={!isSlugInSlugList(card_slug.slug, cards_available)} setCard={() => {
-                                        setCardSelected(card_slug)
-                                        setCardSelectedbgColor(card_list.color)
-                                        setCardSelectedSiblingsList(card_list.list)
-                                    }} setShowModal={setShowModal} />
-                                ))}
-                            </View>
-                        </ScrollView>
-                    }
+        <ThemedView style={{ flex: 1 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, padding: 4 }}>
+                {ALL_CARDS.map((card_list, _index) =>
+                (<TabItem
+                    key={_index}
+                    card_list={card_list}
+                    isSelected={_index === indexToShow}
+                    setSelected={() => {
+                        if (_index === indexToShow) {
+                            setIndexToShow(0)
+                        } else {
+                            setIndexToShow(_index)
+                        }
+                    }}
+                />)
+                )}
+            </View>
+            <ScrollView
+                style={{ backgroundColor: ALL_CARDS[indexToShow].color }}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-evenly',
+                        rowGap: 8,
+                        paddingVertical: 8,
+                    }}
+                >
+
+                    {ALL_CARDS[indexToShow].list.map((card_slug, index) => (
+                        <Card
+                            key={index}
+                            card={card_slug}
+                            unavailable={!isSlugInSlugList(card_slug.slug, serverData.active_cards)}
+                            setCard={() => {
+                                setCardSelected(card_slug)
+                            }}
+                            setShowModal={setShowModal}
+                        />
+                    ))}
                 </View>
-            ))}
+            </ScrollView>
             {showModal &&
                 <CardCarousel
                     card={cardSelected}
-                    bgColor={cardSelectedbgColor}
-                    cardList={cardSelectedSiblingsList}
+                    bgColor={ALL_CARDS[indexToShow].color}
+                    cardList={ALL_CARDS[indexToShow].list}
                     setShowModal={setShowModal}
                     setCard={setCardSelected}
                 />
@@ -181,13 +189,42 @@ export default function CardScreen() {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        flexWrap: 'wrap',
-        gap: 4,
-        padding: 12,
+type AccordionItemProps = {
+    card_list: {
+        title: string;
+        list: CardProps[];
+        color: string;
     }
-})
+    isSelected: Boolean
+    setSelected: () => void
+}
+
+function TabItem(props: AccordionItemProps) {
+    const theme = useColorScheme() ?? 'light';
+    const sv_isSelected = useSharedValue(0)
+
+    const style_Overlay = useAnimatedStyle(() => {
+        return {
+            opacity: sv_isSelected.value
+        }
+    })
+    useEffect(() => {
+        if (props.isSelected) {
+            sv_isSelected.value = withTiming(0)
+        } else {
+            sv_isSelected.value = withTiming(0.3)
+        }
+    }, [props.isSelected])
+
+    return (
+        <Pressable
+            style={{ borderWidth: 1, backgroundColor: props.card_list.color, flexGrow: 1, minWidth: '30%', borderRadius: 8, borderColor: props.isSelected ? theme !== 'dark' ? '#000' : '#fff' : '#666' }}
+            onPress={() => {
+                props.setSelected()
+            }}
+        >
+            <Animated.View style={[{ backgroundColor: theme === 'light' ? '#fff' : '#000', width: '100%', height: '100%', position: 'absolute', flexGrow: 1, borderRadius: 8 }, style_Overlay]} />
+            <ThemedText type={props.isSelected ? 'defaultSemiBold' : 'default'} style={{ textAlign: 'center', paddingHorizontal: 8 }}>{props.card_list.title}</ThemedText>
+        </Pressable>
+    )
+}
