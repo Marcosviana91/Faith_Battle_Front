@@ -6,6 +6,8 @@ import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
 import { ThemedTextInput } from '@/components/themed/ThemedTextInput'
 import BasicButton from '@/components/button/basic';
+import PlayerAvatar64 from '@/components/player_user/PlayerAvatar64';
+import FullLoading from '@/components/general/Loading';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -19,7 +21,7 @@ import { addNotify } from "@/store/reducers/notificationReducer"
 
 import { useKeyboard } from "@/hooks/useKeyboard";
 import { RootReducer } from '@/store';
-import PlayerAvatar64 from '@/components/player_user/PlayerAvatar64';
+import React from 'react';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -34,6 +36,7 @@ export default function LoginScreen() {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [hidePassword, setHidePassword] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const [isCreating, setCreating] = useState(false)
   const [realName, setRealName] = useState('')
@@ -78,6 +81,7 @@ export default function LoginScreen() {
       }
     }
     if (tokenAuthData) {
+      setLoading(false)
       if (tokenAuthData.access_token) {
         setUserToken(tokenAuthData.access_token)
         getUser(tokenAuthData.id)
@@ -134,6 +138,9 @@ export default function LoginScreen() {
       resizeMode='stretch'
       blurRadius={3}
     >
+      {loading &&
+        <FullLoading />
+      }
       <ThemedView style={globalStyles.container} lightColor="#fff7" darkColor="#000c">
         {!(keyboardIsShow[0] && isCreating) && <View style={{ flexBasis: (keyboardIsShow[0] ? 200 : 300) }}>
           <Image
@@ -191,9 +198,9 @@ export default function LoginScreen() {
                   </View>
                 }
                 {showAvatarList &&
-                  <View style={{ height: 250, maxWidth:'90%' }}>
+                  <View style={{ height: 250, maxWidth: '90%' }}>
                     <ScrollView>
-                      <View style={{ gap: 2, flex:1, flexDirection:'row', flexWrap:'wrap', justifyContent:'space-between' }}>
+                      <View style={{ gap: 2, flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
                         {currentServerData.avatar_list!.map((avt) => {
                           return (
                             <Pressable
@@ -257,6 +264,7 @@ export default function LoginScreen() {
                 <BasicButton
                   disabled={userName === '' || password === ''}
                   onPress={() => {
+                    setLoading(true)
                     doLogin({ username: userName, password: password })
                   }} >Logar</BasicButton>
                 <BasicButton
