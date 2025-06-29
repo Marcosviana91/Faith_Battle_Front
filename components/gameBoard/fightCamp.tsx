@@ -78,7 +78,6 @@ export default function FightCamp() {
                         {(matchData?.player_turn === player?.id) && fight_camp && fight_camp.fight_stage == 1 &&
                             <View style={{ height: 50, width: 100 }}>
                                 <BasicButton
-                                   
                                     onPress={() => {
                                         console.log("Lutar")
                                         const data: APIResponseProps = {
@@ -107,7 +106,6 @@ export default function FightCamp() {
                         {fight_camp && fight_camp.fight_stage === 0 && fight_camp.player_defense_id == player?.id &&
                             <View style={{ height: 50, width: 100 }}>
                                 <BasicButton
-                                   
                                     onPress={() => {
                                         console.log("Defender")
                                         const data: APIResponseProps = {
@@ -135,7 +133,7 @@ export default function FightCamp() {
                                 </BasicButton>
                             </View>
                         }
-                        <View style={{ backgroundColor:'red' }}>
+                        <View style={{ }}>
                             <FightContainer attacking={fight_camp.fight_stage === 0 && player?.id === fight_camp.player_defense_id} cards={fight_camp.attack_cards!} />
                             {fight_camp.fight_stage === 0
                                 ? <FightContainer cards={player_match_settings?.cards_to_fight!} />

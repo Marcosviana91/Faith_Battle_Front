@@ -49,7 +49,7 @@ export default function DefaultContainer(props: DefaultContainerProps) {
                 <ScrollView horizontal contentContainerStyle={{ flexDirection: 'row', gap: 2 }}>
                     {props.cards.map((card, _index) => (
                         <Pressable
-                            key={_index}
+                            key={card.in_game_id}
                             onPress={() => {
                                 if (card.slug !== 'not-defense') {
 

@@ -99,7 +99,7 @@ export default function SearchRoom() {
                                     onChangeText={setNewRoomName}
                                 />
                             </View>
-                            <View style={styles.container}>
+                            {/* <View style={styles.container}>
                                 <Text>Quantidade de Times</Text>
                                 <ToggleButton
                                     height={30}
@@ -107,7 +107,7 @@ export default function SearchRoom() {
                                     values={gameTypesList}
                                     onPress={setNewRoomTeamsQtd}
                                 />
-                            </View>
+                            </View> */}
                             <View style={[styles.container, { flexDirection: 'row', gap: 15 }]}>
                                 <Text>Jogadores:</Text>
                                 <ThemedTextInput

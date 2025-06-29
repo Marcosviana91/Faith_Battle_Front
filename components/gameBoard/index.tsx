@@ -30,8 +30,8 @@ export default function GameBoard(props: PlayersInMatchApiProps) {
             zIndex: 1
         },
         forgotten: {
-            width: 75,
-            height: 85,
+            height: 90,
+            width: 65,
             position: "absolute",
             right: 8,
             bottom: windowHeight * 0.03,

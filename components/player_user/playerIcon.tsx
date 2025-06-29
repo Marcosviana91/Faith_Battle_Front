@@ -120,12 +120,12 @@ export function IconsContainer(props: ContainerProps) {
 
 export function ShowFightersIconsContainer(props: ContainerProps) {
     return (
-        <ThemedView style={{ borderWidth: 1, borderRadius: 8, padding: 8, flexDirection: "row", alignItems: 'center', marginBottom: 12, width: '100%', paddingHorizontal: 24 }}>
-            {/* <PlayerIcon id={props.matchData?.fight_camp?.player_attack_id!} type='mini' /> */}
+        <ThemedView style={{ borderWidth: 1, borderRadius: 8, padding: 8, flexDirection: "row", alignItems: 'flex-end', justifyContent:'center', gap:16, marginBottom: 12, width: '100%', paddingHorizontal: 24 }}>
+            <PlayerIcon64 id={props.matchData?.fight_camp?.player_attack_id!} type='mini' />
             <ThemedText style={{ lineHeight: 50 }}>
                 <MaterialCommunityIcons size={40} name="sword-cross" />
             </ThemedText>
-            {/* <PlayerIcon id={props.matchData?.fight_camp?.player_defense_id!} type='mini' /> */}
+            <PlayerIcon64 id={props.matchData?.fight_camp?.player_defense_id!} type='mini' />
         </ThemedView>
     )
 }
@@ -158,7 +158,7 @@ export function SelectEnemyIconsContainer(props: ContainerProps) {
                             style={{
                                 height: '100%',
                             }}>
-                            {/* <PlayerIcon id={_player.id} type='mini' isTarget={props.selected_player_id === _player.id} /> */}
+                            <PlayerIcon64 id={_player.id} type='mini' isTarget={props.selected_player_id === _player.id} />
                             <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
                                 <ThemedText>
                                     <MaterialCommunityIcons name="shield-cross" size={24} />
@@ -202,7 +202,7 @@ export function SelectFriendsIconsContainer(props: ContainerProps) {
                                 style={{
                                     height: '100%',
                                 }}>
-                                {/* <PlayerIcon id={_player.id} type='mini' isCurrent={props.selected_player_id === _player.id} /> */}
+                                <PlayerIcon64 id={_player.id} type='mini' isCurrent={props.selected_player_id === _player.id} />
                                 <ThemedView style={{ flexDirection: 'row', borderWidth: 1, borderBottomWidth: 0, borderEndWidth: 0, borderStartWidth: 0 }}>
                                     <ThemedText>
                                         <MaterialCommunityIcons name="shield-cross" size={24} />

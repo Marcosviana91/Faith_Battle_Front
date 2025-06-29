@@ -9,8 +9,8 @@ import GameBoard from '@/pages/game/gameBoardTable';
 export default function GamePage() {
     const roomData = useSelector((state: RootReducer) => state.matchReducer.room_data)
     const matchData = useSelector((state: RootReducer) => state.matchReducer.match_data)
-    const playerData = useSelector((state: RootReducer) => state.matchReducer.player_data)
-    const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
+    // const playerData = useSelector((state: RootReducer) => state.matchReducer.player_data)
+    // const userData = useSelector((state: RootReducer) => state.authReducer.user_data)
 
 
     if (roomData) {

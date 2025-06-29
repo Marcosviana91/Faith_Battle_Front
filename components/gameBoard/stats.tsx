@@ -1,14 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
+import { ImageBackground, ScrollView, View } from "react-native";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedView } from "../themed/ThemedView";
 import { RootReducer } from "@/store";
-import { AntDesign } from "@expo/vector-icons";
 import BasicButton from "../button/basic";
 import { leaveMatch } from "@/store/reducers/matchReducer";
 import PlayerIcon64 from "../player_user/PlayerIcon64";
+
+import { AntDesign } from "@expo/vector-icons";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { ImageBackground, ScrollView, View } from "react-native";
 // import { PlayerIcon } from "../player_user/playerIcon";
 
 function contaTempo(tempoInicial: number, tempoFinal: number) {
@@ -88,7 +89,14 @@ export default function Stats() {
                                             // console.log(Object.entries(_player.dano_em_fe?.oponentes!))
                                             return (
                                                 <ThemedView key={_player.id} style={{ flexDirection: 'row', gap: 16, height: 80, borderBottomWidth: 1 }}>
-                                                    <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.round_eliminado}º</ThemedText>
+                                                    {_player.round_eliminado && Number(_player.round_eliminado) > 0?
+                                                        <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.round_eliminado}º</ThemedText> :
+                                                        <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>
+                                                            <AntDesign name="Trophy" size={24} />
+                                                        </ThemedText>
+                                                        
+
+                                                    }
                                                     <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.faith_points}</ThemedText>
                                                     <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.dano_em_fe?.total_aplicado}</ThemedText>
                                                     <ThemedText style={{ width: 90, textAlign: 'center', textAlignVertical: 'center' }}>{_player.dano_em_fe?.total_recebido}</ThemedText>

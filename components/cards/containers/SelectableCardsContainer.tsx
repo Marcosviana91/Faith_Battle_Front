@@ -20,7 +20,7 @@ export function SelectableCardsContainer(props: SelectableCardsContainerProps) {
             <ScrollView horizontal contentContainerStyle={{ flexDirection: 'row', gap: 4 }}>
                 {props.cards.map((card, _index) => (
                     <Pressable
-                        key={_index}
+                        key={card.in_game_id}
                         onPress={() => {
                             props.set_selected_card(card)
                         }}

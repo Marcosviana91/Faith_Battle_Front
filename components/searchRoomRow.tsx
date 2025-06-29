@@ -12,10 +12,10 @@ export default function SearchRoomRow(props: RoomApiProps) {
     if (props.id === '0') {
         return (
             <View style={styles.room_row}>
-                <Text style={[styles.row_item, { backgroundColor: "yellow", flexBasis: 120 }]}>Id:</Text>
-                <Text style={[styles.row_item, { backgroundColor: "yellow", flexBasis: 120 }]}>Nome da Sala:</Text>
-                <Text style={[styles.row_item, { backgroundColor: "yellow", flexBasis: 40 }]}>Times:</Text>
-                <Text style={[styles.row_item, { backgroundColor: "yellow", flexBasis: 40 }]}>
+                <Text style={[styles.row_item, { backgroundColor: "#27419B", flexBasis: 120 }]}>Id:</Text>
+                <Text style={[styles.row_item, { backgroundColor: "#27419B", flexBasis: 120 }]}>Nome da Sala:</Text>
+                <Text style={[styles.row_item, { backgroundColor: "#27419B", flexBasis: 40 }]}>Times:</Text>
+                <Text style={[styles.row_item, { backgroundColor: "#27419B", flexBasis: 40 }]}>
                     <FontAwesome name="users" size={24} color="black" />
                 </Text>
             </View>
@@ -60,5 +60,6 @@ const styles = StyleSheet.create({
         verticalAlign: "middle",
         fontSize: 14,
         textAlign: 'center',
+        padding: 10,
     }
 })

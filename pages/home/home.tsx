@@ -1,6 +1,4 @@
-import { useRef } from 'react';
-import { Animated, StyleSheet, View, PanResponder } from 'react-native';
-
+import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed/ThemedText'
 import { ThemedView } from '@/components/themed/ThemedView'
@@ -15,35 +13,11 @@ import { globalStyles } from '@/constants/Styles';
 
 
 export default function HomeScreen() {
-    const pan = useRef(new Animated.ValueXY()).current;
-
-    const panResponder = useRef(
-        PanResponder.create({
-            onMoveShouldSetPanResponder: () => true,
-            // onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
-            onPanResponderMove: (e, state) => {
-                // console.log({...state})
-                pan.x.setValue(state.dx)
-                pan.y.setValue(state.dy)
-            },
-            onPanResponderRelease: () => {
-                pan.extractOffset();
-            },
-        }),
-    ).current;
-
     return (
 
         <ThemedView style={globalStyles.container}>
             <View style={[globalStyles.headerContainer, { flexBasis: 150 }]}>
-                <Animated.View
-                    style={{
-                        transform: [{ translateX: pan.x }, { translateY: pan.y }], zIndex: 999
-                    }}
-                    {...panResponder.panHandlers}
-                >
-                    <HeaderBar />
-                </Animated.View>
+                <HeaderBar />
             </View>
             <View style={globalStyles.contentContainer} >
                 <HelloWave />

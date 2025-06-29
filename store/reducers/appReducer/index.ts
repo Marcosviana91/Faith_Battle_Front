@@ -7,7 +7,7 @@ const initialState: AppSettingReducer = {
         active_cards: []
     },
     settings: {
-        version: 'alpha-1.1.2',
+        version: 'alpha-1.2.1',
     }
 }
 

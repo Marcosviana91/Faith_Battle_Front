@@ -24,15 +24,15 @@ export default function SearchRoomList() {
 
         <View style={{ width: '100%' }}>
             <View style={{ marginBottom: 12 }}>
-                <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
-                    <Pressable
-                        style={{ backgroundColor: '#27419B', borderRadius: 8 }}
+                <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", gap: 12 }}>
+                    {/* <Pressable
+                        style={{ backgroundColor: '#27419B', borderRadius: 8, display: 'none' }}
                         onPress={() => {
                             setShowFilter(!showFilter)
                         }}
                     >
                         {showFilter ? <MaterialCommunityIcons name="filter-remove" size={32} color="black" /> : <MaterialCommunityIcons name="filter-plus" size={32} color="black" />}
-                    </Pressable>
+                    </Pressable> */}
                     <ThemedTextInput style={{ flex: 1 }} onChangeText={setFilterText} placeholder='filtrar por id ou nome' />
                     <Pressable
                         style={{ backgroundColor: '#27419B', borderRadius: 8 }}
@@ -41,17 +41,17 @@ export default function SearchRoomList() {
                         <MaterialCommunityIcons name="reload" size={32} color="black" />
                     </Pressable>
                 </View>
-                {showFilter &&
+                {/* { showFilter &&
                     <View>
                         <Text>Times: </Text>
                         <Text>Sala com senha: </Text>
                     </View>
-                }
+                } */}
             </View>
             {roomList && (
                 <>
                     <View >
-                        <Text style={{ alignSelf: 'center' }}>{roomList.length} salas encontradas</Text>
+                        <Text style={{ alignSelf: 'center', fontSize:18, fontWeight:700, color: 'white', marginBottom: 8 }}>{roomList.length} salas encontradas</Text>
                         <SearchRoomRow id={'0'} />
                     </View>
                     <ScrollView style={{ height: 270 }}>
